@@ -25,9 +25,35 @@
     }
     h1 { font-size: 2rem; color: #1a2b4a; text-align: center; }
     .subtitle { text-align: center; color: #666; margin-bottom: 30px; font-style: italic; }
-    .header-actions { display: flex; justify-content: flex-end; margin-bottom: 15px; }
-    #resetBtn { background: #b33; color: #fff; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    .header-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+    .header-actions button {
+      border: none;
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    #resetBtn { background: #b33; color: #fff; }
     #resetBtn:hover { background: #922; }
+    #publishBtn { background: #2a7a2a; color: #fff; }
+    #publishBtn:hover { background: #1e5e1e; }
+    .mode-indicator {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: #e0e4ea;
+      color: #333;
+    }
+    .mode-indicator.edit { background: #f9e79f; color: #7d6608; }
+    .mode-indicator.view { background: #d5f5e3; color: #1a7a3a; }
 
     .accordion-item { border-bottom: 1px solid #e0e4ea; }
     .accordion-header {
@@ -49,7 +75,9 @@
     }
     .component-item.disabled { opacity: 0.5; border-left-color: #999; }
     .component-item .content { flex: 1; }
-    .component-item .actions { display: flex; gap: 4px; margin-top: 4px; align-items: center; }
+    .component-item .actions {
+      display: flex; gap: 4px; margin-top: 4px; align-items: center;
+    }
     .component-item .actions button {
       background: transparent; border: none; cursor: pointer; font-size: 0.9rem;
       color: #777; padding: 4px 6px; border-radius: 4px;
@@ -63,9 +91,15 @@
     }
     .component-item .actions .toggle.on { background: #4caf50; color: #fff; border-color: #4caf50; }
 
-    .add-component-area { display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
-    .add-component-area select, .add-component-area input { padding: 8px 12px; border: 1px solid #d0d7e3; border-radius: 8px; }
-    .add-component-area button { padding: 8px 18px; background: #1a2b4a; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+    .add-component-area {
+      display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap;
+    }
+    .add-component-area select, .add-component-area input {
+      padding: 8px 12px; border: 1px solid #d0d7e3; border-radius: 8px;
+    }
+    .add-component-area button {
+      padding: 8px 18px; background: #1a2b4a; color: #fff; border: none; border-radius: 8px; cursor: pointer;
+    }
 
     .youtube-iframe { width: 100%; max-width: 560px; height: 315px; border: none; border-radius: 8px; }
     .vraag-input, .foto-input { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
@@ -112,11 +146,22 @@
 </div>
 
 <div class="container">
-  <h1>7 WONDEREN VAN HET KRUIS</h1>
-  <div class="subtitle">Wilkin van der Kamp – interactief studieboek</div>
-  <div class="header-actions">
-    <button id="resetBtn">🔄 Reset alles</button>
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+    <div>
+      <h1>7 WONDEREN VAN HET KRUIS</h1>
+      <div class="subtitle">Wilkin van der Kamp – interactief studieboek</div>
+    </div>
+    <div>
+      <span id="modeIndicator" class="mode-indicator">Begeleider (bewerken)</span>
+    </div>
   </div>
+  
+  <div class="header-actions" id="headerActions">
+    <!-- Alleen zichtbaar in edit-modus -->
+    <button id="publishBtn" style="display:none;">📤 Publiceer</button>
+    <button id="resetBtn" style="display:none;">🔄 Reset alles</button>
+  </div>
+
   <div id="accordion-root"></div>
 </div>
 
@@ -146,6 +191,23 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
+  // ---------- MODE DETECTIE ----------
+  const urlParams = new URLSearchParams(window.location.search);
+  const mode = urlParams.get('mode') || 'view'; // 'edit' of 'view'
+  const isEditMode = (mode === 'edit');
+
+  // Update UI voor modus
+  const modeIndicator = document.getElementById('modeIndicator');
+  if (isEditMode) {
+    modeIndicator.textContent = '📝 Begeleider (bewerken)';
+    modeIndicator.className = 'mode-indicator edit';
+    document.getElementById('publishBtn').style.display = 'inline-block';
+    document.getElementById('resetBtn').style.display = 'inline-block';
+  } else {
+    modeIndicator.textContent = '👀 Student (bekijken)';
+    modeIndicator.className = 'mode-indicator view';
+  }
+
   // ---------- GEBRUIKERSNAAM ----------
   let currentUserName = localStorage.getItem('bijbelstudie_naam') || '';
   function saveName() {
@@ -155,14 +217,13 @@
     localStorage.setItem('bijbelstudie_naam', naam);
     document.getElementById('name-overlay').style.display = 'none';
   }
-  // Controleer bij laden of naam bekend is
   window.addEventListener('DOMContentLoaded', () => {
     if (!currentUserName) {
       document.getElementById('name-overlay').style.display = 'flex';
     }
   });
 
-  // ---------- LOKALE AFBEELDINGEN (de 37 screenshots) ----------
+  // ---------- LOKALE AFBEELDINGEN ----------
   const allImages = [
     "Screenshot 2026-08-13 15.22.52.png",
     "Screenshot 2026-08-13 15.23.18.png",
@@ -206,7 +267,13 @@
   // ---------- TOPICS ----------
   const topics = [
     { id: 'inleiding', title: '1. Inleiding' },
-    { id: 'wonderen', title: '2. De 7 wonderen: Samenvatting' },
+    { id: 'wonder1', title: '2.1 Het wonder van de Liefde' },
+    { id: 'wonder2', title: '2.2 Het wonder van de Verzoening' },
+    { id: 'wonder3', title: '2.3 Het wonder van de Vergeving' },
+    { id: 'wonder4', title: '2.4 Het wonder van de Verlossing' },
+    { id: 'wonder5', title: '2.5 Het wonder van de Genezing' },
+    { id: 'wonder6', title: '2.6 Het wonder van de Gemeenschap' },
+    { id: 'wonder7', title: '2.7 Het wonder van de Overwinning' },
     { id: 'youtube', title: '3. YouTube-materiaal' },
     { id: 'gespreksvragen', title: '4. Gespreksvragen' },
     { id: 'tips', title: '5. Aanvullende tips' }
@@ -219,33 +286,44 @@
         { id: 'comp_' + Date.now() + '_0', type: 'foto-opdracht', active: true },
         { id: 'comp_' + Date.now() + '_1', type: 'text', text: 'Wilkin van der Kamp beschrijft het kruis niet als een zielig toneelstuk, maar als een overwinningswapen en een bron van wonderen. De zeven wonderen zijn bedoeld om je blik op het kruis te verfrissen: niet alleen wat er gebeurde, maar vooral wat het voor jou betekent.', active: true }
       ],
-      'wonderen': [
-        { id: 'comp_' + Date.now() + '_3', type: 'text', text: 'Hieronder vind je de kern van elk wonder. Gebruik dit als naslagwerk voor je studie.', active: true },
-        { id: 'comp_' + Date.now() + '_4', type: 'text', text: '1. Het wonder van de Liefde – God laat Zijn eigen Zoon sterven om te laten zien hoe onvoorwaardelijk en oneindig Zijn liefde voor ons is.', active: true },
-        { id: 'comp_' + Date.now() + '_5', type: 'text', text: '2. Het wonder van de Verzoening – De relatie tussen God en mens is verbroken door zonde. Aan het kruis betaalt Jezus de prijs.', active: true },
-        { id: 'comp_' + Date.now() + '_6', type: 'text', text: '3. Het wonder van de Vergeving – Niet alleen worden onze zonden vergeven, maar ze worden ook vergeten.', active: true },
-        { id: 'comp_' + Date.now() + '_7', type: 'text', text: '4. Het wonder van de Verlossing – Wij zijn verlost uit de macht van de duisternis.', active: true },
-        { id: 'comp_' + Date.now() + '_8', type: 'text', text: '5. Het wonder van de Genezing – Het kruis brengt niet alleen geestelijke, maar ook lichamelijke genezing.', active: true },
-        { id: 'comp_' + Date.now() + '_9', type: 'text', text: '6. Het wonder van de Gemeenschap – Het kruis scheidt niet, maar verbindt.', active: true },
-        { id: 'comp_' + Date.now() + '_10', type: 'text', text: '7. Het wonder van de Overwinning – Het kruis is geen einde, maar een begin. De opstanding volgt!', active: true }
+      'wonder1': [
+        { id: 'comp_' + Date.now() + '_w1_1', type: 'text', text: '1. Het wonder van de Liefde – God laat Zijn eigen Zoon sterven om te laten zien hoe onvoorwaardelijk en oneindig Zijn liefde voor ons is. Het is een liefde die niet afhangt van onze prestaties.', active: true }
+      ],
+      'wonder2': [
+        { id: 'comp_' + Date.now() + '_w2_1', type: 'text', text: '2. Het wonder van de Verzoening – De relatie tussen God en mens is verbroken door zonde. Aan het kruis betaalt Jezus de prijs, zodat de muur tussen ons en God wordt afgebroken. Wij mogen weer vrienden van God zijn.', active: true }
+      ],
+      'wonder3': [
+        { id: 'comp_' + Date.now() + '_w3_1', type: 'text', text: '3. Het wonder van de Vergeving – Niet alleen worden onze zonden vergeven, maar ze worden ook vergeten. Jezus zegt: "Het is volbracht" (Johannes 19:30) – de schuldbrief is aan het kruis genageld.', active: true }
+      ],
+      'wonder4': [
+        { id: 'comp_' + Date.now() + '_w4_1', type: 'text', text: '4. Het wonder van de Verlossing – Wij zijn verlost uit de macht van de duisternis. Het kruis is de plek waar de duivel zijn macht verliest (Kolossenzen 2:15). Wij zijn niet langer slaven van de zonde.', active: true }
+      ],
+      'wonder5': [
+        { id: 'comp_' + Date.now() + '_w5_1', type: 'text', text: '5. Het wonder van de Genezing – Het kruis brengt niet alleen geestelijke, maar ook lichamelijke en emotionele genezing. "Door Zijn striemen is ons genezing" (Jesaja 53:5) is een belofte voor heel de mens.', active: true }
+      ],
+      'wonder6': [
+        { id: 'comp_' + Date.now() + '_w6_1', type: 'text', text: '6. Het wonder van de Gemeenschap – Het kruis scheidt niet, maar verbindt. Het breekt alle muren van haat, ras en klasse af en schept één nieuwe mensheid (Efeziërs 2:14-16). Wij worden deel van Gods familie.', active: true }
+      ],
+      'wonder7': [
+        { id: 'comp_' + Date.now() + '_w7_1', type: 'text', text: '7. Het wonder van de Overwinning – Het kruis is geen einde, maar een begin. De opstanding volgt! Jezus overwint de dood, de hel en het graf. Dit geeft ons de zekerheid van eeuwig leven en hoop voor de toekomst.', active: true }
       ],
       'youtube': [
-        { id: 'comp_' + Date.now() + '_11', type: 'text', text: 'De video\'s van Wilkin van der Kamp zijn te vinden op het kanaal "Wilkin van der Kamp".', active: true },
-        { id: 'comp_' + Date.now() + '_17', type: 'youtube', videoId: '', active: true }
+        { id: 'comp_' + Date.now() + '_y1', type: 'text', text: 'De video\'s van Wilkin van der Kamp zijn te vinden op het kanaal "Wilkin van der Kamp".', active: true },
+        { id: 'comp_' + Date.now() + '_y2', type: 'youtube', videoId: '', active: true }
       ],
       'gespreksvragen': [
-        { id: 'comp_' + Date.now() + '_18', type: 'text', text: 'Gebruik deze vragen na het kijken van een video.', active: true },
-        { id: 'comp_' + Date.now() + '_28', type: 'vraag', vraagText: 'Wat is jouw antwoord op de afsluitende verdiepingsvraag?', active: true }
+        { id: 'comp_' + Date.now() + '_g1', type: 'text', text: 'Gebruik deze vragen na het kijken van een video.', active: true },
+        { id: 'comp_' + Date.now() + '_g2', type: 'vraag', vraagText: 'Wat is jouw antwoord op de afsluitende verdiepingsvraag?', active: true }
       ],
       'tips': [
-        { id: 'comp_' + Date.now() + '_29', type: 'text', text: 'Werkboekje: Er is ook een werkboekje bij de serie (uitgeverij Royal Jongbloed).', active: true }
+        { id: 'comp_' + Date.now() + '_t1', type: 'text', text: 'Werkboekje: Er is ook een werkboekje bij de serie (uitgeverij Royal Jongbloed).', active: true }
       ]
     };
   }
 
   // ---------- STATE ----------
-  let data = {};
-  let currentImageMap = {}; // map componentId -> imageUrl for the current user
+  let data = {}; // zal de draft of published data bevatten, afhankelijk van modus
+  let currentImageMap = {}; // map componentId -> imageUrl for current user
 
   // ---------- COMPONENT TYPES ----------
   const componentTypes = [
@@ -269,9 +347,14 @@
       header.onclick = () => toggleAccordion(header, topic.id);
       const panel = document.createElement('div'); panel.className = 'accordion-panel'; panel.id = `panel-${topic.id}`;
       const compContainer = document.createElement('div'); compContainer.className = 'component-container'; compContainer.id = `components-${topic.id}`; panel.appendChild(compContainer);
-      const addArea = document.createElement('div'); addArea.className = 'add-component-area';
-      addArea.innerHTML = `<select id="type-select-${topic.id}">${componentTypes.map(t => `<option value="${t.value}">${t.label}</option>`).join('')}</select><button onclick="openAddModal('${topic.id}')">➕ Toevoegen</button>`;
-      panel.appendChild(addArea);
+      
+      // Alleen in edit-modus de add-area tonen
+      if (isEditMode) {
+        const addArea = document.createElement('div'); addArea.className = 'add-component-area';
+        addArea.innerHTML = `<select id="type-select-${topic.id}">${componentTypes.map(t => `<option value="${t.value}">${t.label}</option>`).join('')}</select><button onclick="openAddModal('${topic.id}')">➕ Toevoegen</button>`;
+        panel.appendChild(addArea);
+      }
+      
       item.appendChild(header); item.appendChild(panel); root.appendChild(item);
     });
     loadData();
@@ -287,13 +370,24 @@
 
   // ---------- LOAD DATA ----------
   function loadData() {
-    db.ref('accordionData').on('value', (snapshot) => {
+    // Bepaal welke node te gebruiken
+    const dataNode = isEditMode ? 'draft' : 'published';
+    const ref = db.ref(dataNode);
+    ref.on('value', (snapshot) => {
       const val = snapshot.val();
       if (val) {
         data = val;
-        topics.forEach(t => { if (!data[t.id] || data[t.id].length === 0) data[t.id] = getDefaultData()[t.id] || []; });
+        // Zorg dat alle topics bestaan
+        topics.forEach(t => {
+          if (!data[t.id] || data[t.id].length === 0) {
+            data[t.id] = getDefaultData()[t.id] || [];
+          }
+        });
       } else {
-        data = getDefaultData(); db.ref('accordionData').set(data);
+        // Als leeg, vul met default data (voor zowel draft als published)
+        const defaultData = getDefaultData();
+        db.ref(dataNode).set(defaultData);
+        data = defaultData;
       }
       renderAllComponents();
       loadAllFeeds();
@@ -313,56 +407,50 @@
         const contentDiv = document.createElement('div'); contentDiv.className = 'content'; contentDiv.id = `content-${comp.id}`;
         renderComponentContent(contentDiv, comp, topic.id);
         item.appendChild(contentDiv);
-        const actions = document.createElement('div'); actions.className = 'actions';
-        const toggleBtn = document.createElement('button'); toggleBtn.className = 'toggle' + (comp.active !== false ? ' on' : ''); toggleBtn.textContent = comp.active !== false ? 'Aan' : 'Uit'; toggleBtn.onclick = () => toggleComponent(topic.id, index);
-        actions.appendChild(toggleBtn);
-        const editBtn = document.createElement('button'); editBtn.innerHTML = '✎'; editBtn.onclick = () => openEditModal(topic.id, index);
-        const delBtn = document.createElement('button'); delBtn.innerHTML = '✕'; delBtn.className = 'delete'; delBtn.onclick = () => deleteComponent(topic.id, index);
-        actions.appendChild(editBtn); actions.appendChild(delBtn); item.appendChild(actions);
+
+        // Alleen in edit-modus actions tonen
+        if (isEditMode) {
+          const actions = document.createElement('div'); actions.className = 'actions';
+          const toggleBtn = document.createElement('button'); toggleBtn.className = 'toggle' + (comp.active !== false ? ' on' : ''); toggleBtn.textContent = comp.active !== false ? 'Aan' : 'Uit'; toggleBtn.onclick = () => toggleComponent(topic.id, index);
+          actions.appendChild(toggleBtn);
+          const editBtn = document.createElement('button'); editBtn.innerHTML = '✎'; editBtn.onclick = () => openEditModal(topic.id, index);
+          const delBtn = document.createElement('button'); delBtn.innerHTML = '✕'; delBtn.className = 'delete'; delBtn.onclick = () => deleteComponent(topic.id, index);
+          actions.appendChild(editBtn); actions.appendChild(delBtn);
+          item.appendChild(actions);
+        }
+
         container.appendChild(item);
       });
     });
   }
 
   // ---------- RENDER CONTENT ----------
-  // Helper om een unieke foto toe te wijzen via Firebase-transactie
   function assignImage(topicId, compId, userName) {
     return new Promise((resolve, reject) => {
       const ref = db.ref(`fotoToewijzing/${topicId}/${compId}`);
       ref.transaction((currentData) => {
         if (currentData === null) {
-          // Initialiseer met alle beschikbare foto's
-          return {
-            assigned: {},
-            available: allImages.slice()
-          };
+          return { assigned: {}, available: allImages.slice() };
         }
-        // Check of gebruiker al een foto heeft
         if (currentData.assigned && currentData.assigned[userName]) {
-          return; // geen wijziging nodig
+          return;
         }
-        // Als er geen available is, return null om aan te geven dat er geen foto's zijn
         if (!currentData.available || currentData.available.length === 0) {
-          return; // geen wijziging
+          return;
         }
-        // Neem eerste beschikbare foto
         const image = currentData.available[0];
         const newAvailable = currentData.available.slice(1);
         const newAssigned = currentData.assigned || {};
         newAssigned[userName] = image;
-        return {
-          assigned: newAssigned,
-          available: newAvailable
-        };
+        return { assigned: newAssigned, available: newAvailable };
       }, (error, committed, snapshot) => {
-        if (error) {
-          reject(error);
-        } else if (committed) {
+        if (error) reject(error);
+        else if (committed) {
           const data = snapshot.val();
           if (data && data.assigned && data.assigned[userName]) {
             resolve(data.assigned[userName]);
           } else if (!data.available || data.available.length === 0) {
-            resolve(null); // geen beschikbare foto's meer
+            resolve(null);
           } else {
             resolve(null);
           }
@@ -393,7 +481,6 @@
         listenToAnswers(topicId, comp.id);
         break;
       case 'foto-opdracht':
-        // Maak een container met placeholder
         const fotoDiv = document.createElement('div');
         fotoDiv.innerHTML = `
           <h4 style="margin-bottom:8px;">📸 Kaarten op tafel</h4>
@@ -409,7 +496,6 @@
           <div class="foto-lijst" id="foto-lijst-${comp.id}"><em>Reacties worden geladen...</em></div>
         `;
         container.appendChild(fotoDiv);
-        // Asynchroon de foto toewijzen
         assignImage(topicId, comp.id, currentUserName).then(imageUrl => {
           const area = document.getElementById(`foto-area-${comp.id}`);
           if (imageUrl) {
@@ -434,22 +520,32 @@
         listenToGebedspunten(topicId, comp.id);
         break;
       case 'bijbeltekst':
-        const ref = comp.reference || ''; const version = comp.version || '193';
-        const embedUrl = ref ? `https://www.bible.com/embed/${version}/${encodeURIComponent(ref)}` : '';
-        container.innerHTML = `<div class="bijbeltekst-container"><div class="input-row"><input type="text" id="bijbel-ref-${comp.id}" placeholder="Bijbelreferentie (bv. Johannes 3:16)" value="${escapeHtml(ref)}"><input type="text" id="bijbel-version-${comp.id}" placeholder="Versie (bv. 193)" value="${escapeHtml(version)}" style="max-width:100px;"><button onclick="updateBijbeltekst('${topicId}','${comp.id}')">Update</button></div>${embedUrl ? `<iframe src="${embedUrl}" allowfullscreen></iframe>` : '<p>Voer een Bijbelreferentie in.</p>'}</div>`;
+        const ref = comp.reference || ''; 
+        const version = comp.version || '193';
+        const embedUrl = ref ? `https://www.bible.com/nl/bible/${version}/${encodeURIComponent(ref)}` : '';
+        container.innerHTML = `<div class="bijbeltekst-container">
+            <div class="input-row">
+              <input type="text" id="bijbel-ref-${comp.id}" placeholder="Bijbelreferentie (bv. Johannes 3:16)" value="${escapeHtml(ref)}">
+              <input type="text" id="bijbel-version-${comp.id}" placeholder="Versie (bv. 193)" value="${escapeHtml(version)}" style="max-width:100px;">
+              <button onclick="updateBijbeltekst('${topicId}','${comp.id}')">Update</button>
+            </div>
+            ${embedUrl ? `<iframe src="${embedUrl}" allowfullscreen style="width:100%;height:400px;border:none;border-radius:8px;"></iframe>` : '<p>Voer een Bijbelreferentie in en klik op Update.</p>'}
+          </div>`;
         break;
       default: container.textContent = 'Onbekend type';
     }
   }
 
-  // ---------- TOGGLE ----------
+  // ---------- TOGGLE (alleen in edit) ----------
   function toggleComponent(topicId, index) {
+    if (!isEditMode) return;
     const comp = data[topicId][index]; if (!comp) return;
     comp.active = comp.active !== false ? false : true;
-    db.ref(`accordionData/${topicId}/${index}`).update({ active: comp.active });
+    // Update in draft (we zitten in edit-modus)
+    db.ref(`draft/${topicId}/${index}`).update({ active: comp.active });
   }
 
-  // ---------- LIVE FEEDS (ANTWOORDEN, GEBEDSPUNTEN, FOTO-OPDRACHTEN) ----------
+  // ---------- LIVE FEEDS ----------
   function listenToAnswers(topicId, compId) {
     db.ref(`answers/${topicId}/${compId}`).on('value', (sn) => {
       const val = sn.val(); const el = document.getElementById(`antwoord-lijst-${compId}`);
@@ -550,12 +646,26 @@
     const refInput = document.getElementById(`bijbel-ref-${compId}`); const versionInput = document.getElementById(`bijbel-version-${compId}`);
     if (!refInput || !versionInput) return;
     const ref = refInput.value.trim(); const version = versionInput.value.trim() || '193';
-    const comp = data[topicId].find(c => c.id === compId); if (comp) { comp.reference = ref; comp.version = version; db.ref(`accordionData/${topicId}`).set(data[topicId]); }
+    const comp = data[topicId].find(c => c.id === compId); if (comp) { comp.reference = ref; comp.version = version; 
+      // Update in draft (we zitten in edit-modus)
+      const index = data[topicId].indexOf(comp);
+      if (index !== -1) db.ref(`draft/${topicId}/${index}`).update({ reference: ref, version: version });
+    }
   }
 
-  // ---------- MODAL FUNCTIONS ----------
-  function openAddModal(topicId) { currentTopicId = topicId; currentComponentId = null; modalMode = 'add'; const type = document.getElementById(`type-select-${topicId}`).value; openModalForType(type, null); }
-  function openEditModal(topicId, index) { currentTopicId = topicId; currentComponentId = index; modalMode = 'edit'; const comp = data[topicId][index]; if (!comp) return; openModalForType(comp.type, comp); }
+  // ---------- MODAL FUNCTIONS (alleen in edit) ----------
+  function openAddModal(topicId) {
+    if (!isEditMode) return;
+    currentTopicId = topicId; currentComponentId = null; modalMode = 'add'; 
+    const type = document.getElementById(`type-select-${topicId}`).value; 
+    openModalForType(type, null);
+  }
+  function openEditModal(topicId, index) {
+    if (!isEditMode) return;
+    currentTopicId = topicId; currentComponentId = index; modalMode = 'edit'; 
+    const comp = data[topicId][index]; if (!comp) return; 
+    openModalForType(comp.type, comp);
+  }
   
   let currentTopicId = null, currentComponentId = null, modalMode = 'add';
 
@@ -578,6 +688,7 @@
   }
   function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
   function saveModal() {
+    if (!isEditMode) return;
     const type = document.getElementById('modal-type').value; let newComp = { type };
     switch(type) {
       case 'text': newComp.text = document.getElementById('modal-text').value; break;
@@ -593,21 +704,57 @@
     if (!newComp.id) newComp.id = 'comp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
     const topicId = currentTopicId; const list = data[topicId] || [];
     if (modalMode === 'add') list.push(newComp); else { const idx = currentComponentId; if (idx !== null && idx < list.length) { newComp.id = list[idx].id; list[idx] = newComp; } }
-    data[topicId] = list; db.ref('accordionData').set(data); closeModal();
+    data[topicId] = list; 
+    // Update draft
+    db.ref(`draft/${topicId}`).set(list);
+    closeModal();
   }
 
   function deleteComponent(topicId, index) {
+    if (!isEditMode) return;
     if (!confirm('Weet je zeker dat je dit component wilt verwijderen?')) return;
     const list = data[topicId] || []; const comp = list[index];
-    if (comp) { if (comp.type === 'vraag') db.ref(`answers/${topicId}/${comp.id}`).remove(); if (comp.type === 'foto-opdracht') db.ref(`fotoOpdrachten/${topicId}/${comp.id}`).remove(); if (comp.type === 'tekenbord') db.ref(`drawings/${topicId}/${comp.id}`).remove(); if (comp.type === 'gebedspunten') db.ref(`gebedspunten/${topicId}/${comp.id}`).remove(); }
-    list.splice(index, 1); data[topicId] = list; db.ref('accordionData').set(data);
+    if (comp) { 
+      if (comp.type === 'vraag') db.ref(`answers/${topicId}/${comp.id}`).remove(); 
+      if (comp.type === 'foto-opdracht') db.ref(`fotoOpdrachten/${topicId}/${comp.id}`).remove(); 
+      if (comp.type === 'tekenbord') db.ref(`drawings/${topicId}/${comp.id}`).remove(); 
+      if (comp.type === 'gebedspunten') db.ref(`gebedspunten/${topicId}/${comp.id}`).remove(); 
+    }
+    list.splice(index, 1); 
+    data[topicId] = list;
+    db.ref(`draft/${topicId}`).set(list);
   }
+
+  // ---------- PUBLICATIE ----------
+  document.getElementById('publishBtn').addEventListener('click', function() {
+    if (!isEditMode) return;
+    if (!confirm('Weet je zeker dat je de huidige draft wilt publiceren naar de studenten?')) return;
+    // Kopieer draft naar published
+    db.ref('draft').once('value').then(snapshot => {
+      const draftData = snapshot.val();
+      if (draftData) {
+        db.ref('published').set(draftData);
+        alert('✅ Gepubliceerd! Studenten zien nu de bijgewerkte versie.');
+      } else {
+        alert('Er is geen draft om te publiceren.');
+      }
+    });
+  });
 
   // ---------- RESET ----------
   document.getElementById('resetBtn').addEventListener('click', function() {
-    if (!confirm('Weet je zeker dat je ALLE gegevens wilt wissen? Dit verwijdert alle antwoorden, tekeningen, gebedspunten, foto-reacties en foto-toewijzingen. De standaardteksten worden hersteld.')) return;
-    db.ref('answers').remove(); db.ref('drawings').remove(); db.ref('gebedspunten').remove(); db.ref('fotoOpdrachten').remove(); db.ref('fotoToewijzing').remove();
-    db.ref('accordionData').set(getDefaultData());
+    if (!isEditMode) return;
+    if (!confirm('Weet je zeker dat je ALLE gegevens wilt wissen? Dit verwijdert alle antwoorden, tekeningen, gebedspunten, foto-reacties, foto-toewijzingen, én de draft en published inhoud. De standaardteksten worden hersteld.')) return;
+    // Wis alle interactiedata
+    db.ref('answers').remove();
+    db.ref('drawings').remove();
+    db.ref('gebedspunten').remove();
+    db.ref('fotoOpdrachten').remove();
+    db.ref('fotoToewijzing').remove();
+    // Reset draft en published naar default
+    const defaultData = getDefaultData();
+    db.ref('draft').set(defaultData);
+    db.ref('published').set(defaultData);
   });
 
   // ---------- INIT ----------
