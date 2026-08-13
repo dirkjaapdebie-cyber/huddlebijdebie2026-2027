@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7 WONDEREN VAN HET KRUIS – Interactief</title>
+  <!-- Firebase compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 25px 30px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.25rem;
+      color: #1a2b4a;
+      text-align: center;
+    }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      font-style: italic;
+    }
+    .accordion-item {
+      border-bottom: 1px solid #e0e4ea;
+    }
+    .accordion-item:last-child {
+      border-bottom: none;
+    }
+    .accordion-header {
+      width: 100%;
+      background: #f8faff;
+      border: none;
+      padding: 18px 20px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #1a2b4a;
+      transition: background 0.2s;
+    }
+    .accordion-header:hover {
+      background: #eef3fc;
+    }
+    .accordion-header .arrow {
+      font-size: 1.4rem;
+      transition: transform 0.3s ease;
+    }
+    .accordion-header.active .arrow {
+      transform: rotate(90deg);
+    }
+    .accordion-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      padding: 0 20px;
+      background: #fff;
+    }
+    .accordion-panel.open {
+      max-height: 5000px; /* grote waarde zodat alles past */
+      padding: 20px;
+    }
+    .component-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .component-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: #f9fbfe;
+      border-radius: 8px;
+      border-left: 4px solid #3b7cbf;
+    }
+    .component-item .content {
+      flex: 1;
+    }
+    .component-item .actions {
+      display: flex;
+      gap: 6px;
+    }
+    .component-item .actions button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #777;
+      padding: 4px 6px;
+      border-radius: 4px;
+      transition: 0.2s;
+    }
+    .component-item .actions button:hover {
+      background: #e0e7ef;
+      color: #222;
+    }
+    .component-item .actions .delete {
+      color: #b33;
+    }
+    .component-item .actions .delete:hover {
+      background: #fce4e4;
+      color: #a00;
+    }
+    .add-component-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .add-component-area select,
+    .add-component-area input {
+      padding: 8px 12px;
+      border: 1px solid #d0d7e3;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      background: #fff;
+    }
+    .add-component-area button {
+      padding: 8px 18px;
+      background: #1a2b4a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .add-component-area button:hover {
+      background: #2a3b5a;
+    }
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal {
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    .modal h3 {
+      margin-bottom: 15px;
+    }
+    .modal label {
+      display: block;
+      margin: 12px 0 4px;
+      font-weight: 500;
+    }
+    .modal input, .modal textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+    .modal .buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .modal .buttons button {
+      padding: 10px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .modal .btn-cancel {
+      background: #e0e4ea;
+      color: #333;
+    }
+    .modal .btn-save {
+      background: #1a2b4a;
+      color: #fff;
+    }
+    /* Small responsive */
+    @media (max-width: 600px) {
+      .container { padding: 15px; }
+      .accordion-header { font-size: 1rem; padding: 14px 15px; }
+      .add-component-area select, .add-component-area input { flex: 1 1 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>7 WONDEREN VAN HET KRUIS</h1>
+  <div class="subtitle">Wilkin van der Kamp – interactief studieboek</div>
+
+  <div id="accordion-root"></div>
+</div>
+
+<!-- Modal voor component bewerken / toevoegen -->
+<div id="modal-overlay" class="modal-overlay" style="display:none;">
+  <div class="modal">
+    <h3 id="modal-title">Voeg component toe</h3>
+    <div id="modal-form"></div>
+    <div class="buttons">
+      <button class="btn-cancel" onclick="closeModal()">Annuleren</button>
+      <button class="btn-save" onclick="saveModal()">Opslaan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- FIREBASE CONFIG ----------
+  const firebaseConfig = {
+    apiKey: "AIzaSyCSoSYmzdcse87_E-p6K-DMn_NbQWFnPNU",
+    authDomain: "huddlebijdebie26jan.firebaseapp.com",
+    databaseURL: "https://huddlebijdebie26jan-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "huddlebijdebie26jan",
+    storageBucket: "huddlebijdebie26jan.firebasestorage.app",
+    messagingSenderId: "700291377085",
+    appId: "1:700291377085:web:d07c390ccdb760d77094d4"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  // ---------- TOPICS (gebaseerd op de tekst) ----------
+  const topics = [
+    { id: 'inleiding', title: '1. Inleiding' },
+    { id: 'wonderen', title: '2. De 7 wonderen: Samenvatting' },
+    { id: 'youtube', title: '3. YouTube-materiaal' },
+    { id: 'gespreksvragen', title: '4. Gespreksvragen' },
+    { id: 'tips', title: '5. Aanvullende tips' },
+    { id: 'opmaak', title: '6. Tips voor de opmaak in Google Docs' }
+  ];
+
+  // ---------- STATE ----------
+  let data = {}; // { topicId: [ { id, type, content, ... }, ... ] }
+  let currentTopicId = null;
+  let currentComponentId = null; // for editing
+  let modalMode = 'add'; // 'add' or 'edit'
+
+  // ---------- COMPONENT TYPES ----------
+  const componentTypes = [
+    { value: 'text', label: 'Tekst' },
+    { value: 'checkbox', label: 'Checkbox' },
+    { value: 'button', label: 'Knop' },
+    { value: 'input', label: 'Invoerveld' }
+  ];
+
+  // ---------- RENDER ACCORDION ----------
+  function renderAccordion() {
+    const root = document.getElementById('accordion-root');
+    root.innerHTML = '';
+    topics.forEach(topic => {
+      const item = document.createElement('div');
+      item.className = 'accordion-item';
+
+      const header = document.createElement('button');
+      header.className = 'accordion-header';
+      header.innerHTML = `${topic.title} <span class="arrow">▶</span>`;
+      header.onclick = () => toggleAccordion(header, topic.id);
+
+      const panel = document.createElement('div');
+      panel.className = 'accordion-panel';
+      panel.id = `panel-${topic.id}`;
+
+      // container for components
+      const compContainer = document.createElement('div');
+      compContainer.className = 'component-container';
+      compContainer.id = `components-${topic.id}`;
+      panel.appendChild(compContainer);
+
+      // add component area
+      const addArea = document.createElement('div');
+      addArea.className = 'add-component-area';
+      addArea.innerHTML = `
+        <select id="type-select-${topic.id}">
+          ${componentTypes.map(t => `<option value="${t.value}">${t.label}</option>`).join('')}
+        </select>
+        <button onclick="openAddModal('${topic.id}')">➕ Toevoegen</button>
+      `;
+      panel.appendChild(addArea);
+
+      item.appendChild(header);
+      item.appendChild(panel);
+      root.appendChild(item);
+    });
+
+    // load data from Firebase
+    loadData();
+  }
+
+  // ---------- ACCORDION TOGGLE ----------
+  function toggleAccordion(header, topicId) {
+    const panel = document.getElementById(`panel-${topicId}`);
+    const isOpen = panel.classList.contains('open');
+    // close all
+    document.querySelectorAll('.accordion-panel').forEach(p => p.classList.remove('open'));
+    document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
+    if (!isOpen) {
+      panel.classList.add('open');
+      header.classList.add('active');
+    }
+  }
+
+  // ---------- LOAD DATA FROM FIREBASE ----------
+  function loadData() {
+    db.ref('accordionData').on('value', (snapshot) => {
+      const val = snapshot.val();
+      if (val) {
+        data = val;
+      } else {
+        // init empty
+        data = {};
+        topics.forEach(t => data[t.id] = []);
+      }
+      renderAllComponents();
+    });
+  }
+
+  // ---------- RENDER COMPONENTS FOR ALL TOPICS ----------
+  function renderAllComponents() {
+    topics.forEach(topic => {
+      const container = document.getElementById(`components-${topic.id}`);
+      if (!container) return;
+      const components = data[topic.id] || [];
+      container.innerHTML = '';
+      components.forEach((comp, index) => {
+        const item = document.createElement('div');
+        item.className = 'component-item';
+        // content
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'content';
+        switch(comp.type) {
+          case 'text':
+            contentDiv.innerHTML = `<p style="margin:0;">${escapeHtml(comp.text || '')}</p>`;
+            break;
+          case 'checkbox':
+            contentDiv.innerHTML = `<label><input type="checkbox" ${comp.checked ? 'checked' : ''} disabled> ${escapeHtml(comp.label || '')}</label>`;
+            break;
+          case 'button':
+            contentDiv.innerHTML = `<button style="padding:6px 16px;border-radius:6px;border:1px solid #ccc;background:#f0f4fa;cursor:default;">${escapeHtml(comp.label || 'Knop')}</button>`;
+            break;
+          case 'input':
+            contentDiv.innerHTML = `<input type="text" placeholder="${escapeHtml(comp.placeholder || '')}" value="${escapeHtml(comp.value || '')}" disabled style="padding:6px 10px;border:1px solid #ccc;border-radius:6px;width:100%;max-width:300px;">`;
+            break;
+          default:
+            contentDiv.textContent = 'Onbekend type';
+        }
+        item.appendChild(contentDiv);
+
+        // actions: edit & delete
+        const actions = document.createElement('div');
+        actions.className = 'actions';
+        const editBtn = document.createElement('button');
+        editBtn.innerHTML = '✎';
+        editBtn.title = 'Bewerken';
+        editBtn.onclick = () => openEditModal(topic.id, index);
+        const delBtn = document.createElement('button');
+        delBtn.innerHTML = '✕';
+        delBtn.className = 'delete';
+        delBtn.title = 'Verwijderen';
+        delBtn.onclick = () => deleteComponent(topic.id, index);
+        actions.appendChild(editBtn);
+        actions.appendChild(delBtn);
+        item.appendChild(actions);
+
+        container.appendChild(item);
+      });
+    });
+  }
+
+  // ---------- HELPER: ESCAPE HTML ----------
+  function escapeHtml(text) {
+    if (!text) return '';
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+    return text.replace(/[&<>"']/g, m => map[m]);
+  }
+
+  // ---------- ADD COMPONENT (open modal) ----------
+  function openAddModal(topicId) {
+    currentTopicId = topicId;
+    currentComponentId = null;
+    modalMode = 'add';
+    const select = document.getElementById(`type-select-${topicId}`);
+    const type = select.value;
+    openModalForType(type, null);
+  }
+
+  // ---------- EDIT COMPONENT (open modal) ----------
+  function openEditModal(topicId, index) {
+    currentTopicId = topicId;
+    currentComponentId = index;
+    modalMode = 'edit';
+    const comp = data[topicId][index];
+    if (!comp) return;
+    openModalForType(comp.type, comp);
+  }
+
+  // ---------- OPEN MODAL WITH FORM ----------
+  function openModalForType(type, existing) {
+    const overlay = document.getElementById('modal-overlay');
+    const title = document.getElementById('modal-title');
+    const form = document.getElementById('modal-form');
+
+    title.textContent = modalMode === 'add' ? `Voeg ${componentTypes.find(t=>t.value===type)?.label || type} toe` : 'Bewerk component';
+    let html = `<input type="hidden" id="modal-type" value="${type}">`;
+
+    switch(type) {
+      case 'text':
+        html += `<label>Tekstinhoud</label><textarea id="modal-text" rows="4">${existing ? existing.text || '' : ''}</textarea>`;
+        break;
+      case 'checkbox':
+        html += `<label>Label</label><input id="modal-label" value="${existing ? existing.label || '' : ''}">`;
+        html += `<label><input type="checkbox" id="modal-checked" ${existing && existing.checked ? 'checked' : ''}> Standaard aangevinkt</label>`;
+        break;
+      case 'button':
+        html += `<label>Knoptekst</label><input id="modal-label" value="${existing ? existing.label || '' : 'Klik hier'}">`;
+        break;
+      case 'input':
+        html += `<label>Placeholder</label><input id="modal-placeholder" value="${existing ? existing.placeholder || '' : ''}">`;
+        html += `<label>Waarde</label><input id="modal-value" value="${existing ? existing.value || '' : ''}">`;
+        break;
+      default:
+        html += `<p>Onbekend type</p>`;
+    }
+    form.innerHTML = html;
+    overlay.style.display = 'flex';
+  }
+
+  // ---------- CLOSE MODAL ----------
+  function closeModal() {
+    document.getElementById('modal-overlay').style.display = 'none';
+  }
+
+  // ---------- SAVE MODAL ----------
+  function saveModal() {
+    const type = document.getElementById('modal-type').value;
+    let newComp = { type };
+    switch(type) {
+      case 'text':
+        newComp.text = document.getElementById('modal-text').value;
+        break;
+      case 'checkbox':
+        newComp.label = document.getElementById('modal-label').value;
+        newComp.checked = document.getElementById('modal-checked').checked;
+        break;
+      case 'button':
+        newComp.label = document.getElementById('modal-label').value;
+        break;
+      case 'input':
+        newComp.placeholder = document.getElementById('modal-placeholder').value;
+        newComp.value = document.getElementById('modal-value').value;
+        break;
+    }
+
+    const topicId = currentTopicId;
+    const list = data[topicId] || [];
+
+    if (modalMode === 'add') {
+      list.push(newComp);
+    } else {
+      // edit
+      const idx = currentComponentId;
+      if (idx !== null && idx < list.length) {
+        // keep id if exists
+        if (list[idx].id) newComp.id = list[idx].id;
+        list[idx] = newComp;
+      }
+    }
+
+    data[topicId] = list;
+    // save to Firebase
+    db.ref('accordionData').set(data);
+    closeModal();
+    // render will happen automatically via listener
+  }
+
+  // ---------- DELETE COMPONENT ----------
+  function deleteComponent(topicId, index) {
+    if (!confirm('Weet je zeker dat je dit component wilt verwijderen?')) return;
+    const list = data[topicId] || [];
+    list.splice(index, 1);
+    data[topicId] = list;
+    db.ref('accordionData').set(data);
+  }
+
+  // ---------- INIT ----------
+  document.addEventListener('DOMContentLoaded', () => {
+    renderAccordion();
+    // open first by default? optional
+    // setTimeout(() => {
+    //   const firstHeader = document.querySelector('.accordion-header');
+    //   if(firstHeader) firstHeader.click();
+    // }, 100);
+  });
+
+  // ---------- CLOSE MODAL ON ESC ----------
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+</script>
+</body>
+</html>
