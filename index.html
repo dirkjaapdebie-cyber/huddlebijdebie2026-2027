@@ -23,359 +23,100 @@
       padding: 25px 30px;
       box-shadow: 0 8px 25px rgba(0,0,0,0.08);
     }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.25rem;
-      color: #1a2b4a;
-      text-align: center;
-    }
-    .subtitle {
-      text-align: center;
-      color: #666;
-      margin-bottom: 30px;
-      font-style: italic;
-    }
-    .header-actions {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 15px;
-    }
-    #resetBtn {
-      background: #b33;
-      color: #fff;
-      border: none;
-      padding: 8px 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.2s;
-    }
-    #resetBtn:hover {
-      background: #922;
-    }
-    .accordion-item {
-      border-bottom: 1px solid #e0e4ea;
-    }
-    .accordion-item:last-child {
-      border-bottom: none;
-    }
+    h1 { font-size: 2rem; color: #1a2b4a; text-align: center; }
+    .subtitle { text-align: center; color: #666; margin-bottom: 30px; font-style: italic; }
+    .header-actions { display: flex; justify-content: flex-end; margin-bottom: 15px; }
+    #resetBtn { background: #b33; color: #fff; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    #resetBtn:hover { background: #922; }
+
+    .accordion-item { border-bottom: 1px solid #e0e4ea; }
     .accordion-header {
-      width: 100%;
-      background: #f8faff;
-      border: none;
-      padding: 18px 20px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      text-align: left;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #1a2b4a;
-      transition: background 0.2s;
+      width: 100%; background: #f8faff; border: none; padding: 18px 20px;
+      font-size: 1.1rem; font-weight: 600; text-align: left; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center; color: #1a2b4a;
     }
-    .accordion-header:hover {
-      background: #eef3fc;
-    }
-    .accordion-header .arrow {
-      font-size: 1.4rem;
-      transition: transform 0.3s ease;
-    }
-    .accordion-header.active .arrow {
-      transform: rotate(90deg);
-    }
-    .accordion-panel {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease, padding 0.3s ease;
-      padding: 0 20px;
-      background: #fff;
-    }
-    .accordion-panel.open {
-      max-height: 5000px;
-      padding: 20px;
-    }
-    .component-container {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
+    .accordion-header:hover { background: #eef3fc; }
+    .accordion-header .arrow { font-size: 1.4rem; transition: transform 0.3s ease; }
+    .accordion-header.active .arrow { transform: rotate(90deg); }
+    .accordion-panel { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; padding: 0 20px; }
+    .accordion-panel.open { max-height: 5000px; padding: 20px; }
+    .component-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+
     .component-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 8px 12px;
-      background: #f9fbfe;
-      border-radius: 8px;
-      border-left: 4px solid #3b7cbf;
+      display: flex; align-items: flex-start; gap: 10px; padding: 8px 12px;
+      background: #f9fbfe; border-radius: 8px; border-left: 4px solid #3b7cbf;
       transition: opacity 0.3s;
     }
-    .component-item.disabled {
-      opacity: 0.5;
-      border-left-color: #999;
-    }
-    .component-item .content {
-      flex: 1;
-    }
-    .component-item .actions {
-      display: flex;
-      gap: 4px;
-      margin-top: 4px;
-      align-items: center;
-    }
+    .component-item.disabled { opacity: 0.5; border-left-color: #999; }
+    .component-item .content { flex: 1; }
+    .component-item .actions { display: flex; gap: 4px; margin-top: 4px; align-items: center; }
     .component-item .actions button {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      font-size: 0.9rem;
-      color: #777;
-      padding: 4px 6px;
-      border-radius: 4px;
-      transition: 0.2s;
+      background: transparent; border: none; cursor: pointer; font-size: 0.9rem;
+      color: #777; padding: 4px 6px; border-radius: 4px;
     }
-    .component-item .actions button:hover {
-      background: #e0e7ef;
-      color: #222;
-    }
-    .component-item .actions .delete {
-      color: #b33;
-    }
-    .component-item .actions .delete:hover {
-      background: #fce4e4;
-      color: #a00;
-    }
+    .component-item .actions button:hover { background: #e0e7ef; color: #222; }
+    .component-item .actions .delete { color: #b33; }
+    .component-item .actions .delete:hover { background: #fce4e4; color: #a00; }
     .component-item .actions .toggle {
-      font-size: 1rem;
-      padding: 2px 8px;
-      border: 1px solid #ccc;
-      border-radius: 12px;
-      background: #e0e4ea;
-      color: #333;
+      font-size: 1rem; padding: 2px 8px; border: 1px solid #ccc;
+      border-radius: 12px; background: #e0e4ea; color: #333;
     }
-    .component-item .actions .toggle.on {
-      background: #4caf50;
-      color: #fff;
-      border-color: #4caf50;
-    }
-    .add-component-area {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 8px;
-      flex-wrap: wrap;
-    }
-    .add-component-area select,
-    .add-component-area input {
-      padding: 8px 12px;
-      border: 1px solid #d0d7e3;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      background: #fff;
-    }
-    .add-component-area button {
-      padding: 8px 18px;
-      background: #1a2b4a;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.2s;
-    }
-    .add-component-area button:hover {
-      background: #2a3b5a;
-    }
+    .component-item .actions .toggle.on { background: #4caf50; color: #fff; border-color: #4caf50; }
 
-    /* Component-specific styles */
-    .youtube-iframe {
-      width: 100%;
-      max-width: 560px;
-      height: 315px;
-      border: none;
-      border-radius: 8px;
-    }
-    .vraag-input {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin: 10px 0;
-    }
-    .vraag-input input {
-      flex: 1;
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .vraag-input button {
-      padding: 8px 16px;
-      background: #1a2b4a;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .vraag-input button:hover {
-      background: #2a3b5a;
-    }
-    .antwoord-lijst {
-      margin-top: 10px;
-      border-top: 1px solid #e0e4ea;
-      padding-top: 10px;
-    }
-    .antwoord-item {
-      padding: 6px 0;
-      border-bottom: 1px solid #f0f2f5;
-      font-size: 0.95rem;
-    }
-    .antwoord-item .tijd {
-      color: #888;
-      font-size: 0.8rem;
-      margin-left: 8px;
-    }
-    .gebedspunten-container {
-      margin: 10px 0;
-    }
-    .gebedspunten-container .input-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .gebedspunten-container input {
-      flex: 1;
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .gebedspunten-container button {
-      padding: 8px 16px;
-      background: #1a2b4a;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .gebedspunten-container button:hover {
-      background: #2a3b5a;
-    }
-    .gebedspunten-lijst {
-      margin-top: 10px;
-      border-top: 1px solid #e0e4ea;
-      padding-top: 10px;
-    }
-    .gebedspunt-item {
-      padding: 4px 0;
-      border-bottom: 1px solid #f0f2f5;
-      font-size: 0.95rem;
-    }
-    .gebedspunt-item .tijd {
-      color: #888;
-      font-size: 0.8rem;
-      margin-left: 8px;
-    }
-    .bijbeltekst-container iframe {
-      width: 100%;
-      height: 400px;
-      border: none;
-      border-radius: 8px;
-    }
-    .bijbeltekst-container .input-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin: 8px 0;
-    }
-    .bijbeltekst-container input {
-      flex: 1;
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .bijbeltekst-container button {
-      padding: 8px 16px;
-      background: #1a2b4a;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .bijbeltekst-container button:hover {
-      background: #2a3b5a;
-    }
+    .add-component-area { display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+    .add-component-area select, .add-component-area input { padding: 8px 12px; border: 1px solid #d0d7e3; border-radius: 8px; }
+    .add-component-area button { padding: 8px 18px; background: #1a2b4a; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
 
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.4);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+    .youtube-iframe { width: 100%; max-width: 560px; height: 315px; border: none; border-radius: 8px; }
+    .vraag-input, .foto-input { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+    .vraag-input input, .foto-input input, .foto-input textarea { flex: 1; padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; }
+    .vraag-input button, .foto-input button { padding: 8px 16px; background: #1a2b4a; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+    .antwoord-lijst, .foto-lijst { margin-top: 10px; border-top: 1px solid #e0e4ea; padding-top: 10px; }
+    .antwoord-item, .foto-item { padding: 6px 0; border-bottom: 1px solid #f0f2f5; font-size: 0.95rem; }
+    .foto-item img { max-width: 100px; height: auto; border-radius: 4px; vertical-align: middle; margin-right: 10px; }
+    .foto-item .naam { font-weight: 600; }
+    .foto-item .keuze { font-style: italic; color: #1a2b4a; }
+    .foto-item .tijd { color: #888; font-size: 0.8rem; margin-left: 8px; }
+    
+    .foto-opdracht-img { max-width: 100%; max-height: 300px; border-radius: 8px; margin: 10px 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+
+    .modal-overlay, .name-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4); display: flex; justify-content: center; align-items: center; z-index: 2000;
     }
-    .modal {
-      background: #fff;
-      padding: 30px;
-      border-radius: 16px;
-      width: 90%;
-      max-width: 500px;
+    .modal, .name-modal {
+      background: #fff; padding: 30px; border-radius: 16px; width: 90%; max-width: 500px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     }
-    .modal h3 {
-      margin-bottom: 15px;
-    }
-    .modal label {
-      display: block;
-      margin: 12px 0 4px;
-      font-weight: 500;
-    }
-    .modal input, .modal textarea {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-      margin-bottom: 8px;
-    }
-    .modal .buttons {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    .modal .buttons button {
-      padding: 10px 24px;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .modal .btn-cancel {
-      background: #e0e4ea;
-      color: #333;
-    }
-    .modal .btn-save {
-      background: #1a2b4a;
-      color: #fff;
-    }
-    @media (max-width: 600px) {
-      .container { padding: 15px; }
-      .accordion-header { font-size: 1rem; padding: 14px 15px; }
-      .add-component-area select, .add-component-area input { flex: 1 1 100%; }
-      .youtube-iframe { height: 200px; }
-    }
+    .modal h3, .name-modal h3 { margin-bottom: 15px; }
+    .modal label, .name-modal label { display: block; margin: 12px 0 4px; font-weight: 500; }
+    .modal input, .modal textarea, .name-modal input { width: 100%; padding: 8px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; }
+    .name-modal .buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    .name-modal button { padding: 10px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .btn-primary { background: #1a2b4a; color: #fff; }
+    @media (max-width: 600px) { .container { padding: 15px; } }
   </style>
 </head>
 <body>
 
+<!-- Naam invoer modal -->
+<div id="name-overlay" class="name-overlay" style="display:none;">
+  <div class="name-modal">
+    <h3>Welkom! Wat is jouw naam?</h3>
+    <p style="margin-bottom: 15px; color: #666;">Je naam wordt gebruikt bij het indienen van antwoorden en foto-opdrachten.</p>
+    <input type="text" id="name-input" placeholder="Vul je voornaam in..." autofocus>
+    <div class="buttons">
+      <button class="btn-primary" onclick="saveName()">Verder</button>
+    </div>
+  </div>
+</div>
+
 <div class="container">
   <h1>7 WONDEREN VAN HET KRUIS</h1>
   <div class="subtitle">Wilkin van der Kamp – interactief studieboek</div>
-
   <div class="header-actions">
     <button id="resetBtn">🔄 Reset alles</button>
   </div>
-
   <div id="accordion-root"></div>
 </div>
 
@@ -405,7 +146,64 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
-  // ---------- TOPICS (zonder 6) ----------
+  // ---------- GEBRUIKERSNAAM ----------
+  let currentUserName = localStorage.getItem('bijbelstudie_naam') || '';
+  function saveName() {
+    const naam = document.getElementById('name-input').value.trim();
+    if (!naam) { alert('Vul je naam in.'); return; }
+    currentUserName = naam;
+    localStorage.setItem('bijbelstudie_naam', naam);
+    document.getElementById('name-overlay').style.display = 'none';
+  }
+  // Controleer bij laden of naam bekend is
+  window.addEventListener('DOMContentLoaded', () => {
+    if (!currentUserName) {
+      document.getElementById('name-overlay').style.display = 'flex';
+    }
+  });
+
+  // ---------- LOKALE AFBEELDINGEN (de 37 screenshots) ----------
+  const allImages = [
+    "Screenshot 2026-08-13 15.22.52.png",
+    "Screenshot 2026-08-13 15.23.18.png",
+    "Screenshot 2026-08-13 15.23.31.png",
+    "Screenshot 2026-08-13 15.23.38.png",
+    "Screenshot 2026-08-13 15.23.47.png",
+    "Screenshot 2026-08-13 15.23.55.png",
+    "Screenshot 2026-08-13 15.24.06.png",
+    "Screenshot 2026-08-13 15.24.18.png",
+    "Screenshot 2026-08-13 15.24.40.png",
+    "Screenshot 2026-08-13 15.24.46.png",
+    "Screenshot 2026-08-13 15.25.07.png",
+    "Screenshot 2026-08-13 15.25.16.png",
+    "Screenshot 2026-08-13 15.25.34.png",
+    "Screenshot 2026-08-13 15.25.52.png",
+    "Screenshot 2026-08-13 15.26.00.png",
+    "Screenshot 2026-08-13 15.26.11.png",
+    "Screenshot 2026-08-13 15.26.25.png",
+    "Screenshot 2026-08-13 15.26.37.png",
+    "Screenshot 2026-08-13 15.26.49.png",
+    "Screenshot 2026-08-13 15.26.58.png",
+    "Screenshot 2026-08-13 15.27.09.png",
+    "Screenshot 2026-08-13 15.27.23.png",
+    "Screenshot 2026-08-13 15.27.32.png",
+    "Screenshot 2026-08-13 15.27.41.png",
+    "Screenshot 2026-08-13 15.27.54.png",
+    "Screenshot 2026-08-13 15.28.01.png",
+    "Screenshot 2026-08-13 15.28.09.png",
+    "Screenshot 2026-08-13 15.28.16.png",
+    "Screenshot 2026-08-13 15.28.23.png",
+    "Screenshot 2026-08-13 15.28.30.png",
+    "Screenshot 2026-08-13 15.28.40.png",
+    "Screenshot 2026-08-13 15.28.54.png",
+    "Screenshot 2026-08-13 15.29.02.png",
+    "Screenshot 2026-08-13 15.29.13.png",
+    "Screenshot 2026-08-13 15.29.22.png",
+    "Screenshot 2026-08-13 15.29.32.png",
+    "Screenshot 2026-08-13 15.29.40.png"
+  ];
+
+  // ---------- TOPICS ----------
   const topics = [
     { id: 'inleiding', title: '1. Inleiding' },
     { id: 'wonderen', title: '2. De 7 wonderen: Samenvatting' },
@@ -414,76 +212,50 @@
     { id: 'tips', title: '5. Aanvullende tips' }
   ];
 
-  // ---------- DEFAULT DATA (uit het bestand, met active standaard true) ----------
+  // ---------- DEFAULT DATA ----------
   function getDefaultData() {
     return {
       'inleiding': [
-        { id: 'comp_' + Date.now() + '_1', type: 'text', text: 'Wilkin van der Kamp beschrijft het kruis niet als een zielig toneelstuk, maar als een overwinningswapen en een bron van wonderen. De zeven wonderen zijn bedoeld om je blik op het kruis te verfrissen: niet alleen wat er gebeurde, maar vooral wat het voor jou betekent.', active: true },
-        { id: 'comp_' + Date.now() + '_2', type: 'tekenbord', drawing: '', active: true }
+        { id: 'comp_' + Date.now() + '_0', type: 'foto-opdracht', active: true },
+        { id: 'comp_' + Date.now() + '_1', type: 'text', text: 'Wilkin van der Kamp beschrijft het kruis niet als een zielig toneelstuk, maar als een overwinningswapen en een bron van wonderen. De zeven wonderen zijn bedoeld om je blik op het kruis te verfrissen: niet alleen wat er gebeurde, maar vooral wat het voor jou betekent.', active: true }
       ],
       'wonderen': [
         { id: 'comp_' + Date.now() + '_3', type: 'text', text: 'Hieronder vind je de kern van elk wonder. Gebruik dit als naslagwerk voor je studie.', active: true },
-        { id: 'comp_' + Date.now() + '_4', type: 'text', text: '1. Het wonder van de Liefde – God laat Zijn eigen Zoon sterven om te laten zien hoe onvoorwaardelijk en oneindig Zijn liefde voor ons is. Het is een liefde die niet afhangt van onze prestaties.', active: true },
-        { id: 'comp_' + Date.now() + '_5', type: 'text', text: '2. Het wonder van de Verzoening – De relatie tussen God en mens is verbroken door zonde. Aan het kruis betaalt Jezus de prijs, zodat de muur tussen ons en God wordt afgebroken. Wij mogen weer vrienden van God zijn.', active: true },
-        { id: 'comp_' + Date.now() + '_6', type: 'text', text: '3. Het wonder van de Vergeving – Niet alleen worden onze zonden vergeven, maar ze worden ook vergeten. Jezus zegt: "Het is volbracht" (Johannes 19:30) – de schuldbrief is aan het kruis genageld.', active: true },
-        { id: 'comp_' + Date.now() + '_7', type: 'text', text: '4. Het wonder van de Verlossing – Wij zijn verlost uit de macht van de duisternis. Het kruis is de plek waar de duivel zijn macht verliest (Kolossenzen 2:15). Wij zijn niet langer slaven van de zonde.', active: true },
-        { id: 'comp_' + Date.now() + '_8', type: 'text', text: '5. Het wonder van de Genezing – Het kruis brengt niet alleen geestelijke, maar ook lichamelijke en emotionele genezing. "Door Zijn striemen is ons genezing" (Jesaja 53:5) is een belofte voor heel de mens.', active: true },
-        { id: 'comp_' + Date.now() + '_9', type: 'text', text: '6. Het wonder van de Gemeenschap – Het kruis scheidt niet, maar verbindt. Het breekt alle muren van haat, ras en klasse af en schept één nieuwe mensheid (Efeziërs 2:14-16). Wij worden deel van Gods familie.', active: true },
-        { id: 'comp_' + Date.now() + '_10', type: 'text', text: '7. Het wonder van de Overwinning – Het kruis is geen einde, maar een begin. De opstanding volgt! Jezus overwint de dood, de hel en het graf. Dit geeft ons de zekerheid van eeuwig leven en hoop voor de toekomst.', active: true }
+        { id: 'comp_' + Date.now() + '_4', type: 'text', text: '1. Het wonder van de Liefde – God laat Zijn eigen Zoon sterven om te laten zien hoe onvoorwaardelijk en oneindig Zijn liefde voor ons is.', active: true },
+        { id: 'comp_' + Date.now() + '_5', type: 'text', text: '2. Het wonder van de Verzoening – De relatie tussen God en mens is verbroken door zonde. Aan het kruis betaalt Jezus de prijs.', active: true },
+        { id: 'comp_' + Date.now() + '_6', type: 'text', text: '3. Het wonder van de Vergeving – Niet alleen worden onze zonden vergeven, maar ze worden ook vergeten.', active: true },
+        { id: 'comp_' + Date.now() + '_7', type: 'text', text: '4. Het wonder van de Verlossing – Wij zijn verlost uit de macht van de duisternis.', active: true },
+        { id: 'comp_' + Date.now() + '_8', type: 'text', text: '5. Het wonder van de Genezing – Het kruis brengt niet alleen geestelijke, maar ook lichamelijke genezing.', active: true },
+        { id: 'comp_' + Date.now() + '_9', type: 'text', text: '6. Het wonder van de Gemeenschap – Het kruis scheidt niet, maar verbindt.', active: true },
+        { id: 'comp_' + Date.now() + '_10', type: 'text', text: '7. Het wonder van de Overwinning – Het kruis is geen einde, maar een begin. De opstanding volgt!', active: true }
       ],
       'youtube': [
-        { id: 'comp_' + Date.now() + '_11', type: 'text', text: 'De video\'s van Wilkin van der Kamp over dit onderwerp zijn te vinden op:', active: true },
-        { id: 'comp_' + Date.now() + '_12', type: 'text', text: 'YouTube-kanaal: "Wilkin van der Kamp" (officieel kanaal).', active: true },
-        { id: 'comp_' + Date.now() + '_13', type: 'text', text: 'Alternatief: Kanaal "Crossroads" of "Opwekkingsbeweging" (vaak gedeeld).', active: true },
-        { id: 'comp_' + Date.now() + '_14', type: 'text', text: 'Zoektermen: "Wilkin van der Kamp 7 wonderen van het kruis" of "7 wonderen van het kruis preek Wilkin van der Kamp".', active: true },
-        { id: 'comp_' + Date.now() + '_15', type: 'text', text: 'Wat je kunt verwachten: Een afspeellijst van 7 afleveringen (elk wonder een aparte video). Een introductievideo en een afsluitende video. De video\'s duren gemiddeld 25 tot 40 minuten.', active: true },
-        { id: 'comp_' + Date.now() + '_16', type: 'text', text: 'Tip: Er is ook een audioversie van het boek beschikbaar op Spotify en YouTube Music (ideaal om te luisteren tijdens het reizen).', active: true },
+        { id: 'comp_' + Date.now() + '_11', type: 'text', text: 'De video\'s van Wilkin van der Kamp zijn te vinden op het kanaal "Wilkin van der Kamp".', active: true },
         { id: 'comp_' + Date.now() + '_17', type: 'youtube', videoId: '', active: true }
       ],
       'gespreksvragen': [
-        { id: 'comp_' + Date.now() + '_18', type: 'text', text: 'Gebruik deze vragen na het kijken van een video of het lezen van een hoofdstuk.', active: true },
-        { id: 'comp_' + Date.now() + '_19', type: 'text', text: 'Algemene startvraag (voor de hele serie): Wat is voor jou het meest bijzondere aan het kruis van Jezus? Is het iets dat je al lang kent, of zie je het nu met nieuwe ogen?', active: true },
-        { id: 'comp_' + Date.now() + '_20', type: 'text', text: 'Wonder 1: Liefde – Hoe ervaar jij Gods liefde in je dagelijkse leven? Voelt het als een "wonder" of als iets vanzelfsprekends? Wat maakt het voor jou zo moeilijk te geloven dat Gods liefde onvoorwaardelijk is? Hoe kun jij deze liefde deze week doorgeven aan iemand anders?', active: true },
-        { id: 'comp_' + Date.now() + '_21', type: 'text', text: 'Wonder 2: Verzoening – Waar loop jij tegenaan als je denkt aan "verzoening met God"? Zit er een schuldgevoel of juist een opluchting? Het kruis verzoent ons met God, maar ook met onszelf en anderen. Met wie zou jij graag verzoend willen worden?', active: true },
-        { id: 'comp_' + Date.now() + '_22', type: 'text', text: 'Wonder 3: Vergeving – Wat is het verschil tussen "vergeven" en "vergeten"? Vind jij het moeilijk om jezelf te vergeven? Jezus zei aan het kruis: "Vader, vergeef het hun" (Lucas 23:34). Hoe helpt dit voorbeeld jou om anderen te vergeven?', active: true },
-        { id: 'comp_' + Date.now() + '_23', type: 'text', text: 'Wonder 4: Verlossing – Van welke "gevangenis" (verslaving, angst, boosheid, schuld) verlang jij verlost te worden? Paulus zegt dat we vrij zijn. Hoe zie je dat terug in jouw leven, ook als je nog worstelt met zonde?', active: true },
-        { id: 'comp_' + Date.now() + '_24', type: 'text', text: 'Wonder 5: Genezing – Is genezing voor jou alleen geestelijk (ziel) of ook lichamelijk? Hoe bid jij daarover? Welke wonden (van vroeger of nu) zou jij aan het kruis willen leggen voor genezing?', active: true },
-        { id: 'comp_' + Date.now() + '_25', type: 'text', text: 'Wonder 6: Gemeenschap – Het kruis brak de muur tussen Joden en heidenen (Efeziërs 2). Welke muren (politiek, sociaal, kerkelijk) zie jij in jouw omgeving? Hoe kan onze geloofsgemeenschap meer een plek worden van "eenheid" zoals het kruis dat bedoelt?', active: true },
-        { id: 'comp_' + Date.now() + '_26', type: 'text', text: 'Wonder 7: Overwinning – Hoe leef jij in de overwinning van Pasen, midden in een wereld vol problemen? Het kruis is niet het einde, maar de opstanding wint. Wat betekent dat voor jouw toekomstverwachting en angst voor de dood?', active: true },
-        { id: 'comp_' + Date.now() + '_27', type: 'text', text: 'Afsluitende verdiepingsvraag: Van alle 7 wonderen, welke spreekt jou op dit moment het meest aan? Waarom denk je dat dit wonder nu zo belangrijk voor je is?', active: true },
+        { id: 'comp_' + Date.now() + '_18', type: 'text', text: 'Gebruik deze vragen na het kijken van een video.', active: true },
         { id: 'comp_' + Date.now() + '_28', type: 'vraag', vraagText: 'Wat is jouw antwoord op de afsluitende verdiepingsvraag?', active: true }
       ],
       'tips': [
-        { id: 'comp_' + Date.now() + '_29', type: 'text', text: 'Werkboekje: Er is ook een werkboekje bij de serie uitgegeven (uitgeverij Royal Jongbloed). Dit is ideaal om samen in een kring te doen.', active: true },
-        { id: 'comp_' + Date.now() + '_30', type: 'text', text: 'Kernverzen per wonder: Gebruik deze Bijbelteksten ter ondersteuning van de gesprekken:', active: true },
-        { id: 'comp_' + Date.now() + '_31', type: 'text', text: 'Liefde: Romeinen 8:38-39', active: true },
-        { id: 'comp_' + Date.now() + '_32', type: 'text', text: 'Verzoening: 2 Korintiërs 5:18-19', active: true },
-        { id: 'comp_' + Date.now() + '_33', type: 'text', text: 'Vergeving: Kolossenzen 2:13-14', active: true },
-        { id: 'comp_' + Date.now() + '_34', type: 'text', text: 'Verlossing: Galaten 3:13', active: true },
-        { id: 'comp_' + Date.now() + '_35', type: 'text', text: 'Genezing: 1 Petrus 2:24', active: true },
-        { id: 'comp_' + Date.now() + '_36', type: 'text', text: 'Gemeenschap: Efeziërs 2:14-16', active: true },
-        { id: 'comp_' + Date.now() + '_37', type: 'text', text: 'Overwinning: 1 Korintiërs 15:55-57', active: true }
+        { id: 'comp_' + Date.now() + '_29', type: 'text', text: 'Werkboekje: Er is ook een werkboekje bij de serie (uitgeverij Royal Jongbloed).', active: true }
       ]
     };
   }
 
   // ---------- STATE ----------
-  let data = {}; // { topicId: [ component objects ] }
-  let currentTopicId = null;
-  let currentComponentId = null;
-  let modalMode = 'add';
+  let data = {};
+  let currentImageMap = {}; // map componentId -> imageUrl for the current user
 
   // ---------- COMPONENT TYPES ----------
   const componentTypes = [
     { value: 'text', label: 'Tekst' },
     { value: 'youtube', label: 'YouTube-video' },
     { value: 'vraag', label: 'Vraag (met antwoordfeed)' },
+    { value: 'foto-opdracht', label: 'Foto-opdracht (Kaarten op tafel)' },
     { value: 'tekenbord', label: 'Digibord (tekenbord)' },
     { value: 'gebedspunten', label: 'Gebedspunten (livefeed)' },
-    { value: 'bijbeltekst', label: 'Bijbeltekst (YouVersion)' },
-    { value: 'checkbox', label: 'Checkbox' },
-    { value: 'button', label: 'Knop' },
-    { value: 'input', label: 'Invoerveld' }
+    { value: 'bijbeltekst', label: 'Bijbeltekst (YouVersion)' }
   ];
 
   // ---------- RENDER ACCORDION ----------
@@ -491,74 +263,40 @@
     const root = document.getElementById('accordion-root');
     root.innerHTML = '';
     topics.forEach(topic => {
-      const item = document.createElement('div');
-      item.className = 'accordion-item';
-
-      const header = document.createElement('button');
-      header.className = 'accordion-header';
+      const item = document.createElement('div'); item.className = 'accordion-item';
+      const header = document.createElement('button'); header.className = 'accordion-header';
       header.innerHTML = `${topic.title} <span class="arrow">▶</span>`;
       header.onclick = () => toggleAccordion(header, topic.id);
-
-      const panel = document.createElement('div');
-      panel.className = 'accordion-panel';
-      panel.id = `panel-${topic.id}`;
-
-      const compContainer = document.createElement('div');
-      compContainer.className = 'component-container';
-      compContainer.id = `components-${topic.id}`;
-      panel.appendChild(compContainer);
-
-      const addArea = document.createElement('div');
-      addArea.className = 'add-component-area';
-      addArea.innerHTML = `
-        <select id="type-select-${topic.id}">
-          ${componentTypes.map(t => `<option value="${t.value}">${t.label}</option>`).join('')}
-        </select>
-        <button onclick="openAddModal('${topic.id}')">➕ Toevoegen</button>
-      `;
+      const panel = document.createElement('div'); panel.className = 'accordion-panel'; panel.id = `panel-${topic.id}`;
+      const compContainer = document.createElement('div'); compContainer.className = 'component-container'; compContainer.id = `components-${topic.id}`; panel.appendChild(compContainer);
+      const addArea = document.createElement('div'); addArea.className = 'add-component-area';
+      addArea.innerHTML = `<select id="type-select-${topic.id}">${componentTypes.map(t => `<option value="${t.value}">${t.label}</option>`).join('')}</select><button onclick="openAddModal('${topic.id}')">➕ Toevoegen</button>`;
       panel.appendChild(addArea);
-
-      item.appendChild(header);
-      item.appendChild(panel);
-      root.appendChild(item);
+      item.appendChild(header); item.appendChild(panel); root.appendChild(item);
     });
     loadData();
   }
 
-  // ---------- ACCORDION TOGGLE ----------
   function toggleAccordion(header, topicId) {
     const panel = document.getElementById(`panel-${topicId}`);
     const isOpen = panel.classList.contains('open');
     document.querySelectorAll('.accordion-panel').forEach(p => p.classList.remove('open'));
     document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
-    if (!isOpen) {
-      panel.classList.add('open');
-      header.classList.add('active');
-    }
+    if (!isOpen) { panel.classList.add('open'); header.classList.add('active'); }
   }
 
-  // ---------- LOAD DATA FROM FIREBASE ----------
+  // ---------- LOAD DATA ----------
   function loadData() {
     db.ref('accordionData').on('value', (snapshot) => {
       const val = snapshot.val();
       if (val) {
         data = val;
-        // Check if all topics exist, if not fill with defaults
-        topics.forEach(t => {
-          if (!data[t.id] || data[t.id].length === 0) {
-            data[t.id] = getDefaultData()[t.id] || [];
-          }
-        });
+        topics.forEach(t => { if (!data[t.id] || data[t.id].length === 0) data[t.id] = getDefaultData()[t.id] || []; });
       } else {
-        data = getDefaultData();
-        // Save defaults to Firebase
-        db.ref('accordionData').set(data);
+        data = getDefaultData(); db.ref('accordionData').set(data);
       }
       renderAllComponents();
-      // Also load drawings, answers, gebedspunten
-      loadAllDrawings();
-      loadAllAnswers();
-      loadAllGebedspunten();
+      loadAllFeeds();
     });
   }
 
@@ -572,41 +310,69 @@
       components.forEach((comp, index) => {
         const item = document.createElement('div');
         item.className = 'component-item' + (comp.active === false ? ' disabled' : '');
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'content';
-        contentDiv.id = `content-${comp.id}`;
-        // Render based on type
+        const contentDiv = document.createElement('div'); contentDiv.className = 'content'; contentDiv.id = `content-${comp.id}`;
         renderComponentContent(contentDiv, comp, topic.id);
         item.appendChild(contentDiv);
-
-        const actions = document.createElement('div');
-        actions.className = 'actions';
-        // Toggle button
-        const toggleBtn = document.createElement('button');
-        toggleBtn.className = 'toggle' + (comp.active !== false ? ' on' : '');
-        toggleBtn.textContent = comp.active !== false ? 'Aan' : 'Uit';
-        toggleBtn.onclick = () => toggleComponent(topic.id, index);
+        const actions = document.createElement('div'); actions.className = 'actions';
+        const toggleBtn = document.createElement('button'); toggleBtn.className = 'toggle' + (comp.active !== false ? ' on' : ''); toggleBtn.textContent = comp.active !== false ? 'Aan' : 'Uit'; toggleBtn.onclick = () => toggleComponent(topic.id, index);
         actions.appendChild(toggleBtn);
-
-        const editBtn = document.createElement('button');
-        editBtn.innerHTML = '✎';
-        editBtn.title = 'Bewerken';
-        editBtn.onclick = () => openEditModal(topic.id, index);
-        const delBtn = document.createElement('button');
-        delBtn.innerHTML = '✕';
-        delBtn.className = 'delete';
-        delBtn.title = 'Verwijderen';
-        delBtn.onclick = () => deleteComponent(topic.id, index);
-        actions.appendChild(editBtn);
-        actions.appendChild(delBtn);
-        item.appendChild(actions);
-
+        const editBtn = document.createElement('button'); editBtn.innerHTML = '✎'; editBtn.onclick = () => openEditModal(topic.id, index);
+        const delBtn = document.createElement('button'); delBtn.innerHTML = '✕'; delBtn.className = 'delete'; delBtn.onclick = () => deleteComponent(topic.id, index);
+        actions.appendChild(editBtn); actions.appendChild(delBtn); item.appendChild(actions);
         container.appendChild(item);
       });
     });
   }
 
-  // ---------- RENDER COMPONENT CONTENT ----------
+  // ---------- RENDER CONTENT ----------
+  // Helper om een unieke foto toe te wijzen via Firebase-transactie
+  function assignImage(topicId, compId, userName) {
+    return new Promise((resolve, reject) => {
+      const ref = db.ref(`fotoToewijzing/${topicId}/${compId}`);
+      ref.transaction((currentData) => {
+        if (currentData === null) {
+          // Initialiseer met alle beschikbare foto's
+          return {
+            assigned: {},
+            available: allImages.slice()
+          };
+        }
+        // Check of gebruiker al een foto heeft
+        if (currentData.assigned && currentData.assigned[userName]) {
+          return; // geen wijziging nodig
+        }
+        // Als er geen available is, return null om aan te geven dat er geen foto's zijn
+        if (!currentData.available || currentData.available.length === 0) {
+          return; // geen wijziging
+        }
+        // Neem eerste beschikbare foto
+        const image = currentData.available[0];
+        const newAvailable = currentData.available.slice(1);
+        const newAssigned = currentData.assigned || {};
+        newAssigned[userName] = image;
+        return {
+          assigned: newAssigned,
+          available: newAvailable
+        };
+      }, (error, committed, snapshot) => {
+        if (error) {
+          reject(error);
+        } else if (committed) {
+          const data = snapshot.val();
+          if (data && data.assigned && data.assigned[userName]) {
+            resolve(data.assigned[userName]);
+          } else if (!data.available || data.available.length === 0) {
+            resolve(null); // geen beschikbare foto's meer
+          } else {
+            resolve(null);
+          }
+        } else {
+          reject(new Error('Transactie mislukt'));
+        }
+      });
+    });
+  }
+
   function renderComponentContent(container, comp, topicId) {
     container.innerHTML = '';
     switch(comp.type) {
@@ -614,461 +380,241 @@
         container.innerHTML = `<p style="margin:0;white-space:pre-wrap;">${escapeHtml(comp.text || '')}</p>`;
         break;
       case 'youtube':
-        const videoId = comp.videoId || '';
-        if (videoId) {
-          container.innerHTML = `<iframe class="youtube-iframe" src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
-        } else {
-          container.innerHTML = `<p style="color:#888;">Geen video-ID ingevoerd. Bewerk dit component om een YouTube-video toe te voegen.</p>`;
-        }
+        const vid = comp.videoId || '';
+        container.innerHTML = vid ? `<iframe class="youtube-iframe" src="https://www.youtube.com/embed/${vid}" allowfullscreen></iframe>` : `<p style="color:#888;">Geen video-ID ingevoerd.</p>`;
         break;
       case 'vraag':
-        const vraagText = comp.vraagText || 'Stel een vraag...';
         container.innerHTML = `
-          <div>
-            <strong>${escapeHtml(vraagText)}</strong>
-            <div class="vraag-input">
-              <input type="text" id="antwoord-input-${comp.id}" placeholder="Uw antwoord...">
-              <button onclick="verzendAntwoord('${topicId}','${comp.id}')">Verzend</button>
-            </div>
-            <div class="antwoord-lijst" id="antwoord-lijst-${comp.id}">
-              <em>Antwoorden worden hier geladen...</em>
-            </div>
+          <div><strong>${escapeHtml(comp.vraagText || 'Stel een vraag...')}</strong>
+            <div class="vraag-input"><input type="text" id="antwoord-input-${comp.id}" placeholder="Uw antwoord..."><button onclick="verzendAntwoord('${topicId}','${comp.id}')">Verzend</button></div>
+            <div class="antwoord-lijst" id="antwoord-lijst-${comp.id}"><em>Antwoorden worden geladen...</em></div>
           </div>
         `;
         listenToAnswers(topicId, comp.id);
         break;
-      case 'tekenbord':
-        container.innerHTML = `
-          <div class="tekenbord-container">
-            <canvas id="canvas-${comp.id}" width="600" height="400"></canvas>
-            <div class="tekenknoppen">
-              <button onclick="clearDrawing('${topicId}','${comp.id}')">🗑️ Wissen</button>
-              <button onclick="saveDrawing('${topicId}','${comp.id}')">💾 Opslaan</button>
-            </div>
+      case 'foto-opdracht':
+        // Maak een container met placeholder
+        const fotoDiv = document.createElement('div');
+        fotoDiv.innerHTML = `
+          <h4 style="margin-bottom:8px;">📸 Kaarten op tafel</h4>
+          <div id="foto-area-${comp.id}"><p>Bezig met laden van uw foto...</p></div>
+          <div class="foto-input">
+            <select id="foto-keuze-${comp.id}" style="padding:8px;border:1px solid #ccc;border-radius:6px;">
+              <option value="ja">✅ Past bij mij</option>
+              <option value="nee">❌ Past niet bij mij</option>
+            </select>
+            <textarea id="foto-reason-${comp.id}" rows="2" placeholder="Waarom? Leg uit..." style="flex:1;padding:8px;border:1px solid #ccc;border-radius:6px;"></textarea>
+            <button onclick="verzendFotoOpdracht('${topicId}','${comp.id}')">Verstuur</button>
           </div>
+          <div class="foto-lijst" id="foto-lijst-${comp.id}"><em>Reacties worden geladen...</em></div>
         `;
+        container.appendChild(fotoDiv);
+        // Asynchroon de foto toewijzen
+        assignImage(topicId, comp.id, currentUserName).then(imageUrl => {
+          const area = document.getElementById(`foto-area-${comp.id}`);
+          if (imageUrl) {
+            area.innerHTML = `<img src="${imageUrl}" class="foto-opdracht-img" alt="Toegewezen foto">`;
+            currentImageMap[comp.id] = imageUrl;
+          } else {
+            area.innerHTML = `<p style="color:red;">Geen beschikbare foto's meer. Neem contact op met de begeleider.</p>`;
+          }
+        }).catch(err => {
+          console.error('Fout bij toewijzen foto:', err);
+          const area = document.getElementById(`foto-area-${comp.id}`);
+          area.innerHTML = `<p style="color:red;">Fout bij het laden van de foto.</p>`;
+        });
+        listenToFotoOpdrachten(topicId, comp.id);
+        break;
+      case 'tekenbord':
+        container.innerHTML = `<div class="tekenbord-container"><canvas id="canvas-${comp.id}" width="600" height="400"></canvas><div class="tekenknoppen"><button onclick="clearDrawing('${topicId}','${comp.id}')">🗑️ Wissen</button><button onclick="saveDrawing('${topicId}','${comp.id}')">💾 Opslaan</button></div></div>`;
         setTimeout(() => initDrawing(topicId, comp.id), 100);
         break;
       case 'gebedspunten':
-        container.innerHTML = `
-          <div class="gebedspunten-container">
-            <div class="input-row">
-              <input type="text" id="gebedspunt-input-${comp.id}" placeholder="Voeg een gebedspunt toe...">
-              <button onclick="voegGebedspuntToe('${topicId}','${comp.id}')">➕ Toevoegen</button>
-            </div>
-            <div class="gebedspunten-lijst" id="gebedspunten-lijst-${comp.id}">
-              <em>Gebedspunten worden geladen...</em>
-            </div>
-          </div>
-        `;
+        container.innerHTML = `<div class="gebedspunten-container"><div class="input-row"><input type="text" id="gebedspunt-input-${comp.id}" placeholder="Voeg een gebedspunt toe..."><button onclick="voegGebedspuntToe('${topicId}','${comp.id}')">➕ Toevoegen</button></div><div class="gebedspunten-lijst" id="gebedspunten-lijst-${comp.id}"><em>Gebedspunten worden geladen...</em></div></div>`;
         listenToGebedspunten(topicId, comp.id);
         break;
       case 'bijbeltekst':
-        const ref = comp.reference || '';
-        const version = comp.version || '193'; // default NBV
+        const ref = comp.reference || ''; const version = comp.version || '193';
         const embedUrl = ref ? `https://www.bible.com/embed/${version}/${encodeURIComponent(ref)}` : '';
-        container.innerHTML = `
-          <div class="bijbeltekst-container">
-            <div class="input-row">
-              <input type="text" id="bijbel-ref-${comp.id}" placeholder="Bijbelreferentie (bv. Johannes 3:16)" value="${escapeHtml(ref)}">
-              <input type="text" id="bijbel-version-${comp.id}" placeholder="Versie (bv. 193 voor NBV)" value="${escapeHtml(version)}" style="max-width:100px;">
-              <button onclick="updateBijbeltekst('${topicId}','${comp.id}')">Update</button>
-            </div>
-            ${embedUrl ? `<iframe src="${embedUrl}" allowfullscreen></iframe>` : '<p>Voer een Bijbelreferentie in en klik op Update.</p>'}
-          </div>
-        `;
+        container.innerHTML = `<div class="bijbeltekst-container"><div class="input-row"><input type="text" id="bijbel-ref-${comp.id}" placeholder="Bijbelreferentie (bv. Johannes 3:16)" value="${escapeHtml(ref)}"><input type="text" id="bijbel-version-${comp.id}" placeholder="Versie (bv. 193)" value="${escapeHtml(version)}" style="max-width:100px;"><button onclick="updateBijbeltekst('${topicId}','${comp.id}')">Update</button></div>${embedUrl ? `<iframe src="${embedUrl}" allowfullscreen></iframe>` : '<p>Voer een Bijbelreferentie in.</p>'}</div>`;
         break;
-      case 'checkbox':
-        container.innerHTML = `<label><input type="checkbox" ${comp.checked ? 'checked' : ''} disabled> ${escapeHtml(comp.label || '')}</label>`;
-        break;
-      case 'button':
-        container.innerHTML = `<button style="padding:6px 16px;border-radius:6px;border:1px solid #ccc;background:#f0f4fa;cursor:default;">${escapeHtml(comp.label || 'Knop')}</button>`;
-        break;
-      case 'input':
-        container.innerHTML = `<input type="text" placeholder="${escapeHtml(comp.placeholder || '')}" value="${escapeHtml(comp.value || '')}" disabled style="padding:6px 10px;border:1px solid #ccc;border-radius:6px;width:100%;max-width:300px;">`;
-        break;
-      default:
-        container.textContent = 'Onbekend type';
+      default: container.textContent = 'Onbekend type';
     }
   }
 
-  // ---------- TOGGLE COMPONENT ----------
+  // ---------- TOGGLE ----------
   function toggleComponent(topicId, index) {
-    const comp = data[topicId][index];
-    if (!comp) return;
+    const comp = data[topicId][index]; if (!comp) return;
     comp.active = comp.active !== false ? false : true;
     db.ref(`accordionData/${topicId}/${index}`).update({ active: comp.active });
   }
 
-  // ---------- ANSWER FEED ----------
+  // ---------- LIVE FEEDS (ANTWOORDEN, GEBEDSPUNTEN, FOTO-OPDRACHTEN) ----------
   function listenToAnswers(topicId, compId) {
-    const ref = db.ref(`answers/${topicId}/${compId}`);
-    ref.on('value', (snapshot) => {
-      const answers = snapshot.val();
-      const listDiv = document.getElementById(`antwoord-lijst-${compId}`);
-      if (!listDiv) return;
-      if (!answers) {
-        listDiv.innerHTML = '<em>Nog geen antwoorden.</em>';
-        return;
-      }
-      let html = '';
-      const keys = Object.keys(answers).sort((a,b) => a - b);
-      keys.forEach(key => {
-        const entry = answers[key];
-        html += `<div class="antwoord-item">${escapeHtml(entry.antwoord)} <span class="tijd">${new Date(entry.timestamp).toLocaleString()}</span></div>`;
-      });
-      listDiv.innerHTML = html;
+    db.ref(`answers/${topicId}/${compId}`).on('value', (sn) => {
+      const val = sn.val(); const el = document.getElementById(`antwoord-lijst-${compId}`);
+      if (!el) return;
+      if (!val) { el.innerHTML = '<em>Nog geen antwoorden.</em>'; return; }
+      let html = ''; Object.keys(val).sort((a,b)=>a-b).forEach(k => {
+        html += `<div class="antwoord-item">${escapeHtml(val[k].antwoord)} <span class="tijd">${new Date(val[k].timestamp).toLocaleString()}</span></div>`;
+      }); el.innerHTML = html;
     });
   }
-
   function verzendAntwoord(topicId, compId) {
-    const input = document.getElementById(`antwoord-input-${compId}`);
-    if (!input) return;
-    const antwoord = input.value.trim();
-    if (!antwoord) { alert('Voer een antwoord in.'); return; }
-    const ref = db.ref(`answers/${topicId}/${compId}`).push();
-    ref.set({
-      antwoord: antwoord,
-      timestamp: Date.now()
-    });
+    const input = document.getElementById(`antwoord-input-${compId}`); if (!input) return;
+    const txt = input.value.trim(); if (!txt) { alert('Voer een antwoord in.'); return; }
+    db.ref(`answers/${topicId}/${compId}`).push({ antwoord: txt, timestamp: Date.now() });
     input.value = '';
   }
 
-  // ---------- GEBEDSPUNTEN FEED ----------
   function listenToGebedspunten(topicId, compId) {
-    const ref = db.ref(`gebedspunten/${topicId}/${compId}`);
-    ref.on('value', (snapshot) => {
-      const punten = snapshot.val();
-      const listDiv = document.getElementById(`gebedspunten-lijst-${compId}`);
-      if (!listDiv) return;
-      if (!punten) {
-        listDiv.innerHTML = '<em>Nog geen gebedspunten.</em>';
-        return;
-      }
-      let html = '';
-      const keys = Object.keys(punten).sort((a,b) => a - b);
-      keys.forEach(key => {
-        const entry = punten[key];
-        html += `<div class="gebedspunt-item">${escapeHtml(entry.punt)} <span class="tijd">${new Date(entry.timestamp).toLocaleString()}</span></div>`;
-      });
-      listDiv.innerHTML = html;
+    db.ref(`gebedspunten/${topicId}/${compId}`).on('value', (sn) => {
+      const val = sn.val(); const el = document.getElementById(`gebedspunten-lijst-${compId}`);
+      if (!el) return;
+      if (!val) { el.innerHTML = '<em>Nog geen gebedspunten.</em>'; return; }
+      let html = ''; Object.keys(val).sort((a,b)=>a-b).forEach(k => {
+        html += `<div class="gebedspunt-item">${escapeHtml(val[k].punt)} <span class="tijd">${new Date(val[k].timestamp).toLocaleString()}</span></div>`;
+      }); el.innerHTML = html;
     });
   }
-
   function voegGebedspuntToe(topicId, compId) {
-    const input = document.getElementById(`gebedspunt-input-${compId}`);
-    if (!input) return;
-    const punt = input.value.trim();
-    if (!punt) { alert('Voer een gebedspunt in.'); return; }
-    const ref = db.ref(`gebedspunten/${topicId}/${compId}`).push();
-    ref.set({
-      punt: punt,
-      timestamp: Date.now()
-    });
+    const input = document.getElementById(`gebedspunt-input-${compId}`); if (!input) return;
+    const txt = input.value.trim(); if (!txt) { alert('Voer een gebedspunt in.'); return; }
+    db.ref(`gebedspunten/${topicId}/${compId}`).push({ punt: txt, timestamp: Date.now() });
     input.value = '';
   }
 
-  function loadAllGebedspunten() {
-    // wordt geladen via listeners
+  // ---------- FOTO-OPDRACHT FEED ----------
+  function listenToFotoOpdrachten(topicId, compId) {
+    db.ref(`fotoOpdrachten/${topicId}/${compId}`).on('value', (sn) => {
+      const val = sn.val(); const el = document.getElementById(`foto-lijst-${compId}`);
+      if (!el) return;
+      if (!val) { el.innerHTML = '<em>Nog geen reacties.</em>'; return; }
+      let html = ''; Object.keys(val).sort((a,b)=>a-b).forEach(k => {
+        const item = val[k];
+        const keuzeText = item.keuze === 'ja' ? '✅ Past bij mij' : '❌ Past niet bij mij';
+        html += `<div class="foto-item">
+          <img src="${item.imageUrl}" alt="Foto">
+          <span class="naam">${escapeHtml(item.naam)}</span>
+          <span class="keuze">${keuzeText}</span>
+          <span>— ${escapeHtml(item.reason)}</span>
+          <span class="tijd">${new Date(item.timestamp).toLocaleString()}</span>
+        </div>`;
+      }); el.innerHTML = html;
+    });
+  }
+  function verzendFotoOpdracht(topicId, compId) {
+    if (!currentUserName) { alert('Je moet je naam invoeren!'); return; }
+    const keuzeEl = document.getElementById(`foto-keuze-${compId}`);
+    const reasonEl = document.getElementById(`foto-reason-${compId}`);
+    if (!keuzeEl || !reasonEl) return;
+    const keuze = keuzeEl.value; const reason = reasonEl.value.trim();
+    if (!reason) { alert('Schrijf waarom deze foto bij je past of niet.'); return; }
+    const imageUrl = currentImageMap[compId];
+    if (!imageUrl) { alert('Er is nog geen foto geladen.'); return; }
+    db.ref(`fotoOpdrachten/${topicId}/${compId}`).push({
+      naam: currentUserName,
+      keuze: keuze,
+      reason: reason,
+      imageUrl: imageUrl,
+      timestamp: Date.now()
+    });
+    reasonEl.value = '';
   }
 
-  // ---------- BIJBELTEKST UPDATE ----------
-  function updateBijbeltekst(topicId, compId) {
-    const refInput = document.getElementById(`bijbel-ref-${compId}`);
-    const versionInput = document.getElementById(`bijbel-version-${compId}`);
-    if (!refInput || !versionInput) return;
-    const ref = refInput.value.trim();
-    const version = versionInput.value.trim() || '193';
-    // Update component in database
-    const comp = data[topicId].find(c => c.id === compId);
-    if (comp) {
-      comp.reference = ref;
-      comp.version = version;
-      db.ref(`accordionData/${topicId}`).set(data[topicId]); // update entire array (or find index)
-    }
-    // Re-render will happen via listener
-  }
-
-  // ---------- DIGIBORD (TEKENBORD) ----------
+  // ---------- TEKENBORD ----------
   let drawingState = {};
-
   function initDrawing(topicId, compId) {
-    const canvas = document.getElementById(`canvas-${compId}`);
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const key = `${topicId}-${compId}`;
-    drawingState[key] = { canvas, ctx, isDrawing: false };
-
-    db.ref(`drawings/${topicId}/${compId}`).once('value').then(snap => {
-      const dataUrl = snap.val();
-      if (dataUrl) {
-        const img = new Image();
-        img.onload = () => {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0);
-        };
-        img.src = dataUrl;
-      }
+    const canvas = document.getElementById(`canvas-${compId}`); if (!canvas) return;
+    const ctx = canvas.getContext('2d'); const key = `${topicId}-${compId}`; drawingState[key] = { canvas, ctx, isDrawing: false };
+    db.ref(`drawings/${topicId}/${compId}`).once('value').then(sn => {
+      const dataUrl = sn.val(); if (dataUrl) { const img = new Image(); img.onload = () => { ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.drawImage(img, 0, 0); }; img.src = dataUrl; }
     });
-
-    // Mouse events
-    canvas.addEventListener('mousedown', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-      const y = (e.clientY - rect.top) * (canvas.height / rect.height);
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      drawingState[key].isDrawing = true;
-    });
-    canvas.addEventListener('mousemove', (e) => {
-      if (!drawingState[key].isDrawing) return;
-      const rect = canvas.getBoundingClientRect();
-      const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-      const y = (e.clientY - rect.top) * (canvas.height / rect.height);
-      ctx.lineTo(x, y);
-      ctx.stroke();
-    });
-    canvas.addEventListener('mouseup', () => {
-      drawingState[key].isDrawing = false;
-      saveDrawing(topicId, compId);
-    });
-    canvas.addEventListener('mouseleave', () => {
-      drawingState[key].isDrawing = false;
-    });
-
-    // Touch events
-    canvas.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      const x = (touch.clientX - rect.left) * (canvas.width / rect.width);
-      const y = (touch.clientY - rect.top) * (canvas.height / rect.height);
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      drawingState[key].isDrawing = true;
-    });
-    canvas.addEventListener('touchmove', (e) => {
-      e.preventDefault();
-      if (!drawingState[key].isDrawing) return;
-      const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      const x = (touch.clientX - rect.left) * (canvas.width / rect.width);
-      const y = (touch.clientY - rect.top) * (canvas.height / rect.height);
-      ctx.lineTo(x, y);
-      ctx.stroke();
-    });
-    canvas.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      drawingState[key].isDrawing = false;
-      saveDrawing(topicId, compId);
-    });
+    const startDraw = (x, y) => { ctx.beginPath(); ctx.moveTo(x, y); drawingState[key].isDrawing = true; };
+    const moveDraw = (x, y) => { if (!drawingState[key].isDrawing) return; ctx.lineTo(x, y); ctx.stroke(); };
+    const endDraw = () => { drawingState[key].isDrawing = false; saveDrawing(topicId, compId); };
+    canvas.addEventListener('mousedown', (e) => { const r = canvas.getBoundingClientRect(); startDraw((e.clientX-r.left)*(canvas.width/r.width), (e.clientY-r.top)*(canvas.height/r.height)); });
+    canvas.addEventListener('mousemove', (e) => { if (!drawingState[key].isDrawing) return; const r = canvas.getBoundingClientRect(); moveDraw((e.clientX-r.left)*(canvas.width/r.width), (e.clientY-r.top)*(canvas.height/r.height)); });
+    canvas.addEventListener('mouseup', endDraw); canvas.addEventListener('mouseleave', endDraw);
+    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); const t = e.touches[0]; const r = canvas.getBoundingClientRect(); startDraw((t.clientX-r.left)*(canvas.width/r.width), (t.clientY-r.top)*(canvas.height/r.height)); });
+    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); if (!drawingState[key].isDrawing) return; const t = e.touches[0]; const r = canvas.getBoundingClientRect(); moveDraw((t.clientX-r.left)*(canvas.width/r.width), (t.clientY-r.top)*(canvas.height/r.height)); });
+    canvas.addEventListener('touchend', endDraw);
   }
+  function saveDrawing(topicId, compId) { const key = `${topicId}-${compId}`; const state = drawingState[key]; if (!state) return; db.ref(`drawings/${topicId}/${compId}`).set(state.canvas.toDataURL('image/png')); }
+  function clearDrawing(topicId, compId) { const key = `${topicId}-${compId}`; const state = drawingState[key]; if (!state) return; state.ctx.clearRect(0, 0, state.canvas.width, state.canvas.height); db.ref(`drawings/${topicId}/${compId}`).remove(); }
 
-  function saveDrawing(topicId, compId) {
-    const key = `${topicId}-${compId}`;
-    const state = drawingState[key];
-    if (!state) return;
-    const dataUrl = state.canvas.toDataURL('image/png');
-    db.ref(`drawings/${topicId}/${compId}`).set(dataUrl);
-  }
+  function loadAllFeeds() { /* done by listeners */ }
 
-  function clearDrawing(topicId, compId) {
-    const key = `${topicId}-${compId}`;
-    const state = drawingState[key];
-    if (!state) return;
-    state.ctx.clearRect(0, 0, state.canvas.width, state.canvas.height);
-    db.ref(`drawings/${topicId}/${compId}`).remove();
-  }
-
-  function loadAllDrawings() { /* done via init */ }
-
-  // ---------- LOAD ALL ANSWERS ----------
-  function loadAllAnswers() { /* done via listeners */ }
-
-  // ---------- HELPER: ESCAPE HTML ----------
-  function escapeHtml(text) {
-    if (!text) return '';
-    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-    return text.replace(/[&<>"']/g, m => map[m]);
+  // ---------- BIJBELTEKST ----------
+  function updateBijbeltekst(topicId, compId) {
+    const refInput = document.getElementById(`bijbel-ref-${compId}`); const versionInput = document.getElementById(`bijbel-version-${compId}`);
+    if (!refInput || !versionInput) return;
+    const ref = refInput.value.trim(); const version = versionInput.value.trim() || '193';
+    const comp = data[topicId].find(c => c.id === compId); if (comp) { comp.reference = ref; comp.version = version; db.ref(`accordionData/${topicId}`).set(data[topicId]); }
   }
 
   // ---------- MODAL FUNCTIONS ----------
-  function openAddModal(topicId) {
-    currentTopicId = topicId;
-    currentComponentId = null;
-    modalMode = 'add';
-    const select = document.getElementById(`type-select-${topicId}`);
-    const type = select.value;
-    openModalForType(type, null);
-  }
-
-  function openEditModal(topicId, index) {
-    currentTopicId = topicId;
-    currentComponentId = index;
-    modalMode = 'edit';
-    const comp = data[topicId][index];
-    if (!comp) return;
-    openModalForType(comp.type, comp);
-  }
+  function openAddModal(topicId) { currentTopicId = topicId; currentComponentId = null; modalMode = 'add'; const type = document.getElementById(`type-select-${topicId}`).value; openModalForType(type, null); }
+  function openEditModal(topicId, index) { currentTopicId = topicId; currentComponentId = index; modalMode = 'edit'; const comp = data[topicId][index]; if (!comp) return; openModalForType(comp.type, comp); }
+  
+  let currentTopicId = null, currentComponentId = null, modalMode = 'add';
 
   function openModalForType(type, existing) {
-    const overlay = document.getElementById('modal-overlay');
-    const title = document.getElementById('modal-title');
-    const form = document.getElementById('modal-form');
-
+    const overlay = document.getElementById('modal-overlay'); const title = document.getElementById('modal-title'); const form = document.getElementById('modal-form');
     title.textContent = modalMode === 'add' ? `Voeg ${componentTypes.find(t=>t.value===type)?.label || type} toe` : 'Bewerk component';
     let html = `<input type="hidden" id="modal-type" value="${type}">`;
-
     switch(type) {
-      case 'text':
-        html += `<label>Tekstinhoud</label><textarea id="modal-text" rows="4">${existing ? existing.text || '' : ''}</textarea>`;
-        break;
-      case 'youtube':
-        html += `<label>YouTube Video-ID</label><input id="modal-videoId" value="${existing ? existing.videoId || '' : ''}" placeholder="Bijv. dQw4w9WgXcQ">`;
-        break;
-      case 'vraag':
-        html += `<label>Vraagtekst</label><textarea id="modal-vraagText" rows="2">${existing ? existing.vraagText || '' : ''}</textarea>`;
-        break;
-      case 'tekenbord':
-        html += `<p>Het tekenbord heeft geen instellingen. Het wordt weergegeven als canvas.</p>`;
-        break;
-      case 'gebedspunten':
-        html += `<p>Dit component toont een livefeed van gebedspunten. Geen extra instellingen.</p>`;
-        break;
-      case 'bijbeltekst':
-        html += `<label>Bijbelreferentie (bv. Johannes 3:16)</label><input id="modal-reference" value="${existing ? existing.reference || '' : ''}">`;
-        html += `<label>Versie (bv. 193 voor NBV)</label><input id="modal-version" value="${existing ? existing.version || '' : '193'}">`;
-        break;
-      case 'checkbox':
-        html += `<label>Label</label><input id="modal-label" value="${existing ? existing.label || '' : ''}">`;
-        html += `<label><input type="checkbox" id="modal-checked" ${existing && existing.checked ? 'checked' : ''}> Standaard aangevinkt</label>`;
-        break;
-      case 'button':
-        html += `<label>Knoptekst</label><input id="modal-label" value="${existing ? existing.label || '' : 'Klik hier'}">`;
-        break;
-      case 'input':
-        html += `<label>Placeholder</label><input id="modal-placeholder" value="${existing ? existing.placeholder || '' : ''}">`;
-        html += `<label>Waarde</label><input id="modal-value" value="${existing ? existing.value || '' : ''}">`;
-        break;
-      default:
-        html += `<p>Onbekend type</p>`;
+      case 'text': html += `<label>Tekstinhoud</label><textarea id="modal-text" rows="4">${existing ? existing.text || '' : ''}</textarea>`; break;
+      case 'youtube': html += `<label>YouTube Video-ID</label><input id="modal-videoId" value="${existing ? existing.videoId || '' : ''}" placeholder="Bijv. dQw4w9WgXcQ">`; break;
+      case 'vraag': html += `<label>Vraagtekst</label><textarea id="modal-vraagText" rows="2">${existing ? existing.vraagText || '' : ''}</textarea>`; break;
+      case 'foto-opdracht': html += `<p>Geen instellingen nodig. De foto wordt willekeurig toegewezen uit de lokale screenshots.</p>`; break;
+      case 'tekenbord': html += `<p>Geen instellingen.</p>`; break;
+      case 'gebedspunten': html += `<p>Geen instellingen.</p>`; break;
+      case 'bijbeltekst': html += `<label>Bijbelreferentie</label><input id="modal-reference" value="${existing ? existing.reference || '' : ''}"><label>Versie (bv. 193)</label><input id="modal-version" value="${existing ? existing.version || '' : '193'}">`; break;
+      default: html += `<p>Onbekend type</p>`;
     }
-    // Option to set active status (standaard true)
     html += `<label><input type="checkbox" id="modal-active" ${existing && existing.active === false ? '' : 'checked'}> Component actief</label>`;
-
-    form.innerHTML = html;
-    overlay.style.display = 'flex';
+    form.innerHTML = html; overlay.style.display = 'flex';
   }
-
-  function closeModal() {
-    document.getElementById('modal-overlay').style.display = 'none';
-  }
-
+  function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
   function saveModal() {
-    const type = document.getElementById('modal-type').value;
-    let newComp = { type };
+    const type = document.getElementById('modal-type').value; let newComp = { type };
     switch(type) {
-      case 'text':
-        newComp.text = document.getElementById('modal-text').value;
-        break;
-      case 'youtube':
-        newComp.videoId = document.getElementById('modal-videoId').value;
-        break;
-      case 'vraag':
-        newComp.vraagText = document.getElementById('modal-vraagText').value;
-        break;
-      case 'tekenbord':
-        newComp.drawing = '';
-        break;
-      case 'gebedspunten':
-        // no extra fields
-        break;
-      case 'bijbeltekst':
-        newComp.reference = document.getElementById('modal-reference').value;
-        newComp.version = document.getElementById('modal-version').value || '193';
-        break;
-      case 'checkbox':
-        newComp.label = document.getElementById('modal-label').value;
-        newComp.checked = document.getElementById('modal-checked').checked;
-        break;
-      case 'button':
-        newComp.label = document.getElementById('modal-label').value;
-        break;
-      case 'input':
-        newComp.placeholder = document.getElementById('modal-placeholder').value;
-        newComp.value = document.getElementById('modal-value').value;
-        break;
-      default:
-        newComp = { type };
+      case 'text': newComp.text = document.getElementById('modal-text').value; break;
+      case 'youtube': newComp.videoId = document.getElementById('modal-videoId').value; break;
+      case 'vraag': newComp.vraagText = document.getElementById('modal-vraagText').value; break;
+      case 'foto-opdracht': break;
+      case 'tekenbord': newComp.drawing = ''; break;
+      case 'gebedspunten': break;
+      case 'bijbeltekst': newComp.reference = document.getElementById('modal-reference').value; newComp.version = document.getElementById('modal-version').value || '193'; break;
+      default: newComp = { type };
     }
-    // Active status
     newComp.active = document.getElementById('modal-active').checked;
-
-    // Genereer uniek ID als nieuw
-    if (!newComp.id) {
-      newComp.id = 'comp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
-    }
-
-    const topicId = currentTopicId;
-    const list = data[topicId] || [];
-
-    if (modalMode === 'add') {
-      list.push(newComp);
-    } else {
-      const idx = currentComponentId;
-      if (idx !== null && idx < list.length) {
-        newComp.id = list[idx].id;
-        list[idx] = newComp;
-      }
-    }
-
-    data[topicId] = list;
-    db.ref('accordionData').set(data);
-    closeModal();
+    if (!newComp.id) newComp.id = 'comp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+    const topicId = currentTopicId; const list = data[topicId] || [];
+    if (modalMode === 'add') list.push(newComp); else { const idx = currentComponentId; if (idx !== null && idx < list.length) { newComp.id = list[idx].id; list[idx] = newComp; } }
+    data[topicId] = list; db.ref('accordionData').set(data); closeModal();
   }
 
-  // ---------- DELETE COMPONENT ----------
   function deleteComponent(topicId, index) {
     if (!confirm('Weet je zeker dat je dit component wilt verwijderen?')) return;
-    const list = data[topicId] || [];
-    const comp = list[index];
-    if (comp) {
-      // Verwijder bijbehorende data
-      if (comp.type === 'vraag') {
-        db.ref(`answers/${topicId}/${comp.id}`).remove();
-      }
-      if (comp.type === 'tekenbord') {
-        db.ref(`drawings/${topicId}/${comp.id}`).remove();
-      }
-      if (comp.type === 'gebedspunten') {
-        db.ref(`gebedspunten/${topicId}/${comp.id}`).remove();
-      }
-    }
-    list.splice(index, 1);
-    data[topicId] = list;
-    db.ref('accordionData').set(data);
+    const list = data[topicId] || []; const comp = list[index];
+    if (comp) { if (comp.type === 'vraag') db.ref(`answers/${topicId}/${comp.id}`).remove(); if (comp.type === 'foto-opdracht') db.ref(`fotoOpdrachten/${topicId}/${comp.id}`).remove(); if (comp.type === 'tekenbord') db.ref(`drawings/${topicId}/${comp.id}`).remove(); if (comp.type === 'gebedspunten') db.ref(`gebedspunten/${topicId}/${comp.id}`).remove(); }
+    list.splice(index, 1); data[topicId] = list; db.ref('accordionData').set(data);
   }
 
-  // ---------- RESET DATABASE ----------
+  // ---------- RESET ----------
   document.getElementById('resetBtn').addEventListener('click', function() {
-    if (!confirm('Weet je zeker dat je ALLE gegevens wilt wissen? Dit verwijdert alle antwoorden, tekeningen, gebedspunten en aangepaste componenten. De standaardteksten worden hersteld.')) return;
-    // Verwijder alle extra data
-    db.ref('answers').remove();
-    db.ref('drawings').remove();
-    db.ref('gebedspunten').remove();
-    // Reset accordionData naar defaults
-    const defaultData = getDefaultData();
-    db.ref('accordionData').set(defaultData);
+    if (!confirm('Weet je zeker dat je ALLE gegevens wilt wissen? Dit verwijdert alle antwoorden, tekeningen, gebedspunten, foto-reacties en foto-toewijzingen. De standaardteksten worden hersteld.')) return;
+    db.ref('answers').remove(); db.ref('drawings').remove(); db.ref('gebedspunten').remove(); db.ref('fotoOpdrachten').remove(); db.ref('fotoToewijzing').remove();
+    db.ref('accordionData').set(getDefaultData());
   });
 
   // ---------- INIT ----------
-  document.addEventListener('DOMContentLoaded', () => {
-    renderAccordion();
-  });
+  document.addEventListener('DOMContentLoaded', renderAccordion);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-  });
+  function escapeHtml(text) { if (!text) return ''; const map = { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;' }; return text.replace(/[&<>"']/g, m => map[m]); }
 </script>
 </body>
 </html>
