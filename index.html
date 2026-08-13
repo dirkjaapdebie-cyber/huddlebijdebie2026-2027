@@ -117,8 +117,8 @@
       padding: 0 10px;
     }
     .accordion-panel.open { 
-      max-height: 600px;      /* ← MAXIMALE HOOGTE VOOR SCROLL */
-      overflow-y: auto;       /* ← SCROLLBAAR MAKEN */
+      max-height: 600px;      /* MAXIMALE HOOGTE VOOR SCROLL */
+      overflow-y: auto;       /* SCROLLBAAR MAKEN */
       padding: 10px 10px 20px 10px; 
     }
     .component-container { 
@@ -386,7 +386,7 @@
     "Screenshot 2026-08-13 15.29.40.png"
   ];
 
-  // ---------- TOPICS ----------
+  // ---------- TOPICS (alleen inleiding + 7 wonderen) ----------
   const topics = [
     { id: 'inleiding', title: '1. Inleiding' },
     { id: 'wonder1', title: '2.1 Het wonder van de Liefde' },
@@ -395,10 +395,7 @@
     { id: 'wonder4', title: '2.4 Het wonder van de Verlossing' },
     { id: 'wonder5', title: '2.5 Het wonder van de Genezing' },
     { id: 'wonder6', title: '2.6 Het wonder van de Gemeenschap' },
-    { id: 'wonder7', title: '2.7 Het wonder van de Overwinning' },
-    { id: 'youtube', title: '3. YouTube-materiaal' },
-    { id: 'gespreksvragen', title: '4. Gespreksvragen' },
-    { id: 'tips', title: '5. Aanvullende tips' }
+    { id: 'wonder7', title: '2.7 Het wonder van de Overwinning' }
   ];
 
   // ---------- DEFAULT DATA ----------
@@ -428,17 +425,6 @@
       ],
       'wonder7': [
         { id: 'comp_' + Date.now() + '_w7_1', type: 'text', text: '7. Het wonder van de Overwinning – Het kruis is geen einde, maar een begin. De opstanding volgt! Jezus overwint de dood, de hel en het graf. Dit geeft ons de zekerheid van eeuwig leven en hoop voor de toekomst.', active: true }
-      ],
-      'youtube': [
-        { id: 'comp_' + Date.now() + '_y1', type: 'text', text: 'De video\'s van Wilkin van der Kamp zijn te vinden op het kanaal "Wilkin van der Kamp".', active: true },
-        { id: 'comp_' + Date.now() + '_y2', type: 'youtube', videoId: '', active: true }
-      ],
-      'gespreksvragen': [
-        { id: 'comp_' + Date.now() + '_g1', type: 'text', text: 'Gebruik deze vragen na het kijken van een video.', active: true },
-        { id: 'comp_' + Date.now() + '_g2', type: 'vraag', vraagText: 'Wat is jouw antwoord op de afsluitende verdiepingsvraag?', active: true }
-      ],
-      'tips': [
-        { id: 'comp_' + Date.now() + '_t1', type: 'text', text: 'Werkboekje: Er is ook een werkboekje bij de serie (uitgeverij Royal Jongbloed).', active: true }
       ]
     };
   }
