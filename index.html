@@ -117,7 +117,8 @@
       padding: 0 10px;
     }
     .accordion-panel.open { 
-      max-height: 5000px; 
+      max-height: 600px;      /* ← MAXIMALE HOOGTE VOOR SCROLL */
+      overflow-y: auto;       /* ← SCROLLBAAR MAKEN */
       padding: 10px 10px 20px 10px; 
     }
     .component-container { 
@@ -314,7 +315,6 @@
   } else {
     modeIndicator.textContent = '👀 Student (bekijken)';
     modeIndicator.className = 'mode-indicator view';
-    // switchBtn blijft zichtbaar, maar tekst anders
     switchBtn.textContent = '🔄 Schakel naar begeleidersmodus';
   }
 
@@ -322,11 +322,9 @@
   switchBtn.addEventListener('click', function() {
     const currentUrl = window.location.href;
     if (isEditMode) {
-      // remove mode=edit
       const newUrl = currentUrl.replace('?mode=edit', '').replace('&mode=edit', '');
       window.location.href = newUrl;
     } else {
-      // add mode=edit
       const separator = currentUrl.includes('?') ? '&' : '?';
       window.location.href = currentUrl + separator + 'mode=edit';
     }
