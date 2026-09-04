@@ -243,6 +243,22 @@
       color: #4a8fe7;
       margin-top: 4px;
     }
+    .foto-knoppen {
+      margin-top: 8px;
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+    .foto-knoppen button {
+      padding: 6px 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .foto-knop-wel { background: #d1fae5; color: #065f46; }
+    .foto-knop-niet { background: #fee2e2; color: #9b2c2c; }
   </style>
 </head>
 <body>
@@ -630,7 +646,6 @@
             </div>`;
           listenToPoll(topicId, comp.id);
         } else if (comp.type === 'fotoStelling') {
-          // Foto-stelling: toont grid met alle screenshots en live toewijzingen
           innerHTML = `
             <div class="foto-stelling-box">
               <strong>📷 Foto-stelling: ${escapeHtml(comp.stellingText)}</strong>
@@ -638,7 +653,7 @@
               <div class="feed-container" id="foto-feed-${comp.id}">Bezig met reacties laden...</div>
             </div>`;
           // Start listeners voor toewijzingen en reacties
-          listenToPhotoAssignments(comp.id);
+          listenToPhotoAssignments(topicId, comp.id);
           listenToPhotoReactions(topicId, comp.id);
         } else if (comp.type === 'website') {
           innerHTML = `
@@ -676,8 +691,23 @@
     }, 50);
   }
 
+  // Helper: YouTube ID extraheren
+  function extractYouTubeId(url) {
+    if (!url) return '';
+    // Patronen: watch?v=, youtu.be/, embed/
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+      /^([a-zA-Z0-9_-]{11})$/ // directe ID
+    ];
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match) return match[1];
+    }
+    return '';
+  }
+
   // ---------- FOTO-STELLING: TOEWIJZINGEN & REACTIES ----------
-  function listenToPhotoAssignments(compId) {
+  function listenToPhotoAssignments(topicId, compId) {
     const gridContainer = document.getElementById(`foto-grid-${compId}`);
     if (!gridContainer) return;
     db.ref('fototoewijzing').on('value', (snap) => {
@@ -690,10 +720,19 @@
         const isCurrentUserOwner = owners.includes(currentUserName);
         const card = document.createElement('div');
         card.className = 'foto-card';
+        let knoppenHTML = '';
+        if (isCurrentUserOwner) {
+          knoppenHTML = `
+            <div class="foto-knoppen">
+              <button class="foto-knop-wel" onclick="photoReact('${topicId}','${compId}','wel')">👍 Past bij mij</button>
+              <button class="foto-knop-niet" onclick="photoReact('${topicId}','${compId}','niks')">👎 Past niet bij mij</button>
+            </div>`;
+        }
         card.innerHTML = `
           <img src="${foto}" alt="Screenshot ${index+1}">
           <div class="naam">${escapeHtml(ownerName)}</div>
           ${isCurrentUserOwner ? '<div class="eigenaar-badge">Jouw foto</div>' : ''}
+          ${knoppenHTML}
         `;
         gridContainer.appendChild(card);
       });
@@ -714,19 +753,14 @@
   }
 
   // Functie voor het versturen van een reactie bij de foto-stelling
-  function sendPhotoReaction(topicId, compId, reactie) {
+  function photoReact(topicId, compId, soort) {
     if (!currentUserName) return;
+    const reactie = soort === 'wel' ? '👍 Deze foto past bij mij' : '👎 Deze foto past niet bij mij';
     db.ref(`interactie/${topicId}/${compId}/reacties`).push({
       naam: currentUserName,
       reactie: reactie,
       ts: Date.now()
     });
-  }
-
-  // Knoppen in foto-stelling: klik op "Past bij mij" of "Past niet bij mij"
-  function photoReact(topicId, compId, soort) {
-    const reactie = soort === 'wel' ? '👍 Deze foto past bij mij' : '👎 Deze foto past niet bij mij';
-    sendPhotoReaction(topicId, compId, reactie);
   }
 
   // ---------- INTERACTIE LIVE FEEDS (bestaande) ----------
