@@ -118,7 +118,7 @@
       padding: 0 20px;
     }
     .accordion-panel.open { 
-      max-height: 2000px;
+      max-height: 3000px;
       padding: 10px 20px 20px 20px; 
     }
     
@@ -195,6 +195,26 @@
     .btn-poll.eens:hover { background: #d1fae5; border-color: #10b981; }
     .btn-poll.oneens:hover { background: #fee2e2; border-color: #ef4444; }
     .poll-results { margin-top: 10px; font-weight: 600; font-size: 0.95rem; }
+
+    /* Iframe & YouTube blokken */
+    .iframe-container, .youtube-container {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 */
+      height: 0;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    .iframe-container iframe, .youtube-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 10px;
+    }
+    .iframe-container iframe[src*="youtube"] { border: none; }
+    .component-item .label { font-weight: 700; margin-bottom: 8px; }
   </style>
 </head>
 <body>
@@ -310,12 +330,13 @@
     if (!currentUserName) document.getElementById('name-overlay').style.display = 'flex';
   });
 
-  // ---------- STRUCTUUR 4 AVONDEN DATA ----------
+  // ---------- STRUCTUUR 5 AVONDEN DATA ----------
   const defaultTopics = [
     { id: 'avond1', title: 'Avond 1: Schuld & Genade' },
     { id: 'avond2', title: 'Avond 2: Vrijheid & Zuiverheid' },
-    { id: 'avond3', title: 'Avond 3: Kracht & Strijd' },
-    { id: 'avond4', title: 'Avond 4: Vrede & Identiteit' }
+    { id: 'avond3', title: 'Avond 3: Heling & Pijn' },
+    { id: 'avond4', title: 'Avond 4: De Strijd & Jouw Route' },
+    { id: 'avond5', title: 'Avond 5: Identiteit & Koninklijke Uitzending' }
   ];
 
   function getDefaultData() {
@@ -323,28 +344,59 @@
       'topics': defaultTopics,
       'content': {
         'avond1': [
-          { id: 'a1_t1', type: 'text', text: 'Wonder van het Kruis: 1. Vergeving (Jezus zweet bloeddruppels in Getsemane).\nBenodigdheden: Fotokaarten, 7 steentjes, pennen, het kruis, laptop + scherm.\n\nProgramma (19:00 - 20:30):\n19:00 - 19:15 | Opening & Filmpje (Introductie Getsemane)\n19:15 - 19:30 | Input: Jezus droeg onze prestatiedruk.', active: true },
-          { id: 'a1_v1', type: 'vraag', vraagText: 'Op welk gebied in je studentenleven ervaar jij de grootste druk om perfect te zijn? (Bijv. studie, sociaal leven, geloof).', active: true },
-          { id: 'a1_v2', type: 'vraag', vraagText: 'Vind je het moeilijker om vergeving van God te accepteren, of om jezelf te vergeven?', active: true },
-          { id: 'a1_s1', type: 'stelling', stellingText: 'Als christelijke student mag je eigenlijk geen last hebben van faalangst of prestatiedruk.', active: true }
+          { id: 'a1_schema', type: 'text', text: '📅 Tijdschema Avond 1 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje (introductie Getsemane)\n19:15 – 19:30 | Input: "Jezus droeg onze prestatiedruk"\n19:30 – 20:15 | Kringvragen, gebed & werkvorm (steentjes)\n20:15 – 20:30 | Afsluiting & uitleg: hoe pas je dit principe zelf toe? (3 minuten)', active: true },
+          { id: 'a1_t1', type: 'text', text: '🎬 Avond 1: Schuld & Genade\n\nWonder 1: Vergeving (Jezus zweet bloeddruppels in Getsemane).\n\nOpbouw voor hun hart: Rust vinden. Kringleiders dragen vaak een dubbele verantwoordelijkheid (studie + de spirituele zorg voor anderen). Jezus droeg de ultieme stress, zodat zij vanuit rust en genade mogen leven. Je bent eerst Gods kind, dan pas leider.', active: true },
+          { id: 'a1_v1', type: 'vraag', vraagText: 'Waar voel jij op dit moment de grootste druk om te moeten \'presteren\' (richting God, je studie of je omgeving)?', active: true },
+          { id: 'a1_v2', type: 'vraag', vraagText: 'Vind je het makkelijk om te accepteren dat Gods genade voor jou genoeg is, zónder dat je er iets voor hoeft te doen?', active: true },
+          { id: 'a1_s1', type: 'stelling', stellingText: 'Als christelijke student mag je eigenlijk geen last hebben van faalangst of prestatiedruk.', active: true },
+          { id: 'a1_w1', type: 'text', text: '🙏 Gebed & Werkvorm:\nIedereen legt een steentje (symbool voor eigen faalangst of schuld) bij het kruis. Bid specifiek voor rust en bevrijding van prestatiedruk in het leven van elke student afzonderlijk.', active: true },
+          { id: 'a1_tafel', type: 'text', text: '🍽️ Stellingen & Dilemma\'s voor de maaltijd\n\nStelling:\n"Het is moeilijker om jezelf te vergeven voor een grote fout dan om te geloven dat God het heeft vergeven."\n\nDilemma:\nJe haalt een belangrijk tentamen niet door uitstelgedrag. Kies je ervoor om dit direct tegen een vriend te zeggen (kwetsbaar) of los je het de volgende keer stiekem in je eentje op (perfectionisme)?\n\nVraag voor op tafel:\nWanneer merkte jij voor het laatst dat je onbewust probeerde om de liefde van God of waardering van anderen te verdienen?', active: true },
+          { id: 'a1_y1', type: 'youtube', url: 'https://www.youtube.com/watch?v=VIDEO_ID1', active: true },
+          { id: 'a1_web1', type: 'website', url: 'https://www.example.com/rust', active: true }
         ],
         'avond2': [
-          { id: 'a2_t1', type: 'text', text: 'Wonderen: 2. Verlossing (Slagen op Zijn rug) & 3. Reiniging (Bloed uit Zijn hoofdwonden).\nBenodigdheden: Notitieblaadjes, pennen, papierversnipperaar.\n\nProgramma:\n19:00 | Opening & Filmpje\n19:15 | Input: Vrijgemaakt van destructieve gewoontes.', active: true },
-          { id: 'a2_v1', type: 'vraag', vraagText: 'Welke slechte gewoonte of "verslaving" kost jou stiekem de meeste tijd en vrijheid?', active: true },
-          { id: 'a2_v2', type: 'vraag', vraagText: 'Welke negatieve gedachte/label over jezelf geloof jij het snelst?', active: true },
-          { id: 'a2_s1', type: 'stelling', stellingText: 'Je kunt pas een bruikbare christen zijn als je je destructieve gewoontes en zonden volledig hebt overwonnen.', active: true }
+          { id: 'a2_schema', type: 'text', text: '📅 Tijdschema Avond 2 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje\n19:15 – 19:30 | Input: "Vrijgemaakt van destructieve gewoontes"\n19:30 – 20:15 | Kringvragen, gebed & werkvorm (papierversnipperaar)\n20:15 – 20:30 | Afsluiting & uitleg: hoe pas je dit principe zelf toe? (3 minuten)', active: true },
+          { id: 'a2_t1', type: 'text', text: '🎬 Avond 2: Vrijheid & Zuiverheid\n\nWonderen: 2. Verlossing (Slagen op Zijn rug) & 3. Reiniging (Bloed uit Zijn hoofdwonden).\n\nOpbouw voor hun hart: Schoonmaak. Als leider sta je in de frontlinie en dat kan gepaard gaan met leugens in je hoofd of de verleiding van geheime zonden (social media verslaving, onzuiverheid). Jezus\' bloed reinigt je geweten en breekt ketens.', active: true },
+          { id: 'a2_v1', type: 'vraag', vraagText: 'Welke negatieve gedachte of leugen over jezelf ("Ik schiet tekort", "Ik ben niet geestelijk genoeg") geloof jij het snelst?', active: true },
+          { id: 'a2_v2', type: 'vraag', vraagText: 'Op welk terrein in je leven verlang je op dit moment naar meer persoonlijke vrijheid of zuiverheid?', active: true },
+          { id: 'a2_s1', type: 'stelling', stellingText: 'Je kunt pas een bruikbare christen zijn als je je destructieve gewoontes en zonden volledig hebt overwonnen.', active: true },
+          { id: 'a2_w1', type: 'text', text: '🙏 Gebed & Werkvorm:\nSchrijf de leugens/blokkades op en vernietig ze (papierversnipperaar). Zegen elkaar in tweetallen met een gereinigd denken en spreek Gods waarheid over elkaar uit.', active: true },
+          { id: 'a2_tafel', type: 'text', text: '🍽️ Stellingen & Dilemma\'s voor de maaltijd\n\nStelling:\n"Sociale media kosten je meer innerlijke rust dan je toe wilt geven."\n\nDilemma:\nJe ontdekt dat je een hardnekkige, stiekeme gewoonte hebt waar je vanaf wilt. Vertel je dit direct aan je mentor/kring, of vecht je er eerst een halfjaar in stilte tegen?\n\nVraag voor op tafel:\nWelk negatief label of welk kritisch stemmetje uit je verleden klinkt het vaakst door als je even alleen bent?', active: true },
+          { id: 'a2_y1', type: 'youtube', url: 'https://www.youtube.com/watch?v=VIDEO_ID2', active: true },
+          { id: 'a2_web1', type: 'website', url: 'https://www.example.com/vrijheid', active: true }
         ],
         'avond3': [
-          { id: 'a3_t1', type: 'text', text: 'Wonderen: 4. Genezing (Bloed uit Zijn handen) & 5. Bevrijding (Bloed uit Zijn voeten).\nBenodigdheden: Comfortabele setting, pennen, papier.\n\nProgramma:\n19:00 | Opening & Filmpje\n19:15 | Input: Heling voor pijn en angst.', active: true },
-          { id: 'a3_v1', type: 'vraag', vraagText: 'Waar ervaar jij op dit moment de meeste (mentale of fysieke) vermoeidheid of pijn?', active: true },
-          { id: 'a3_v2', type: 'vraag', vraagText: 'Wat vind je het meest spannend aan de keuzes voor jouw toekomst?', active: true },
-          { id: 'a3_s1', type: 'stelling', stellingText: 'Geestelijke strijd is iets van vroeger of van verre landen; als Nederlandse student merk je daar eigenlijk weinig van.', active: true }
+          { id: 'a3_schema', type: 'text', text: '📅 Tijdschema Avond 3 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje\n19:15 – 19:30 | Input: "Heling voor pijn en angst"\n19:30 – 20:15 | Kringvragen, ministry-sessie & gebed\n20:15 – 20:30 | Afsluiting & uitleg: hoe pas je dit principe zelf toe? (3 minuten)', active: true },
+          { id: 'a3_t1', type: 'text', text: '🎬 Avond 3: Heling & Pijn\n\nWonder: 4. Genezing (Bloed uit Zijn handen).\n\nOpbouw voor hun hart: Diepe heling. Kringleiders zijn vaak \'gevers\', maar dragen zelf ook weleens verborgen wonden (afwijzing, eenzaamheid, fysieke uitputting). Jezus\' doorboorde handen zijn er om hún pijn aan te raken.', active: true },
+          { id: 'a3_v1', type: 'vraag', vraagText: 'Als je heel eerlijk naar jezelf kijkt: waar zit op dit moment jouw emotionele of fysieke vermoeidheid/pijn?', active: true },
+          { id: 'a3_v2', type: 'vraag', vraagText: 'Vind je het makkelijk om je eigen zwakheid aan God (en deze groep) te laten zien, of houd je liever de schijn op dat het goed gaat?', active: true },
+          { id: 'a3_s1', type: 'stelling', stellingText: 'Geestelijke strijd is iets van vroeger of van verre landen; als Nederlandse student merk je daar eigenlijk weinig van.', active: true },
+          { id: 'a3_w1', type: 'text', text: '🙏 Gebed & Werkvorm:\nRicht de hele afsluiting in als een ministry-sessie. Vraag wie er gebed wil voor heling of herstel en ga als leiding specifiek voor deze studenten bidden en zegenen met de Heilige Geest.', active: true },
+          { id: 'a3_tafel', type: 'text', text: '🍽️ Stellingen & Dilemma\'s voor de maaltijd\n\nStelling:\n"Als christelijke studenten zijn we te bang om onze echte mentale of fysieke zwakheid te laten zien."\n\nDilemma:\nJe bent zo moe van je studie en het leiderschap dat je het liefst al je taken per direct neerlegt. Doe je alsof er niets aan de hand is tot de vakantie, of trek je nu aan de bel?\n\nVraag voor op tafel:\nWat is de plek of situatie waar jij je het snelst eenzaam voelt, ondanks dat je midden in een studentenleven zit?', active: true },
+          { id: 'a3_y1', type: 'youtube', url: 'https://www.youtube.com/watch?v=VIDEO_ID3', active: true },
+          { id: 'a3_web1', type: 'website', url: 'https://www.example.com/heling', active: true }
         ],
         'avond4': [
-          { id: 'a4_t1', type: 'text', text: 'Wonderen: 6. Verzoening (Bloed uit Zijn zijde) & 7. Wedergeboorte (Het doorboorde hart).\nBenodigdheden: 7 identiteitskaarten, iets feestelijks.\n\nProgramma:\n19:00 | Opening & Filmpje\n19:15 | Input: Maskers mogen af.', active: true },
-          { id: 'a4_v1', type: 'vraag', vraagText: 'Welk "masker" zet jij nog wel eens op in de studentenwereld om erbij te horen?', active: true },
-          { id: 'a4_v2', type: 'vraag', vraagText: 'Wat is het grootste "wonder" of inzicht dat je meeneemt uit deze 4 avonden?', active: true },
-          { id: 'a4_s1', type: 'stelling', stellingText: 'Het is onmogelijk om in een seculiere studentenwereld 100% te leven vanuit je christelijke identity zonder buiten de groep te vallen.', active: true }
+          { id: 'a4_schema', type: 'text', text: '📅 Tijdschema Avond 4 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje\n19:15 – 19:30 | Input: "Autoriteit en vrede in de strijd"\n19:30 – 20:15 | Kringvragen, proclamatiegebed & werkvorm\n20:15 – 20:30 | Afsluiting & uitleg: hoe pas je dit principe zelf toe? (3 minuten)', active: true },
+          { id: 'a4_t1', type: 'text', text: '🎬 Avond 4: De Strijd & Jouw Route\n\nWonderen: 5. Bevrijding (Bloed uit Zijn voeten) & 6. Verzoening (Bloed uit Zijn zijde).\n\nOpbouw voor hun hart: Autoriteit en vrede. Leren staan in de overwinning van Jezus. Soms voelt het leven als een strijd waarin je geleefd wordt. Jezus\' voeten geven vaste grond om te wandelen in vrede, vrij van angst voor keuzes in de toekomst.', active: true },
+          { id: 'a4_v1', type: 'vraag', vraagText: 'Waar ervaar jij op dit moment de meeste (geestelijke) strijd of twijfel in je dagelijks leven?', active: true },
+          { id: 'a4_v2', type: 'vraag', vraagText: 'Ervaar je de diepe vrede (verzoening) van God in je basis, of is er onrust over je relaties of de toekomst?', active: true },
+          { id: 'a4_s1', type: 'stelling', stellingText: 'Als christen in een seculiere wereld hoef je geen strijd te voelen, want Jezus heeft alles al overwonnen.', active: true },
+          { id: 'a4_w1', type: 'text', text: '🙏 Gebed & Werkvorm:\nGa in een cirkel staan. De leiding spreekt een krachtig proclamatiegebed uit over de voeten en wegen van de studenten: dat ze standvastig zullen zijn en angstvrij hun stappen in het leven mogen zetten.', active: true },
+          { id: 'a4_tafel', type: 'text', text: '🍽️ Stellingen & Dilemma\'s voor de maaltijd\n\nStelling:\n"Het maken van keuzes over je toekomst (studie of partner) veroorzaakt bij jou meer angst dan vertrouwen."\n\nDilemma:\nEr ontstaat een flinke irritatie tussen twee mensen op jouw kring. Confronteer je hen daar direct open over tijdens de nababespreking, of hoop je dat het vanzelf overgaat?\n\nVraag voor op tafel:\nWaar merk jij in het dagelijks leven dat het studentenleven tegen je christelijke waarden indruist?', active: true },
+          { id: 'a4_y1', type: 'youtube', url: 'https://www.youtube.com/watch?v=VIDEO_ID4', active: true },
+          { id: 'a4_web1', type: 'website', url: 'https://www.example.com/strijd', active: true }
+        ],
+        'avond5': [
+          { id: 'a5_schema', type: 'text', text: '📅 Tijdschema Avond 5 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje\n19:15 – 19:30 | Input: "Nieuw hart, nieuwe identiteit"\n19:30 – 20:15 | Kringvragen, zegenkaarten & feestelijke afsluiting\n20:15 – 20:30 | Afsluiting & uitleg: hoe kun je dit principe (de 7 wonderen) blijven gebruiken in je persoonlijke leven? (3 minuten)', active: true },
+          { id: 'a5_t1', type: 'text', text: '🎬 Avond 5: Identiteit & Koninklijke Uitzending\n\nWonder: 7. Wedergeboorte (Het doorboorde hart van Jezus).\n\nOpbouw voor hun hart: Koninklijke identiteit. Het diepe besef dat ze geliefd zijn om wie ze zijn, niet om wat ze doen. Een nieuw hart betekent leven vanuit overvloed.', active: true },
+          { id: 'a5_v1', type: 'vraag', vraagText: 'Als al je taken en rollen (inclusief het kringleiderschap) wegvallen: wie ben jij dan aan de voeten van Jezus?', active: true },
+          { id: 'a5_v2', type: 'vraag', vraagText: 'Welk \'wonder van het kruis\' heeft jou de afgelopen weken persoonlijk het meest veranderd of opgebouwd?', active: true },
+          { id: 'a5_s1', type: 'stelling', stellingText: 'Het is onmogelijk om in een seculiere studentenwereld 100% te leven vanuit je christelijke identity zonder buiten de groep te vallen.', active: true },
+          { id: 'a5_w1', type: 'text', text: '🙏 Gebed & Werkvorm:\nSluit feestelijk af. Geef elke student een Zegenkaart met een profetische of opbouwende bemoediging die jullie als leiding specifiek voor die persoon hebben opgeschreven. Spreek een grote zegen uit over hun leven.', active: true },
+          { id: 'a5_tafel', type: 'text', text: '🍽️ Stellingen & Dilemma\'s voor de maaltijd\n\nStelling:\n"Jouw eigenwaarde hangt stiekem meer af van je studieresultaten en prestaties dan van je identiteit in Christus."\n\nDilemma:\nJe mag kiezen: of je haalt cum laude je diploma maar hebt een matig sociaal/geestelijk leven, of je studeert met een ruime voldoende af en investeert al je tijd in mensen om je heen.\n\nVraag voor op tafel:\nWelk masker zet jij in de collegezaal of op de vereniging op omdat je bang bent dat ze je anders niet aardig vinden?', active: true },
+          { id: 'a5_y1', type: 'youtube', url: 'https://www.youtube.com/watch?v=VIDEO_ID5', active: true },
+          { id: 'a5_web1', type: 'website', url: 'https://www.example.com/identiteit', active: true }
         ]
       }
     };
@@ -413,6 +465,8 @@
             <option value="text">Tekstblok</option>
             <option value="vraag">Open Vraag</option>
             <option value="stelling">Stelling (Poll)</option>
+            <option value="website">Website (iframe)</option>
+            <option value="youtube">YouTube-video</option>
           </select>
           <button onclick="openAddModal('${topic.id}')">➕ Blok Toevoegen</button>
         `;
@@ -472,6 +526,19 @@
               <div class="poll-results" id="poll-res-${comp.id}">Uitslag: 0x Eens | 0x Oneens</div>
             </div>`;
           listenToPoll(topicId, comp.id);
+        } else if (comp.type === 'website') {
+          innerHTML = `
+            <div class="label">🌐 Website:</div>
+            <div class="iframe-container">
+              <iframe src="${escapeHtml(comp.url)}" allowfullscreen></iframe>
+            </div>`;
+        } else if (comp.type === 'youtube') {
+          const videoId = extractYouTubeId(comp.url);
+          innerHTML = `
+            <div class="label">🎬 YouTube:</div>
+            <div class="youtube-container">
+              <iframe src="https://www.youtube.com/embed/${videoId}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>`;
         }
 
         box.innerHTML = innerHTML;
@@ -493,6 +560,21 @@
         container.appendChild(box);
       });
     }, 50);
+  }
+
+  // Helper: YouTube ID extraheren
+  function extractYouTubeId(url) {
+    if (!url) return '';
+    // Patronen: watch?v=, youtu.be/, embed/
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+      /^([a-zA-Z0-9_-]{11})$/ // directe ID
+    ];
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match) return match[1];
+    }
+    return '';
   }
 
   // ---------- INTERACTIE LIVE FEEDS ----------
@@ -567,6 +649,10 @@
       form.innerHTML += `<label>Vraagtekst</label><input type="text" id="m-vraag" value="${existing ? existing.vraagText : ''}">`;
     } else if (type === 'stelling') {
       form.innerHTML += `<label>Stellingtekst</label><input type="text" id="m-stelling" value="${existing ? existing.stellingText : ''}">`;
+    } else if (type === 'website') {
+      form.innerHTML += `<label>Website-URL</label><input type="url" id="m-url" placeholder="https://..." value="${existing ? existing.url : ''}">`;
+    } else if (type === 'youtube') {
+      form.innerHTML += `<label>YouTube-URL (of video-ID)</label><input type="text" id="m-url" placeholder="https://www.youtube.com/watch?v=..." value="${existing ? existing.url : ''}">`;
     }
     document.getElementById('modal-overlay').style.display = 'flex';
   }
@@ -581,6 +667,7 @@
     if (type === 'text') obj.text = document.getElementById('m-text').value;
     if (type === 'vraag') obj.vraagText = document.getElementById('m-vraag').value;
     if (type === 'stelling') obj.stellingText = document.getElementById('m-stelling').value;
+    if (type === 'website' || type === 'youtube') obj.url = document.getElementById('m-url').value;
 
     if (!contentData[currentTopicId]) contentData[currentTopicId] = [];
     
@@ -661,12 +748,12 @@
   });
 
   document.getElementById('resetBtn').addEventListener('click', function() {
-    if (!confirm('⚠️ Let op: Weet je zeker dat je alle data wilt terugzetten naar de 4 standaardavonden? Alle live antwoorden worden gewist.')) return;
+    if (!confirm('⚠️ Let op: Weet je zeker dat je alle data wilt terugzetten naar de 5 standaardavonden? Alle live antwoorden worden gewist.')) return;
     db.ref('interactie').remove();
     const def = getDefaultData();
     db.ref('draft').set(def);
     db.ref('published').set(def);
-    alert('Systeem succesvol gereset naar de 4 basisavonden.');
+    alert('Systeem succesvol gereset naar de 5 basisavonden.');
   });
 
   // ---------- SETUP INITIALISATIE ----------
