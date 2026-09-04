@@ -166,7 +166,7 @@
     .add-component-area button { padding: 8px 16px; background: #a0c4ff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
 
     /* Inputs & Interactiviteit */
-    .vraag-box, .stelling-box { background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 10px; }
+    .vraag-box, .stelling-box, .foto-stelling-box { background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 10px; }
     .input-group { display: flex; gap: 10px; margin-top: 8px; }
     .input-group input { flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; }
     .input-group button { padding: 8px 16px; background: #4a8fe7; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
@@ -215,6 +215,34 @@
     }
     .iframe-container iframe[src*="youtube"] { border: none; }
     .component-item .label { font-weight: 700; margin-bottom: 8px; }
+
+    /* Foto-stelling grid */
+    .foto-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .foto-card {
+      background: #f1f5f9;
+      border-radius: 8px;
+      padding: 8px;
+      text-align: center;
+    }
+    .foto-card img {
+      width: 100%;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+    .foto-card .naam {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .foto-card .eigenaar-badge {
+      font-size: 0.75rem;
+      color: #4a8fe7;
+      margin-top: 4px;
+    }
   </style>
 </head>
 <body>
@@ -288,6 +316,47 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
+  // ---------- SCREENSHOTS LIJST ----------
+  const SCREENSHOTS = [
+    'Screenshot 2026-08-13 15.22.52.png',
+    'Screenshot 2026-08-13 15.23.18.png',
+    'Screenshot 2026-08-13 15.23.31.png',
+    'Screenshot 2026-08-13 15.23.38.png',
+    'Screenshot 2026-08-13 15.23.47.png',
+    'Screenshot 2026-08-13 15.23.55.png',
+    'Screenshot 2026-08-13 15.24.06.png',
+    'Screenshot 2026-08-13 15.24.18.png',
+    'Screenshot 2026-08-13 15.24.40.png',
+    'Screenshot 2026-08-13 15.24.46.png',
+    'Screenshot 2026-08-13 15.25.07.png',
+    'Screenshot 2026-08-13 15.25.16.png',
+    'Screenshot 2026-08-13 15.25.34.png',
+    'Screenshot 2026-08-13 15.25.52.png',
+    'Screenshot 2026-08-13 15.26.00.png',
+    'Screenshot 2026-08-13 15.26.11.png',
+    'Screenshot 2026-08-13 15.26.25.png',
+    'Screenshot 2026-08-13 15.26.37.png',
+    'Screenshot 2026-08-13 15.26.49.png',
+    'Screenshot 2026-08-13 15.26.58.png',
+    'Screenshot 2026-08-13 15.27.09.png',
+    'Screenshot 2026-08-13 15.27.23.png',
+    'Screenshot 2026-08-13 15.27.32.png',
+    'Screenshot 2026-08-13 15.27.41.png',
+    'Screenshot 2026-08-13 15.27.54.png',
+    'Screenshot 2026-08-13 15.28.01.png',
+    'Screenshot 2026-08-13 15.28.09.png',
+    'Screenshot 2026-08-13 15.28.16.png',
+    'Screenshot 2026-08-13 15.28.23.png',
+    'Screenshot 2026-08-13 15.28.30.png',
+    'Screenshot 2026-08-13 15.28.40.png',
+    'Screenshot 2026-08-13 15.28.54.png',
+    'Screenshot 2026-08-13 15.29.02.png',
+    'Screenshot 2026-08-13 15.29.13.png',
+    'Screenshot 2026-08-13 15.29.22.png',
+    'Screenshot 2026-08-13 15.29.32.png',
+    'Screenshot 2026-08-13 15.29.40.png'
+  ];
+
   // ---------- MODE & RECHTEN ----------
   const urlParams = new URLSearchParams(window.location.search);
   const mode = urlParams.get('mode') || 'view';
@@ -317,17 +386,49 @@
     }
   });
 
-  // ---------- GEBRUIKERSNAAM ----------
+  // ---------- GEBRUIKERSNAAM & FOTO TOEWIJZING ----------
   let currentUserName = localStorage.getItem('bijbelstudie_naam') || '';
+  
   function saveName() {
     const naam = document.getElementById('name-input').value.trim();
     if (!naam) { alert('Vul aub je naam in.'); return; }
     currentUserName = naam;
     localStorage.setItem('bijbelstudie_naam', naam);
     document.getElementById('name-overlay').style.display = 'none';
+    // Wijs een foto toe als dat nog niet is gebeurd
+    assignRandomPhoto();
   }
+
+  // Wijs een willekeurige, nog niet gebruikte foto toe aan de huidige gebruiker
+  function assignRandomPhoto() {
+    if (!currentUserName) return;
+    const userRef = db.ref('fototoewijzing/' + currentUserName);
+    userRef.once('value', (snap) => {
+      if (snap.exists()) return; // al een foto
+      // Haal alle bestaande toewijzingen op om een vrije foto te kiezen
+      db.ref('fototoewijzing').once('value', (allSnap) => {
+        const existing = allSnap.val() || {};
+        const usedIndices = Object.values(existing).map(v => v.index);
+        const freeIndices = SCREENSHOTS.map((_, i) => i).filter(i => !usedIndices.includes(i));
+        if (freeIndices.length === 0) {
+          // Alle foto's bezet – kies gewoon een willekeurige (overlap toestaan)
+          const randomIndex = Math.floor(Math.random() * SCREENSHOTS.length);
+          userRef.set({ index: randomIndex, foto: SCREENSHOTS[randomIndex] });
+        } else {
+          const randomIndex = freeIndices[Math.floor(Math.random() * freeIndices.length)];
+          userRef.set({ index: randomIndex, foto: SCREENSHOTS[randomIndex] });
+        }
+      });
+    });
+  }
+
   window.addEventListener('DOMContentLoaded', () => {
-    if (!currentUserName) document.getElementById('name-overlay').style.display = 'flex';
+    if (!currentUserName) {
+      document.getElementById('name-overlay').style.display = 'flex';
+    } else {
+      // Al ingelogd – zorg dat er een foto is
+      assignRandomPhoto();
+    }
   });
 
   // ---------- STRUCTUUR 5 AVONDEN DATA ----------
@@ -344,6 +445,7 @@
       'topics': defaultTopics,
       'content': {
         'avond1': [
+          { id: 'a1_fotoStelling', type: 'fotoStelling', stellingText: 'Bekijk de foto die je hebt toegewezen gekregen. Vertel of deze foto iets met jou te maken heeft.', fotos: SCREENSHOTS, active: true },
           { id: 'a1_schema', type: 'text', text: '📅 Tijdschema Avond 1 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje (introductie Getsemane)\n19:15 – 19:30 | Input: "Jezus droeg onze prestatiedruk"\n19:30 – 20:15 | Kringvragen, gebed & werkvorm (steentjes)\n20:15 – 20:30 | Afsluiting & uitleg: hoe pas je dit principe zelf toe? (3 minuten)', active: true },
           { id: 'a1_t1', type: 'text', text: '🎬 Avond 1: Schuld & Genade\n\nWonder 1: Vergeving (Jezus zweet bloeddruppels in Getsemane).\n\nOpbouw voor hun hart: Rust vinden. Kringleiders dragen vaak een dubbele verantwoordelijkheid (studie + de spirituele zorg voor anderen). Jezus droeg de ultieme stress, zodat zij vanuit rust en genade mogen leven. Je bent eerst Gods kind, dan pas leider.', active: true },
           { id: 'a1_v1', type: 'vraag', vraagText: 'Waar voel jij op dit moment de grootste druk om te moeten \'presteren\' (richting God, je studie of je omgeving)?', active: true },
@@ -465,6 +567,7 @@
             <option value="text">Tekstblok</option>
             <option value="vraag">Open Vraag</option>
             <option value="stelling">Stelling (Poll)</option>
+            <option value="fotoStelling">Foto-stelling (Screenshots)</option>
             <option value="website">Website (iframe)</option>
             <option value="youtube">YouTube-video</option>
           </select>
@@ -526,6 +629,17 @@
               <div class="poll-results" id="poll-res-${comp.id}">Uitslag: 0x Eens | 0x Oneens</div>
             </div>`;
           listenToPoll(topicId, comp.id);
+        } else if (comp.type === 'fotoStelling') {
+          // Foto-stelling: toont grid met alle screenshots en live toewijzingen
+          innerHTML = `
+            <div class="foto-stelling-box">
+              <strong>📷 Foto-stelling: ${escapeHtml(comp.stellingText)}</strong>
+              <div class="foto-grid" id="foto-grid-${comp.id}"></div>
+              <div class="feed-container" id="foto-feed-${comp.id}">Bezig met reacties laden...</div>
+            </div>`;
+          // Start listeners voor toewijzingen en reacties
+          listenToPhotoAssignments(comp.id);
+          listenToPhotoReactions(topicId, comp.id);
         } else if (comp.type === 'website') {
           innerHTML = `
             <div class="label">🌐 Website:</div>
@@ -562,22 +676,60 @@
     }, 50);
   }
 
-  // Helper: YouTube ID extraheren
-  function extractYouTubeId(url) {
-    if (!url) return '';
-    // Patronen: watch?v=, youtu.be/, embed/
-    const patterns = [
-      /(?:youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
-      /^([a-zA-Z0-9_-]{11})$/ // directe ID
-    ];
-    for (const pattern of patterns) {
-      const match = url.match(pattern);
-      if (match) return match[1];
-    }
-    return '';
+  // ---------- FOTO-STELLING: TOEWIJZINGEN & REACTIES ----------
+  function listenToPhotoAssignments(compId) {
+    const gridContainer = document.getElementById(`foto-grid-${compId}`);
+    if (!gridContainer) return;
+    db.ref('fototoewijzing').on('value', (snap) => {
+      const assignments = snap.val() || {};
+      gridContainer.innerHTML = '';
+      // Toon alle foto's uit de lijst (niet alleen toegewezen)
+      SCREENSHOTS.forEach((foto, index) => {
+        const owners = Object.keys(assignments).filter(name => assignments[name].index === index);
+        const ownerName = owners.length > 0 ? owners.join(', ') : 'Nog niet toegewezen';
+        const isCurrentUserOwner = owners.includes(currentUserName);
+        const card = document.createElement('div');
+        card.className = 'foto-card';
+        card.innerHTML = `
+          <img src="${foto}" alt="Screenshot ${index+1}">
+          <div class="naam">${escapeHtml(ownerName)}</div>
+          ${isCurrentUserOwner ? '<div class="eigenaar-badge">Jouw foto</div>' : ''}
+        `;
+        gridContainer.appendChild(card);
+      });
+    });
   }
 
-  // ---------- INTERACTIE LIVE FEEDS ----------
+  function listenToPhotoReactions(topicId, compId) {
+    const feedContainer = document.getElementById(`foto-feed-${compId}`);
+    if (!feedContainer) return;
+    db.ref(`interactie/${topicId}/${compId}/reacties`).on('value', (snap) => {
+      feedContainer.innerHTML = '';
+      const data = snap.val();
+      if (!data) { feedContainer.innerHTML = '<em>Nog geen reacties.</em>'; return; }
+      Object.values(data).reverse().forEach(r => {
+        feedContainer.innerHTML += `<div class="feed-item"><span><strong>${escapeHtml(r.naam)}:</strong> ${escapeHtml(r.reactie)}</span><span class="time">${new Date(r.ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span></div>`;
+      });
+    });
+  }
+
+  // Functie voor het versturen van een reactie bij de foto-stelling
+  function sendPhotoReaction(topicId, compId, reactie) {
+    if (!currentUserName) return;
+    db.ref(`interactie/${topicId}/${compId}/reacties`).push({
+      naam: currentUserName,
+      reactie: reactie,
+      ts: Date.now()
+    });
+  }
+
+  // Knoppen in foto-stelling: klik op "Past bij mij" of "Past niet bij mij"
+  function photoReact(topicId, compId, soort) {
+    const reactie = soort === 'wel' ? '👍 Deze foto past bij mij' : '👎 Deze foto past niet bij mij';
+    sendPhotoReaction(topicId, compId, reactie);
+  }
+
+  // ---------- INTERACTIE LIVE FEEDS (bestaande) ----------
   function sendAnswer(topicId, compId) {
     const input = document.getElementById(`in-${compId}`);
     if (!input || !input.value.trim()) return;
@@ -649,6 +801,9 @@
       form.innerHTML += `<label>Vraagtekst</label><input type="text" id="m-vraag" value="${existing ? existing.vraagText : ''}">`;
     } else if (type === 'stelling') {
       form.innerHTML += `<label>Stellingtekst</label><input type="text" id="m-stelling" value="${existing ? existing.stellingText : ''}">`;
+    } else if (type === 'fotoStelling') {
+      form.innerHTML += `<label>Stellingtekst</label><input type="text" id="m-foto-stelling" value="${existing ? existing.stellingText : ''}">`;
+      form.innerHTML += `<p style="color:#64748b; font-size:0.8rem; margin-top:5px;">De fotolijst is vast ingesteld (37 screenshots).</p>`;
     } else if (type === 'website') {
       form.innerHTML += `<label>Website-URL</label><input type="url" id="m-url" placeholder="https://..." value="${existing ? existing.url : ''}">`;
     } else if (type === 'youtube') {
@@ -667,6 +822,10 @@
     if (type === 'text') obj.text = document.getElementById('m-text').value;
     if (type === 'vraag') obj.vraagText = document.getElementById('m-vraag').value;
     if (type === 'stelling') obj.stellingText = document.getElementById('m-stelling').value;
+    if (type === 'fotoStelling') {
+      obj.stellingText = document.getElementById('m-foto-stelling').value;
+      obj.fotos = SCREENSHOTS; // vast
+    }
     if (type === 'website' || type === 'youtube') obj.url = document.getElementById('m-url').value;
 
     if (!contentData[currentTopicId]) contentData[currentTopicId] = [];
@@ -750,6 +909,7 @@
   document.getElementById('resetBtn').addEventListener('click', function() {
     if (!confirm('⚠️ Let op: Weet je zeker dat je alle data wilt terugzetten naar de 5 standaardavonden? Alle live antwoorden worden gewist.')) return;
     db.ref('interactie').remove();
+    db.ref('fototoewijzing').remove();
     const def = getDefaultData();
     db.ref('draft').set(def);
     db.ref('published').set(def);
