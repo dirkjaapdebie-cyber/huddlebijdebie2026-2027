@@ -259,6 +259,54 @@
     }
     .foto-knop-wel { background: #d1fae5; color: #065f46; }
     .foto-knop-niet { background: #fee2e2; color: #9b2c2c; }
+    
+    /* Diapresentatie stijlen (nieuw) */
+    .dia-presentatie {
+      margin-top: 15px;
+    }
+    .dia-slide {
+      position: relative;
+      width: 100%;
+      max-height: 400px;
+      overflow: hidden;
+      border-radius: 10px;
+      background: #e2e8f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .dia-slide img {
+      max-width: 100%;
+      max-height: 400px;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+    .dia-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .dia-controls button {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      background: #e2e8f0;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .dia-controls button:hover {
+      background: #cbd5e1;
+    }
+    .dia-controls span {
+      font-weight: 600;
+      color: #475569;
+    }
+    .foto-stelling-box .input-group {
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
@@ -461,7 +509,7 @@
       'topics': defaultTopics,
       'content': {
         'avond1': [
-          { id: 'a1_fotoStelling', type: 'fotoStelling', stellingText: 'Bekijk de foto die je hebt toegewezen gekregen. Vertel of deze foto iets met jou te maken heeft.', fotos: SCREENSHOTS, active: true },
+          { id: 'a1_fotoStelling', type: 'fotoStelling', stellingText: 'Kies een foto uit de diapresentatie en schrijf op wat deze foto met jou te maken heeft.', fotos: SCREENSHOTS, active: true },
           { id: 'a1_schema', type: 'text', text: '📅 Tijdschema Avond 1 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje (introductie Getsemane)\n19:15 – 19:30 | Input: "Jezus droeg onze prestatiedruk"\n19:30 – 20:15 | Kringvragen, gebed & werkvorm (steentjes)\n20:15 – 20:30 | Afsluiting & uitleg: hoe pas je dit principe zelf toe? (3 minuten)', active: true },
           { id: 'a1_t1', type: 'text', text: '🎬 Avond 1: Schuld & Genade\n\nWonder 1: Vergeving (Jezus zweet bloeddruppels in Getsemane).\n\nOpbouw voor hun hart: Rust vinden. Kringleiders dragen vaak een dubbele verantwoordelijkheid (studie + de spirituele zorg voor anderen). Jezus droeg de ultieme stress, zodat zij vanuit rust en genade mogen leven. Je bent eerst Gods kind, dan pas leider.', active: true },
           { id: 'a1_v1', type: 'vraag', vraagText: 'Waar voel jij op dit moment de grootste druk om te moeten \'presteren\' (richting God, je studie of je omgeving)?', active: true },
@@ -583,7 +631,7 @@
             <option value="text">Tekstblok</option>
             <option value="vraag">Open Vraag</option>
             <option value="stelling">Stelling (Poll)</option>
-            <option value="fotoStelling">Foto-stelling (Screenshots)</option>
+            <option value="fotoStelling">Foto-stelling (Diapresentatie)</option>
             <option value="website">Website (iframe)</option>
             <option value="youtube">YouTube-video</option>
           </select>
@@ -649,12 +697,24 @@
           innerHTML = `
             <div class="foto-stelling-box">
               <strong>📷 Foto-stelling: ${escapeHtml(comp.stellingText)}</strong>
-              <div class="foto-grid" id="foto-grid-${comp.id}"></div>
-              <div class="feed-container" id="foto-feed-${comp.id}">Bezig met reacties laden...</div>
+              <div class="dia-presentatie">
+                <div class="dia-slide">
+                  <img id="dia-img-${comp.id}" src="${SCREENSHOTS[0]}" alt="Screenshot 1">
+                </div>
+                <div class="dia-controls">
+                  <button onclick="updatePhotoDia('${comp.id}', -1)">◀ Vorige</button>
+                  <span id="dia-counter-${comp.id}">1 / ${SCREENSHOTS.length}</span>
+                  <button onclick="updatePhotoDia('${comp.id}', 1)">Volgende ▶</button>
+                </div>
+                <div class="input-group">
+                  <input type="text" id="photo-answer-${comp.id}" placeholder="Typ jouw antwoord over deze foto...">
+                  <button onclick="sendPhotoAnswer('${topicId}','${comp.id}')">Verstuur</button>
+                </div>
+                <div class="feed-container" id="photo-feed-${comp.id}">Bezig met laden...</div>
+              </div>
             </div>`;
-          // Start listeners voor toewijzingen en reacties
-          listenToPhotoAssignments(topicId, comp.id);
-          listenToPhotoReactions(topicId, comp.id);
+          // Initialiseer de diapresentatie en luisteraar
+          initPhotoDia(topicId, comp.id);
         } else if (comp.type === 'website') {
           innerHTML = `
             <div class="label">🌐 Website:</div>
@@ -706,61 +766,88 @@
     return '';
   }
 
-  // ---------- FOTO-STELLING: TOEWIJZINGEN & REACTIES ----------
-  function listenToPhotoAssignments(topicId, compId) {
-    const gridContainer = document.getElementById(`foto-grid-${compId}`);
-    if (!gridContainer) return;
-    db.ref('fototoewijzing').on('value', (snap) => {
-      const assignments = snap.val() || {};
-      gridContainer.innerHTML = '';
-      // Toon alle foto's uit de lijst (niet alleen toegewezen)
-      SCREENSHOTS.forEach((foto, index) => {
-        const owners = Object.keys(assignments).filter(name => assignments[name].index === index);
-        const ownerName = owners.length > 0 ? owners.join(', ') : 'Nog niet toegewezen';
-        const isCurrentUserOwner = owners.includes(currentUserName);
-        const card = document.createElement('div');
-        card.className = 'foto-card';
-        let knoppenHTML = '';
-        if (isCurrentUserOwner) {
-          knoppenHTML = `
-            <div class="foto-knoppen">
-              <button class="foto-knop-wel" onclick="photoReact('${topicId}','${compId}','wel')">👍 Past bij mij</button>
-              <button class="foto-knop-niet" onclick="photoReact('${topicId}','${compId}','niks')">👎 Past niet bij mij</button>
-            </div>`;
-        }
-        card.innerHTML = `
-          <img src="${foto}" alt="Screenshot ${index+1}">
-          <div class="naam">${escapeHtml(ownerName)}</div>
-          ${isCurrentUserOwner ? '<div class="eigenaar-badge">Jouw foto</div>' : ''}
-          ${knoppenHTML}
-        `;
-        gridContainer.appendChild(card);
+  // ---------- FOTO-STELLING: DIAPRESENTATIE & OPEN VRAAG (nieuw) ----------
+  let photoIndexMap = {};        // compId -> huidige dia-index
+  let photoAnswersCache = {};    // compId -> array met alle antwoorden
+
+  // Zet de luisteraar en initialiseer de eerste dia
+  function initPhotoDia(topicId, compId) {
+    photoIndexMap[compId] = photoIndexMap[compId] || 0;
+    
+    // Haal alle antwoorden op als cache nog niet bestaat
+    if (!photoAnswersCache[compId]) {
+      photoAnswersCache[compId] = [];
+      db.ref(`interactie/${topicId}/${compId}/photoAnswers`).on('value', (snap) => {
+        const data = snap.val();
+        photoAnswersCache[compId] = data ? Object.values(data) : [];
+        renderPhotoFeed(compId);
       });
-    });
+    }
+    
+    // Toon eerste dia en render feed
+    updateDiaImage(compId);
+    renderPhotoFeed(compId);
   }
 
-  function listenToPhotoReactions(topicId, compId) {
-    const feedContainer = document.getElementById(`foto-feed-${compId}`);
-    if (!feedContainer) return;
-    db.ref(`interactie/${topicId}/${compId}/reacties`).on('value', (snap) => {
-      feedContainer.innerHTML = '';
-      const data = snap.val();
-      if (!data) { feedContainer.innerHTML = '<em>Nog geen reacties.</em>'; return; }
-      Object.values(data).reverse().forEach(r => {
-        feedContainer.innerHTML += `<div class="feed-item"><span><strong>${escapeHtml(r.naam)}:</strong> ${escapeHtml(r.reactie)}</span><span class="time">${new Date(r.ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span></div>`;
-      });
-    });
+  // Wissel van dia (richting = -1 of +1)
+  function updatePhotoDia(compId, richting) {
+    const huidige = photoIndexMap[compId] || 0;
+    const nieuwe = (huidige + richting + SCREENSHOTS.length) % SCREENSHOTS.length;
+    photoIndexMap[compId] = nieuwe;
+    
+    // Update afbeelding en teller
+    updateDiaImage(compId);
+    
+    // Update feed voor de nieuwe foto
+    renderPhotoFeed(compId);
   }
 
-  // Functie voor het versturen van een reactie bij de foto-stelling
-  function photoReact(topicId, compId, soort) {
-    if (!currentUserName) return;
-    const reactie = soort === 'wel' ? '👍 Deze foto past bij mij' : '👎 Deze foto past niet bij mij';
-    db.ref(`interactie/${topicId}/${compId}/reacties`).push({
-      naam: currentUserName,
-      reactie: reactie,
+  // Update de afbeelding en teller
+  function updateDiaImage(compId) {
+    const img = document.getElementById(`dia-img-${compId}`);
+    const teller = document.getElementById(`dia-counter-${compId}`);
+    if (img && teller) {
+      const index = photoIndexMap[compId] || 0;
+      img.src = SCREENSHOTS[index];
+      teller.textContent = `${index + 1} / ${SCREENSHOTS.length}`;
+    }
+  }
+
+  // Verstuur een antwoord voor de huidige foto
+  function sendPhotoAnswer(topicId, compId) {
+    const input = document.getElementById(`photo-answer-${compId}`);
+    if (!input || !input.value.trim()) return;
+    const fotoIndex = photoIndexMap[compId] || 0;
+    db.ref(`interactie/${topicId}/${compId}/photoAnswers`).push({
+      naam: currentUserName || "Anoniem",
+      tekst: input.value.trim(),
+      fotoIndex: fotoIndex,
       ts: Date.now()
     });
+    input.value = '';
+  }
+
+  // Render de feed voor de huidige dia
+  function renderPhotoFeed(compId) {
+    const container = document.getElementById(`photo-feed-${compId}`);
+    if (!container) return;
+    
+    const huidigeIndex = photoIndexMap[compId] || 0;
+    const antwoorden = (photoAnswersCache[compId] || [])
+      .filter(a => a.fotoIndex === huidigeIndex)
+      .reverse(); // nieuwste eerst
+    
+    if (antwoorden.length === 0) {
+      container.innerHTML = '<em>Nog geen antwoorden voor deze foto.</em>';
+      return;
+    }
+    
+    container.innerHTML = antwoorden.map(a => `
+      <div class="feed-item">
+        <span><strong>${escapeHtml(a.naam)}:</strong> ${escapeHtml(a.tekst)}</span>
+        <span class="time">${new Date(a.ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+      </div>
+    `).join('');
   }
 
   // ---------- INTERACTIE LIVE FEEDS (bestaande) ----------
