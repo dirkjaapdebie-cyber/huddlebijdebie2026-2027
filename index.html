@@ -307,6 +307,10 @@
     .foto-stelling-box .input-group {
       margin-bottom: 10px;
     }
+
+    /* Drag & Drop stijlen */
+    .dragging { opacity: 0.5; }
+    .drag-over { border: 2px dashed #4a8fe7; }
   </style>
 </head>
 <body>
@@ -575,6 +579,11 @@
   let currentComponentIdx = null;
   let modalMode = 'add';
 
+  // ---------- DRAG & DROP STATE ----------
+  let draggedTopicIndex = null;
+  let draggedComponentIndex = null;
+  let draggedComponentTopicId = null;
+
   // ---------- ACCORDEON & RENDER CORE ----------
   function initApp() {
     const dataNode = isEditMode ? 'draft' : 'published';
@@ -597,8 +606,17 @@
     const root = document.getElementById('accordion-root');
     root.innerHTML = '';
     
-    topicsList.forEach(topic => {
-      const item = document.createElement('div'); item.className = 'accordion-item';
+    topicsList.forEach((topic, index) => {
+      const item = document.createElement('div'); 
+      item.className = 'accordion-item';
+      if (isEditMode) {
+        item.draggable = true;
+        item.dataset.topicIndex = index;
+        item.addEventListener('dragstart', handleTopicDragStart);
+        item.addEventListener('dragover', handleTopicDragOver);
+        item.addEventListener('drop', handleTopicDrop);
+        item.addEventListener('dragend', handleTopicDragEnd);
+      }
       
       const header = document.createElement('button'); header.className = 'accordion-header';
       header.innerHTML = `<span>${escapeHtml(topic.title)}</span> <span class="arrow">▶</span>`;
@@ -667,6 +685,15 @@
 
         const box = document.createElement('div');
         box.className = 'component-item' + (comp.active === false ? ' disabled' : '');
+        if (isEditMode) {
+          box.draggable = true;
+          box.dataset.topicId = topicId;
+          box.dataset.componentIndex = idx;
+          box.addEventListener('dragstart', handleComponentDragStart);
+          box.addEventListener('dragover', handleComponentDragOver);
+          box.addEventListener('drop', handleComponentDrop);
+          box.addEventListener('dragend', handleComponentDragEnd);
+        }
         
         let innerHTML = '';
         if (comp.type === 'text') {
@@ -890,6 +917,87 @@
       Object.values(data).forEach(v => { if(v === 'Eens') eens++; else oneens++; });
       display.textContent = `Uitslag live: ${eens}x Eens 👍 | ${oneens}x Oneens 👎`;
     });
+  }
+
+  // ---------- DRAG & DROP FUNCTIES ----------
+  function arrayMove(arr, fromIndex, toIndex) {
+    if (toIndex < 0 || toIndex >= arr.length) return;
+    const el = arr.splice(fromIndex, 1)[0];
+    arr.splice(toIndex, 0, el);
+  }
+
+  // ---- Topic drag & drop ----
+  function handleTopicDragStart(e) {
+    draggedTopicIndex = parseInt(e.target.dataset.topicIndex);
+    e.target.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', 'topic');
+  }
+
+  function handleTopicDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const target = e.target.closest('.accordion-item');
+    if (target && target !== e.currentTarget) {
+      target.classList.add('drag-over');
+    }
+  }
+
+  function handleTopicDrop(e) {
+    e.preventDefault();
+    const targetIndex = parseInt(e.currentTarget.dataset.topicIndex);
+    if (draggedTopicIndex === null || draggedTopicIndex === targetIndex) return;
+    arrayMove(topicsList, draggedTopicIndex, targetIndex);
+    db.ref('draft/topics').set(topicsList);
+    // Reset state en re-render
+    draggedTopicIndex = null;
+    renderAccordionStructure();
+  }
+
+  function handleTopicDragEnd(e) {
+    e.target.classList.remove('dragging');
+    document.querySelectorAll('.accordion-item').forEach(item => item.classList.remove('drag-over'));
+  }
+
+  // ---- Component drag & drop ----
+  function handleComponentDragStart(e) {
+    draggedComponentTopicId = e.target.dataset.topicId;
+    draggedComponentIndex = parseInt(e.target.dataset.componentIndex);
+    e.target.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', 'component');
+  }
+
+  function handleComponentDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const target = e.target.closest('.component-item');
+    if (target && target !== e.currentTarget) {
+      target.classList.add('drag-over');
+    }
+  }
+
+  function handleComponentDrop(e) {
+    e.preventDefault();
+    if (draggedComponentTopicId === null || draggedComponentIndex === null) return;
+    const targetTopicId = e.currentTarget.dataset.topicId;
+    const targetIndex = parseInt(e.currentTarget.dataset.componentIndex);
+    // Alleen als zelfde topic? We laten alleen binnen zelfde topic toe, anders wordt het complex.
+    // Maar we kunnen ook verplaatsen naar een ander topic? Laten we eerst alleen binnen zelfde topic toestaan.
+    if (draggedComponentTopicId !== targetTopicId) return;
+    if (draggedComponentIndex === targetIndex) return;
+
+    const list = contentData[draggedComponentTopicId];
+    arrayMove(list, draggedComponentIndex, targetIndex);
+    db.ref(`draft/content/${draggedComponentTopicId}`).set(list);
+    draggedComponentTopicId = null;
+    draggedComponentIndex = null;
+    renderComponents(draggedComponentTopicId);
+  }
+
+  function handleComponentDragEnd(e) {
+    e.target.classList.remove('dragging');
+    document.querySelectorAll('.component-item').forEach(item => item.classList.remove('drag-over'));
   }
 
   // ---------- EDIT EN EDIT-MODALS (DRAFT) ----------
