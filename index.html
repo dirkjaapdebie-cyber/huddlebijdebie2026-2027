@@ -69,7 +69,6 @@
     #switchModeBtn:hover { background: #b0c9f2; transform: translateY(-2px); }
     #addTopicBtn { background: #e2e8f0; color: #334155; }
     #addTopicBtn:hover { background: #cbd5e1; transform: translateY(-2px); }
-
     .mode-indicator {
       display: inline-block;
       padding: 6px 16px;
@@ -80,7 +79,6 @@
     }
     .mode-indicator.edit { background: rgba(254, 243, 199, 0.8); color: #b45309; }
     .mode-indicator.view { background: rgba(209, 250, 229, 0.8); color: #065f46; }
-
     /* Accordeon */
     .accordion-item { 
       border-bottom: 1px solid #e9edf2; 
@@ -138,7 +136,6 @@
     }
     .btn-delete-topic { background: #fee2e2; color: #ef4444; }
     .btn-edit-topic { background: #fef3c7; color: #d97706; }
-
     /* Component Items */
     .component-container { display: flex; flex-direction: column; gap: 14px; }
     .component-item {
@@ -156,7 +153,6 @@
     }
     .component-item .actions .delete { background: #fee2e2; color: #ef4444; }
     .component-item .actions .toggle.on { background: #b5e6c3; color: #1a6b3a; }
-
     /* Add Area */
     .add-component-area { 
       display: flex; align-items: center; gap: 10px; margin-top: 15px; padding: 12px;
@@ -164,16 +160,100 @@
     }
     .add-component-area select { padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; }
     .add-component-area button { padding: 8px 16px; background: #a0c4ff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
-
     /* Inputs & Interactiviteit */
-    .vraag-box, .stelling-box, .foto-stelling-box { background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 10px; }
+    .vraag-box, .stelling-box, .foto-stelling-box, .stickynotes-box { background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 10px; }
     .input-group { display: flex; gap: 10px; margin-top: 8px; }
-    .input-group input { flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; }
+    .input-group input, .input-group textarea { flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; }
     .input-group button { padding: 8px 16px; background: #4a8fe7; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
     
     .feed-container { margin-top: 12px; max-height: 150px; overflow-y: auto; background: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; }
     .feed-item { padding: 6px 0; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; }
     .feed-item .time { color: #94a3b8; font-size: 0.75rem; }
+
+    /* STICKY NOTES STYLES */
+    .stickynotes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+      margin-top: 15px;
+      max-height: 450px;
+      overflow-y: auto;
+      padding: 8px;
+    }
+    .sticky-note {
+      background: #fef08a; /* Geel */
+      padding: 14px;
+      border-radius: 4px;
+      box-shadow: 2px 4px 10px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 130px;
+      transform: rotate(-1.5deg);
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+      word-break: break-word;
+      border-bottom-right-radius: 18px 4px;
+    }
+    .sticky-note:nth-child(even) {
+      transform: rotate(1.5deg);
+      background: #fed7aa; /* Peachy Oranje */
+    }
+    .sticky-note:nth-child(3n) {
+      transform: rotate(-1deg);
+      background: #bbf7d0; /* Zacht Groen */
+    }
+    .sticky-note:nth-child(4n) {
+      transform: rotate(2deg);
+      background: #bfdbfe; /* Zacht Blauw */
+    }
+    .sticky-note:nth-child(5n) {
+      transform: rotate(-2deg);
+      background: #fbcfe8; /* Zacht Roze */
+    }
+    .sticky-note:hover {
+      transform: scale(1.04) rotate(0deg);
+      box-shadow: 4px 10px 20px rgba(0,0,0,0.15);
+      z-index: 10;
+    }
+    .sticky-note .author {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: #334155;
+      margin-bottom: 6px;
+      border-bottom: 1px dashed rgba(0,0,0,0.15);
+      padding-bottom: 4px;
+    }
+    .sticky-note .text {
+      flex-grow: 1;
+      color: #1e293b;
+      white-space: pre-wrap;
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+    .sticky-note .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 0.7rem;
+      color: #64748b;
+      padding-top: 6px;
+    }
+    .sticky-note .btn-edit-note {
+      background: rgba(0,0,0,0.08);
+      border: none;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #1e293b;
+      transition: background 0.2s;
+    }
+    .sticky-note .btn-edit-note:hover {
+      background: rgba(0,0,0,0.2);
+    }
 
     /* Modals */
     .modal-overlay, .name-overlay {
@@ -188,14 +268,12 @@
     .modal .buttons button { padding: 8px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; }
     .btn-cancel { background: #e2e8f0; }
     .btn-save { background: #4a8fe7; color: white; }
-
     /* Stelling Poll UI */
     .poll-buttons { display: flex; gap: 10px; margin-top: 10px; }
     .btn-poll { flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; font-weight: 600; cursor: pointer; }
     .btn-poll.eens:hover { background: #d1fae5; border-color: #10b981; }
     .btn-poll.oneens:hover { background: #fee2e2; border-color: #ef4444; }
     .poll-results { margin-top: 10px; font-weight: 600; font-size: 0.95rem; }
-
     /* Iframe & YouTube blokken */
     .iframe-container, .youtube-container {
       position: relative;
@@ -215,7 +293,6 @@
     }
     .iframe-container iframe[src*="youtube"] { border: none; }
     .component-item .label { font-weight: 700; margin-bottom: 8px; }
-
     /* Foto-stelling grid */
     .foto-grid {
       display: grid;
@@ -260,7 +337,7 @@
     .foto-knop-wel { background: #d1fae5; color: #065f46; }
     .foto-knop-niet { background: #fee2e2; color: #9b2c2c; }
     
-    /* Diapresentatie stijlen (nieuw) */
+    /* Diapresentatie stijlen */
     .dia-presentatie {
       margin-top: 15px;
     }
@@ -307,14 +384,12 @@
     .foto-stelling-box .input-group {
       margin-bottom: 10px;
     }
-
     /* Drag & Drop stijlen */
     .dragging { opacity: 0.5; }
     .drag-over { border: 2px dashed #4a8fe7; }
   </style>
 </head>
 <body>
-
 <!-- Naam invoer modal -->
 <div id="name-overlay" class="name-overlay" style="display:none;">
   <div class="name-modal">
@@ -323,7 +398,6 @@
     <button onclick="saveName()" style="margin-top:15px; width:100%; padding:10px; background:#4a8fe7; color:white; border:none; border-radius:8px; font-weight:600; cursor:pointer;">Starten</button>
   </div>
 </div>
-
 <div class="container">
   <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
     <div>
@@ -341,10 +415,8 @@
     <button id="publishBtn" style="display:none;">📤 Push naar Iedereen</button>
     <button id="resetBtn" style="display:none;">⚠️ Reset Data</button>
   </div>
-
   <div id="accordion-root"></div>
 </div>
-
 <!-- Modal voor Content Componenten -->
 <div id="modal-overlay" class="modal-overlay" style="display:none;">
   <div class="modal">
@@ -356,7 +428,6 @@
     </div>
   </div>
 </div>
-
 <!-- Modal voor Avond (Topic) Toevoegen/Bewerken -->
 <div id="topic-modal-overlay" class="modal-overlay" style="display:none;">
   <div class="modal">
@@ -369,7 +440,6 @@
     </div>
   </div>
 </div>
-
 <script>
   // ---------- FIREBASE CONFIG ----------
   const firebaseConfig = {
@@ -383,7 +453,6 @@
   };
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
-
   // ---------- SCREENSHOTS LIJST ----------
   const SCREENSHOTS = [
     'Screenshot 2026-08-13 15.22.52.png',
@@ -424,18 +493,15 @@
     'Screenshot 2026-08-13 15.29.32.png',
     'Screenshot 2026-08-13 15.29.40.png'
   ];
-
   // ---------- MODE & RECHTEN ----------
   const urlParams = new URLSearchParams(window.location.search);
   const mode = urlParams.get('mode') || 'view';
   const isEditMode = (mode === 'edit');
-
   const modeIndicator = document.getElementById('modeIndicator');
   const switchBtn = document.getElementById('switchModeBtn');
   const publishBtn = document.getElementById('publishBtn');
   const resetBtn = document.getElementById('resetBtn');
   const addTopicBtn = document.getElementById('addTopicBtn');
-
   if (isEditMode) {
     modeIndicator.textContent = '📝 Aanpasmodus (Live Editten)';
     modeIndicator.className = 'mode-indicator edit';
@@ -444,7 +510,6 @@
     addTopicBtn.style.display = 'inline-block';
     switchBtn.textContent = '👀 Terug naar volgmodus';
   }
-
   switchBtn.addEventListener('click', function() {
     if (!isEditMode) {
       window.location.href = window.location.pathname + "?mode=edit";
@@ -452,7 +517,6 @@
       window.location.href = window.location.pathname;
     }
   });
-
   // ---------- GEBRUIKERSNAAM & FOTO TOEWIJZING ----------
   let currentUserName = localStorage.getItem('bijbelstudie_naam') || '';
   
@@ -464,7 +528,6 @@
     document.getElementById('name-overlay').style.display = 'none';
     assignRandomPhoto();
   }
-
   function assignRandomPhoto() {
     if (!currentUserName) return;
     const userRef = db.ref('fototoewijzing/' + currentUserName);
@@ -484,7 +547,6 @@
       });
     });
   }
-
   window.addEventListener('DOMContentLoaded', () => {
     if (!currentUserName) {
       document.getElementById('name-overlay').style.display = 'flex';
@@ -492,7 +554,6 @@
       assignRandomPhoto();
     }
   });
-
   // ---------- STRUCTUUR 5 AVONDEN DATA ----------
   const defaultTopics = [
     { id: 'avond1', title: 'Avond 1: Schuld & Genade' },
@@ -501,13 +562,13 @@
     { id: 'avond4', title: 'Avond 4: De Strijd & Jouw Route' },
     { id: 'avond5', title: 'Avond 5: Identiteit & Koninklijke Uitzending' }
   ];
-
   function getDefaultData() {
     return {
       'topics': defaultTopics,
       'content': {
         'avond1': [
           { id: 'a1_fotoStelling', type: 'fotoStelling', stellingText: 'Kies een foto uit de diapresentatie en schrijf op wat deze foto met jou te maken heeft.', fotos: SCREENSHOTS, active: true },
+          { id: 'a1_sticky', type: 'stickynotes', title: '📌 Deel je eerste gedachten op een geeltje', active: true },
           { id: 'a1_schema', type: 'text', text: '📅 Tijdschema Avond 1 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje (introductie Getsemane)\n19:15 – 19:30 | Input: "Jezus droeg onze prestatiedruk"\n19:30 – 20:15 | Kringvragen, gebed & werkvorm (steentjes)\n20:15 – 20:30 | Afsluiting & uitleg: hoe pas je dit principe zelf toe? (3 minuten)', active: true },
           { id: 'a1_t1', type: 'text', text: '🎬 Avond 1: Schuld & Genade\n\nWonder 1: Vergeving (Jezus zweet bloeddruppels in Getsemane).\n\nOpbouw voor hun hart: Rust vinden. Kringleiders dragen vaak een dubbele verantwoordelijkheid (studie + de spirituele zorg voor anderen). Jezus droeg de ultieme stress, zodat zij vanuit rust en genade mogen leven. Je bent eerst Gods kind, dan pas leider.', active: true },
           { id: 'a1_v1', type: 'vraag', vraagText: 'Waar voel jij op dit moment de grootste druk om te moeten \'presteren\' (richting God, je studie of je omgeving)?', active: true },
@@ -565,19 +626,16 @@
       }
     };
   }
-
   // ---------- STATE ----------
   let topicsList = [];
   let contentData = {};
   let currentTopicId = null;
   let currentComponentIdx = null;
   let modalMode = 'add';
-
   // ---------- DRAG & DROP STATE ----------
   let draggedTopicIndex = null;
   let draggedComponentIndex = null;
   let draggedComponentTopicId = null;
-
   // ---------- ACCORDEON & RENDER CORE ----------
   function initApp() {
     const dataNode = isEditMode ? 'draft' : 'published';
@@ -595,7 +653,6 @@
       renderAccordionStructure();
     });
   }
-
   function renderAccordionStructure() {
     const root = document.getElementById('accordion-root');
     root.innerHTML = '';
@@ -618,20 +675,17 @@
         if(e.target.tagName !== 'BUTTON' && e.target.closest('.topic-controls')) return;
         toggleAccordion(header, topic.id);
       };
-
       const panel = document.createElement('div'); panel.className = 'accordion-panel'; panel.id = `panel-${topic.id}`;
       
       if (isEditMode) {
         const tControls = document.createElement('div');
         tControls.className = 'topic-controls';
-        // AANGEPAST: geen inline onclick meer met de titel, alleen id
         tControls.innerHTML = `
           <button class="btn-edit-topic" onclick="openEditTopicModal('${topic.id}')">✎ Titel Aanpassen</button>
           <button class="btn-delete-topic" onclick="deleteTopic('${topic.id}')">🗑️ Avond Verwijderen</button>
         `;
         panel.appendChild(tControls);
       }
-
       const compContainer = document.createElement('div'); 
       compContainer.className = 'component-container'; 
       compContainer.id = `components-${topic.id}`; 
@@ -644,6 +698,7 @@
             <option value="text">Tekstblok</option>
             <option value="vraag">Open Vraag</option>
             <option value="stelling">Stelling (Poll)</option>
+            <option value="stickynotes">Sticky Notes (Live Wall)</option>
             <option value="fotoStelling">Foto-stelling (Diapresentatie)</option>
             <option value="website">Website (iframe)</option>
             <option value="youtube">YouTube-video</option>
@@ -657,7 +712,6 @@
       renderComponents(topic.id);
     });
   }
-
   function toggleAccordion(header, topicId) {
     const panel = document.getElementById(`panel-${topicId}`);
     const isOpen = panel.classList.contains('open');
@@ -667,7 +721,6 @@
       panel.classList.add('open'); header.classList.add('active');
     }
   }
-
   function renderComponents(topicId) {
     setTimeout(() => {
       const container = document.getElementById(`components-${topicId}`);
@@ -677,7 +730,6 @@
       const list = contentData[topicId] || [];
       list.forEach((comp, idx) => {
         if (!isEditMode && comp.active === false) return;
-
         const box = document.createElement('div');
         box.className = 'component-item' + (comp.active === false ? ' disabled' : '');
         if (isEditMode) {
@@ -715,6 +767,17 @@
               <div class="poll-results" id="poll-res-${comp.id}">Uitslag: 0x Eens | 0x Oneens</div>
             </div>`;
           listenToPoll(topicId, comp.id);
+        } else if (comp.type === 'stickynotes') {
+          innerHTML = `
+            <div class="stickynotes-box">
+              <strong>📌 Sticky Notes Wall: ${escapeHtml(comp.title || 'Deel je gedachten')}</strong>
+              <div class="input-group" style="margin-top: 10px;">
+                <textarea id="sn-input-${comp.id}" placeholder="Schrijf jouw sticky note hier..." rows="2"></textarea>
+                <button onclick="addStickyNote('${topicId}','${comp.id}')" style="align-self:flex-start; height:auto; padding:10px 16px;">Plakken 📌</button>
+              </div>
+              <div class="stickynotes-grid" id="sn-grid-${comp.id}">Bezig met geeltjes laden...</div>
+            </div>`;
+          listenToStickyNotes(topicId, comp.id);
         } else if (comp.type === 'fotoStelling') {
           innerHTML = `
             <div class="foto-stelling-box">
@@ -750,9 +813,7 @@
               <iframe src="https://www.youtube.com/embed/${videoId}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>`;
         }
-
         box.innerHTML = innerHTML;
-
         if (isEditMode) {
           const actions = document.createElement('div'); actions.className = 'actions';
           const toggleBtn = document.createElement('button'); 
@@ -766,12 +827,10 @@
           actions.appendChild(toggleBtn); actions.appendChild(editBtn); actions.appendChild(delBtn);
           box.appendChild(actions);
         }
-
         container.appendChild(box);
       });
     }, 50);
   }
-
   // Helper: YouTube ID extraheren
   function extractYouTubeId(url) {
     if (!url) return '';
@@ -786,10 +845,71 @@
     return '';
   }
 
+  // ---------- STICKY NOTES FUNCTIES ----------
+  function addStickyNote(topicId, compId) {
+    const input = document.getElementById(`sn-input-${compId}`);
+    if (!input || !input.value.trim()) return;
+    
+    db.ref(`interactie/${topicId}/${compId}/stickynotes`).push({
+      naam: currentUserName || "Anoniem",
+      tekst: input.value.trim(),
+      ts: Date.now()
+    });
+    input.value = '';
+  }
+
+  function listenToStickyNotes(topicId, compId) {
+    db.ref(`interactie/${topicId}/${compId}/stickynotes`).on('value', (snap) => {
+      const grid = document.getElementById(`sn-grid-${compId}`);
+      if (!grid) return;
+      grid.innerHTML = '';
+      const data = snap.val();
+      if (!data) { 
+        grid.innerHTML = '<em style="color:#64748b; font-size:0.9rem;">Er zijn nog geen sticky notes geplakt. Wees de eerste!</em>'; 
+        return; 
+      }
+      
+      const entries = Object.entries(data).reverse(); // Nieuwste bovenaan/eerst
+      entries.forEach(([key, note]) => {
+        const noteEl = document.createElement('div');
+        noteEl.className = 'sticky-note';
+        
+        const timeStr = new Date(note.ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        
+        noteEl.innerHTML = `
+          <div>
+            <div class="author">📌 ${escapeHtml(note.naam)}</div>
+            <div class="text">${escapeHtml(note.tekst)}</div>
+          </div>
+          <div class="meta">
+            <span>${timeStr}</span>
+            <button class="btn-edit-note" onclick="editStickyNote('${topicId}','${compId}','${key}')">✎ Bewerken</button>
+          </div>
+        `;
+        grid.appendChild(noteEl);
+      });
+    });
+  }
+
+  function editStickyNote(topicId, compId, noteKey) {
+    const noteRef = db.ref(`interactie/${topicId}/${compId}/stickynotes/${noteKey}`);
+    noteRef.once('value', (snap) => {
+      const note = snap.val();
+      if (!note) return;
+      
+      const newText = prompt("Bewerk je sticky note:", note.tekst);
+      if (newText !== null && newText.trim() !== "") {
+        noteRef.update({
+          tekst: newText.trim(),
+          editedTs: Date.now()
+        });
+      }
+    });
+  }
+
   // ---------- FOTO-STELLING: DIAPRESENTATIE & OPEN VRAAG ----------
   let photoIndexMap = {};
   let photoAnswersCache = {};
-
   function initPhotoDia(topicId, compId) {
     photoIndexMap[compId] = photoIndexMap[compId] || 0;
     
@@ -805,7 +925,6 @@
     updateDiaImage(compId);
     renderPhotoFeed(compId);
   }
-
   function updatePhotoDia(compId, richting) {
     const huidige = photoIndexMap[compId] || 0;
     const nieuwe = (huidige + richting + SCREENSHOTS.length) % SCREENSHOTS.length;
@@ -813,7 +932,6 @@
     updateDiaImage(compId);
     renderPhotoFeed(compId);
   }
-
   function updateDiaImage(compId) {
     const img = document.getElementById(`dia-img-${compId}`);
     const teller = document.getElementById(`dia-counter-${compId}`);
@@ -823,7 +941,6 @@
       teller.textContent = `${index + 1} / ${SCREENSHOTS.length}`;
     }
   }
-
   function sendPhotoAnswer(topicId, compId) {
     const input = document.getElementById(`photo-answer-${compId}`);
     if (!input || !input.value.trim()) return;
@@ -836,7 +953,6 @@
     });
     input.value = '';
   }
-
   function renderPhotoFeed(compId) {
     const container = document.getElementById(`photo-feed-${compId}`);
     if (!container) return;
@@ -858,7 +974,6 @@
       </div>
     `).join('');
   }
-
   // ---------- INTERACTIE LIVE FEEDS (bestaande) ----------
   function sendAnswer(topicId, compId) {
     const input = document.getElementById(`in-${compId}`);
@@ -870,7 +985,6 @@
     });
     input.value = '';
   }
-
   function listenToAnswers(topicId, compId) {
     db.ref(`interactie/${topicId}/${compId}/antwoorden`).on('value', (snap) => {
       const container = document.getElementById(`feed-${compId}`);
@@ -883,12 +997,10 @@
       });
     });
   }
-
   function votePoll(topicId, compId, vote) {
     if(!currentUserName) return;
     db.ref(`interactie/${topicId}/${compId}/poll/${currentUserName}`).set(vote);
   }
-
   function listenToPoll(topicId, compId) {
     db.ref(`interactie/${topicId}/${compId}/poll`).on('value', (snap) => {
       const display = document.getElementById(`poll-res-${compId}`);
@@ -900,21 +1012,18 @@
       display.textContent = `Uitslag live: ${eens}x Eens 👍 | ${oneens}x Oneens 👎`;
     });
   }
-
   // ---------- DRAG & DROP FUNCTIES ----------
   function arrayMove(arr, fromIndex, toIndex) {
     if (toIndex < 0 || toIndex >= arr.length) return;
     const el = arr.splice(fromIndex, 1)[0];
     arr.splice(toIndex, 0, el);
   }
-
   function handleTopicDragStart(e) {
     draggedTopicIndex = parseInt(e.target.dataset.topicIndex);
     e.target.classList.add('dragging');
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', 'topic');
   }
-
   function handleTopicDragOver(e) {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
@@ -923,7 +1032,6 @@
       target.classList.add('drag-over');
     }
   }
-
   function handleTopicDrop(e) {
     e.preventDefault();
     const targetIndex = parseInt(e.currentTarget.dataset.topicIndex);
@@ -933,12 +1041,10 @@
     draggedTopicIndex = null;
     renderAccordionStructure();
   }
-
   function handleTopicDragEnd(e) {
     e.target.classList.remove('dragging');
     document.querySelectorAll('.accordion-item').forEach(item => item.classList.remove('drag-over'));
   }
-
   function handleComponentDragStart(e) {
     draggedComponentTopicId = e.target.dataset.topicId;
     draggedComponentIndex = parseInt(e.target.dataset.componentIndex);
@@ -946,7 +1052,6 @@
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', 'component');
   }
-
   function handleComponentDragOver(e) {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
@@ -955,7 +1060,6 @@
       target.classList.add('drag-over');
     }
   }
-
   function handleComponentDrop(e) {
     e.preventDefault();
     if (draggedComponentTopicId === null || draggedComponentIndex === null) return;
@@ -963,7 +1067,6 @@
     const targetIndex = parseInt(e.currentTarget.dataset.componentIndex);
     if (draggedComponentTopicId !== targetTopicId) return;
     if (draggedComponentIndex === targetIndex) return;
-
     const list = contentData[draggedComponentTopicId];
     arrayMove(list, draggedComponentIndex, targetIndex);
     db.ref(`draft/content/${draggedComponentTopicId}`).set(list);
@@ -971,31 +1074,26 @@
     draggedComponentIndex = null;
     renderComponents(draggedComponentTopicId);
   }
-
   function handleComponentDragEnd(e) {
     e.target.classList.remove('dragging');
     document.querySelectorAll('.component-item').forEach(item => item.classList.remove('drag-over'));
   }
-
   // ---------- EDIT EN EDIT-MODALS (DRAFT) ----------
   function toggleComponent(topicId, idx) {
     const comp = contentData[topicId][idx];
     comp.active = !comp.active;
     db.ref(`draft/content/${topicId}/${idx}/active`).set(comp.active);
   }
-
   function openAddModal(topicId) {
     currentTopicId = topicId; modalMode = 'add';
     const type = document.getElementById(`type-select-${topicId}`).value;
     buildModalForm(type, null);
   }
-
   function openEditModal(topicId, idx) {
     currentTopicId = topicId; currentComponentIdx = idx; modalMode = 'edit';
     const comp = contentData[topicId][idx];
     buildModalForm(comp.type, comp);
   }
-
   function buildModalForm(type, existing) {
     const form = document.getElementById('modal-form');
     document.getElementById('modal-title').textContent = modalMode === 'add' ? "Component Toevoegen" : "Component Redigeren";
@@ -1007,6 +1105,8 @@
       form.innerHTML += `<label>Vraagtekst</label><input type="text" id="m-vraag" value="${existing ? existing.vraagText : ''}">`;
     } else if (type === 'stelling') {
       form.innerHTML += `<label>Stellingtekst</label><input type="text" id="m-stelling" value="${existing ? existing.stellingText : ''}">`;
+    } else if (type === 'stickynotes') {
+      form.innerHTML += `<label>Titel / Opdracht op de Sticky Wall</label><input type="text" id="m-stickynotes-title" value="${existing ? escapeHtml(existing.title || '') : ''}" placeholder="Bijv. Deel je belangrijkste inzicht...">`;
     } else if (type === 'fotoStelling') {
       form.innerHTML += `<label>Stellingtekst</label><input type="text" id="m-foto-stelling" value="${existing ? existing.stellingText : ''}">`;
       form.innerHTML += `<p style="color:#64748b; font-size:0.8rem; margin-top:5px;">De fotolijst is vast ingesteld (37 screenshots).</p>`;
@@ -1017,9 +1117,7 @@
     }
     document.getElementById('modal-overlay').style.display = 'flex';
   }
-
   function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
-
   function saveModal() {
     if (!isEditMode) return;
     const type = document.getElementById('m-type').value;
@@ -1028,12 +1126,12 @@
     if (type === 'text') obj.text = document.getElementById('m-text').value;
     if (type === 'vraag') obj.vraagText = document.getElementById('m-vraag').value;
     if (type === 'stelling') obj.stellingText = document.getElementById('m-stelling').value;
+    if (type === 'stickynotes') obj.title = document.getElementById('m-stickynotes-title').value;
     if (type === 'fotoStelling') {
       obj.stellingText = document.getElementById('m-foto-stelling').value;
       obj.fotos = SCREENSHOTS;
     }
     if (type === 'website' || type === 'youtube') obj.url = document.getElementById('m-url').value;
-
     if (!contentData[currentTopicId]) contentData[currentTopicId] = [];
     
     if (modalMode === 'add') {
@@ -1045,20 +1143,17 @@
     db.ref(`draft/content/${currentTopicId}`).set(contentData[currentTopicId]);
     closeModal();
   }
-
   function existingIdOrNew() {
     if (modalMode === 'edit' && contentData[currentTopicId][currentComponentIdx].id) {
       return contentData[currentTopicId][currentComponentIdx].id;
     }
     return 'c_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
   }
-
   function deleteComponent(topicId, idx) {
     if(!confirm("Weet je zeker dat je dit blok wilt wissen?")) return;
     contentData[topicId].splice(idx, 1);
     db.ref(`draft/content/${topicId}`).set(contentData[topicId]);
   }
-
   // ---------- HOOFDSTUKKEN/AVONDEN DYNAMISCH BEWERKEN ----------
   let editingTopicId = null;
   function openAddTopicModal() {
@@ -1068,7 +1163,6 @@
     document.getElementById('topic-modal-overlay').style.display = 'flex';
   }
   
-  // AANGEPAST: haal de titel op uit de topicsList
   function openEditTopicModal(id) {
     const topic = topicsList.find(t => t.id === id);
     if (!topic) return;
@@ -1097,7 +1191,6 @@
     db.ref('draft/content').set(contentData);
     closeTopicModal();
   }
-
   function deleteTopic(id) {
     if(!confirm("Weet je 100% zeker dat je deze volledige avond en alle bijbehorende tekst/vragen wilt verwijderen?")) return;
     topicsList = topicsList.filter(t => t.id !== id);
@@ -1105,7 +1198,6 @@
     db.ref('draft/topics').set(topicsList);
     db.ref('draft/content').set(contentData);
   }
-
   // ---------- LIVE DEELNEMERS PUSH & CONTROLS ----------
   document.getElementById('publishBtn').addEventListener('click', function() {
     if (!confirm('Wil je alle geredigeerde teksten en avonden direct pushen naar de telefoons van de studenten?')) return;
@@ -1116,7 +1208,6 @@
       }
     });
   });
-
   document.getElementById('resetBtn').addEventListener('click', function() {
     if (!confirm('⚠️ Let op: Weet je zeker dat je alle data wilt terugzetten naar de 5 standaardavonden? Alle live antwoorden worden gewist.')) return;
     db.ref('interactie').remove();
@@ -1126,7 +1217,6 @@
     db.ref('published').set(def);
     alert('Systeem succesvol gereset naar de 5 basisavonden.');
   });
-
   // ---------- SETUP INITIALISATIE ----------
   document.addEventListener('DOMContentLoaded', initApp);
   function escapeHtml(text) { if (!text) return ''; const map = { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;' }; return text.replace(/[&<>"']/g, m => map[m]); }
