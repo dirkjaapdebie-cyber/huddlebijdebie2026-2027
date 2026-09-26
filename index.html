@@ -28,21 +28,57 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.06);
       border: 1px solid rgba(255,255,255,0.3);
     }
+    .header-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    .header-top-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
     h1 { 
       font-size: 2.2rem; 
       font-weight: 800; 
       background: linear-gradient(135deg, #7c5cbf, #4a8fe7);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-align: center; 
+      text-align: left; 
       letter-spacing: -0.5px;
     }
     .subtitle { 
-      text-align: center; 
+      text-align: left; 
       color: #64748b; 
       margin-bottom: 5px; 
       font-weight: 500;
       font-size: 1.1rem;
+    }
+    .qr-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      padding: 6px 12px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+    .qr-box img {
+      width: 55px;
+      height: 55px;
+      border-radius: 6px;
+    }
+    .qr-box span {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #475569;
+      max-width: 80px;
+      line-height: 1.2;
     }
     .header-actions {
       display: flex;
@@ -79,6 +115,7 @@
     }
     .mode-indicator.edit { background: rgba(254, 243, 199, 0.8); color: #b45309; }
     .mode-indicator.view { background: rgba(209, 250, 229, 0.8); color: #065f46; }
+
     /* Accordeon */
     .accordion-item { 
       border-bottom: 1px solid #e9edf2; 
@@ -116,7 +153,7 @@
       padding: 0 20px;
     }
     .accordion-panel.open { 
-      max-height: 3000px;
+      max-height: 3500px;
       padding: 10px 20px 20px 20px; 
     }
     
@@ -136,6 +173,7 @@
     }
     .btn-delete-topic { background: #fee2e2; color: #ef4444; }
     .btn-edit-topic { background: #fef3c7; color: #d97706; }
+
     /* Component Items */
     .component-container { display: flex; flex-direction: column; gap: 14px; }
     .component-item {
@@ -153,6 +191,7 @@
     }
     .component-item .actions .delete { background: #fee2e2; color: #ef4444; }
     .component-item .actions .toggle.on { background: #b5e6c3; color: #1a6b3a; }
+
     /* Add Area */
     .add-component-area { 
       display: flex; align-items: center; gap: 10px; margin-top: 15px; padding: 12px;
@@ -160,99 +199,109 @@
     }
     .add-component-area select { padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; }
     .add-component-area button { padding: 8px 16px; background: #a0c4ff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
     /* Inputs & Interactiviteit */
-    .vraag-box, .stelling-box, .foto-stelling-box, .stickynotes-box { background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 10px; }
+    .vraag-box, .stelling-box, .foto-stelling-box, .geeltjes-box { background: #fff; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; margin-top: 10px; }
     .input-group { display: flex; gap: 10px; margin-top: 8px; }
-    .input-group input, .input-group textarea { flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; }
+    .input-group input { flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; }
     .input-group button { padding: 8px 16px; background: #4a8fe7; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
     
-    .feed-container { margin-top: 12px; max-height: 150px; overflow-y: auto; background: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; }
+    .feed-container { margin-top: 12px; max-height: 180px; overflow-y: auto; background: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.9rem; }
     .feed-item { padding: 6px 0; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; }
     .feed-item .time { color: #94a3b8; font-size: 0.75rem; }
 
-    /* STICKY NOTES STYLES */
-    .stickynotes-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 14px;
-      margin-top: 15px;
-      max-height: 450px;
-      overflow-y: auto;
-      padding: 8px;
+    /* STICKY NOTES / GEELTJES STYLES */
+    .geeltjes-input-area {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
     }
-    .sticky-note {
-      background: #fef08a; /* Geel */
-      padding: 14px;
-      border-radius: 4px;
-      box-shadow: 2px 4px 10px rgba(0,0,0,0.08);
+    .geeltjes-input-area input {
+      flex: 1;
+      min-width: 180px;
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+    }
+    .geeltjes-input-area select {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      font-weight: 600;
+    }
+    .geeltjes-input-area button {
+      padding: 8px 16px;
+      background: #f59e0b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.1s ease;
+    }
+    .geeltjes-input-area button:hover {
+      transform: scale(1.03);
+    }
+    .geeltjes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+      min-height: 80px;
+    }
+    .geeltje {
+      padding: 12px 10px;
+      border-radius: 2px 2px 10px 2px;
+      box-shadow: 2px 4px 10px rgba(0,0,0,0.1);
+      font-size: 0.88rem;
+      line-height: 1.35;
+      font-weight: 500;
+      color: #1e293b;
+      position: relative;
+      word-break: break-word;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 130px;
-      transform: rotate(-1.5deg);
-      transition: all 0.2s ease;
-      font-size: 0.9rem;
-      word-break: break-word;
-      border-bottom-right-radius: 18px 4px;
+      min-height: 110px;
     }
-    .sticky-note:nth-child(even) {
-      transform: rotate(1.5deg);
-      background: #fed7aa; /* Peachy Oranje */
-    }
-    .sticky-note:nth-child(3n) {
-      transform: rotate(-1deg);
-      background: #bbf7d0; /* Zacht Groen */
-    }
-    .sticky-note:nth-child(4n) {
-      transform: rotate(2deg);
-      background: #bfdbfe; /* Zacht Blauw */
-    }
-    .sticky-note:nth-child(5n) {
-      transform: rotate(-2deg);
-      background: #fbcfe8; /* Zacht Roze */
-    }
-    .sticky-note:hover {
-      transform: scale(1.04) rotate(0deg);
-      box-shadow: 4px 10px 20px rgba(0,0,0,0.15);
+    .geeltje:hover {
+      transform: scale(1.06) rotate(0deg) !important;
       z-index: 10;
+      box-shadow: 4px 10px 18px rgba(0,0,0,0.15);
     }
-    .sticky-note .author {
+    .geeltje.yellow { background: #fef08a; border-top: 6px solid #fde047; }
+    .geeltje.pink   { background: #fbcfe8; border-top: 6px solid #f472b6; }
+    .geeltje.blue   { background: #bae6fd; border-top: 6px solid #38bdf8; }
+    .geeltje.green  { background: #bbf7d0; border-top: 6px solid #4ade80; }
+    .geeltje .author {
+      font-size: 0.72rem;
       font-weight: 700;
-      font-size: 0.8rem;
-      color: #334155;
-      margin-bottom: 6px;
-      border-bottom: 1px dashed rgba(0,0,0,0.15);
-      padding-bottom: 4px;
+      color: #475569;
+      margin-top: 8px;
+      text-align: right;
     }
-    .sticky-note .text {
-      flex-grow: 1;
-      color: #1e293b;
-      white-space: pre-wrap;
-      font-size: 0.92rem;
-      line-height: 1.4;
-    }
-    .sticky-note .meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
-      font-size: 0.7rem;
-      color: #64748b;
-      padding-top: 6px;
-    }
-    .sticky-note .btn-edit-note {
-      background: rgba(0,0,0,0.08);
+    .geeltje .delete-note {
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      background: rgba(0,0,0,0.12);
       border: none;
-      padding: 3px 8px;
-      border-radius: 4px;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 10px;
+      line-height: 18px;
+      text-align: center;
       cursor: pointer;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #1e293b;
-      transition: background 0.2s;
+      color: #333;
+      display: none;
     }
-    .sticky-note .btn-edit-note:hover {
-      background: rgba(0,0,0,0.2);
+    .geeltje:hover .delete-note {
+      display: block;
     }
 
     /* Modals */
@@ -268,12 +317,14 @@
     .modal .buttons button { padding: 8px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; }
     .btn-cancel { background: #e2e8f0; }
     .btn-save { background: #4a8fe7; color: white; }
+
     /* Stelling Poll UI */
     .poll-buttons { display: flex; gap: 10px; margin-top: 10px; }
     .btn-poll { flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; font-weight: 600; cursor: pointer; }
     .btn-poll.eens:hover { background: #d1fae5; border-color: #10b981; }
     .btn-poll.oneens:hover { background: #fee2e2; border-color: #ef4444; }
     .poll-results { margin-top: 10px; font-weight: 600; font-size: 0.95rem; }
+
     /* Iframe & YouTube blokken */
     .iframe-container, .youtube-container {
       position: relative;
@@ -291,52 +342,8 @@
       border: none;
       border-radius: 10px;
     }
-    .iframe-container iframe[src*="youtube"] { border: none; }
     .component-item .label { font-weight: 700; margin-bottom: 8px; }
-    /* Foto-stelling grid */
-    .foto-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .foto-card {
-      background: #f1f5f9;
-      border-radius: 8px;
-      padding: 8px;
-      text-align: center;
-    }
-    .foto-card img {
-      width: 100%;
-      border-radius: 6px;
-      margin-bottom: 6px;
-    }
-    .foto-card .naam {
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-    .foto-card .eigenaar-badge {
-      font-size: 0.75rem;
-      color: #4a8fe7;
-      margin-top: 4px;
-    }
-    .foto-knoppen {
-      margin-top: 8px;
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-    }
-    .foto-knoppen button {
-      padding: 6px 10px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-    .foto-knop-wel { background: #d1fae5; color: #065f46; }
-    .foto-knop-niet { background: #fee2e2; color: #9b2c2c; }
-    
+
     /* Diapresentatie stijlen */
     .dia-presentatie {
       margin-top: 15px;
@@ -381,15 +388,14 @@
       font-weight: 600;
       color: #475569;
     }
-    .foto-stelling-box .input-group {
-      margin-bottom: 10px;
-    }
+
     /* Drag & Drop stijlen */
     .dragging { opacity: 0.5; }
     .drag-over { border: 2px dashed #4a8fe7; }
   </style>
 </head>
 <body>
+
 <!-- Naam invoer modal -->
 <div id="name-overlay" class="name-overlay" style="display:none;">
   <div class="name-modal">
@@ -398,14 +404,19 @@
     <button onclick="saveName()" style="margin-top:15px; width:100%; padding:10px; background:#4a8fe7; color:white; border:none; border-radius:8px; font-weight:600; cursor:pointer;">Starten</button>
   </div>
 </div>
+
 <div class="container">
-  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px;">
+  <div class="header-top-row">
     <div>
       <h1>7 WONDEREN VAN HET KRUIS</h1>
       <div class="subtitle">Live Studiemethode Huddle 2026-2027</div>
     </div>
-    <div>
+    <div class="header-top-right">
       <span id="modeIndicator" class="mode-indicator view">👀 Volger/Deelnemer</span>
+      <div class="qr-box">
+        <img id="headerQrCode" src="" alt="QR Code">
+        <span>Scan voor live Huddle</span>
+      </div>
     </div>
   </div>
   
@@ -415,8 +426,10 @@
     <button id="publishBtn" style="display:none;">📤 Push naar Iedereen</button>
     <button id="resetBtn" style="display:none;">⚠️ Reset Data</button>
   </div>
+
   <div id="accordion-root"></div>
 </div>
+
 <!-- Modal voor Content Componenten -->
 <div id="modal-overlay" class="modal-overlay" style="display:none;">
   <div class="modal">
@@ -428,6 +441,7 @@
     </div>
   </div>
 </div>
+
 <!-- Modal voor Avond (Topic) Toevoegen/Bewerken -->
 <div id="topic-modal-overlay" class="modal-overlay" style="display:none;">
   <div class="modal">
@@ -440,6 +454,7 @@
     </div>
   </div>
 </div>
+
 <script>
   // ---------- FIREBASE CONFIG ----------
   const firebaseConfig = {
@@ -453,6 +468,7 @@
   };
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
+
   // ---------- SCREENSHOTS LIJST ----------
   const SCREENSHOTS = [
     'Screenshot 2026-08-13 15.22.52.png',
@@ -493,6 +509,7 @@
     'Screenshot 2026-08-13 15.29.32.png',
     'Screenshot 2026-08-13 15.29.40.png'
   ];
+
   // ---------- MODE & RECHTEN ----------
   const urlParams = new URLSearchParams(window.location.search);
   const mode = urlParams.get('mode') || 'view';
@@ -502,6 +519,7 @@
   const publishBtn = document.getElementById('publishBtn');
   const resetBtn = document.getElementById('resetBtn');
   const addTopicBtn = document.getElementById('addTopicBtn');
+
   if (isEditMode) {
     modeIndicator.textContent = '📝 Aanpasmodus (Live Editten)';
     modeIndicator.className = 'mode-indicator edit';
@@ -510,6 +528,7 @@
     addTopicBtn.style.display = 'inline-block';
     switchBtn.textContent = '👀 Terug naar volgmodus';
   }
+
   switchBtn.addEventListener('click', function() {
     if (!isEditMode) {
       window.location.href = window.location.pathname + "?mode=edit";
@@ -517,43 +536,33 @@
       window.location.href = window.location.pathname;
     }
   });
-  // ---------- GEBRUIKERSNAAM & FOTO TOEWIJZING ----------
+
+  // ---------- GEBRUIKERSNAAM & QR CODE ----------
   let currentUserName = localStorage.getItem('bijbelstudie_naam') || '';
-  
+
   function saveName() {
     const naam = document.getElementById('name-input').value.trim();
     if (!naam) { alert('Vul aub je naam in.'); return; }
     currentUserName = naam;
     localStorage.setItem('bijbelstudie_naam', naam);
     document.getElementById('name-overlay').style.display = 'none';
-    assignRandomPhoto();
   }
-  function assignRandomPhoto() {
-    if (!currentUserName) return;
-    const userRef = db.ref('fototoewijzing/' + currentUserName);
-    userRef.once('value', (snap) => {
-      if (snap.exists()) return;
-      db.ref('fototoewijzing').once('value', (allSnap) => {
-        const existing = allSnap.val() || {};
-        const usedIndices = Object.values(existing).map(v => v.index);
-        const freeIndices = SCREENSHOTS.map((_, i) => i).filter(i => !usedIndices.includes(i));
-        if (freeIndices.length === 0) {
-          const randomIndex = Math.floor(Math.random() * SCREENSHOTS.length);
-          userRef.set({ index: randomIndex, foto: SCREENSHOTS[randomIndex] });
-        } else {
-          const randomIndex = freeIndices[Math.floor(Math.random() * freeIndices.length)];
-          userRef.set({ index: randomIndex, foto: SCREENSHOTS[randomIndex] });
-        }
-      });
-    });
+
+  function setupQrCode() {
+    const qrImg = document.getElementById('headerQrCode');
+    if (qrImg) {
+      const currentUrl = window.location.origin + window.location.pathname;
+      qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(currentUrl);
+    }
   }
+
   window.addEventListener('DOMContentLoaded', () => {
+    setupQrCode();
     if (!currentUserName) {
       document.getElementById('name-overlay').style.display = 'flex';
-    } else {
-      assignRandomPhoto();
     }
   });
+
   // ---------- STRUCTUUR 5 AVONDEN DATA ----------
   const defaultTopics = [
     { id: 'avond1', title: 'Avond 1: Schuld & Genade' },
@@ -562,80 +571,58 @@
     { id: 'avond4', title: 'Avond 4: De Strijd & Jouw Route' },
     { id: 'avond5', title: 'Avond 5: Identiteit & Koninklijke Uitzending' }
   ];
+
   function getDefaultData() {
     return {
       'topics': defaultTopics,
       'content': {
         'avond1': [
           { id: 'a1_fotoStelling', type: 'fotoStelling', stellingText: 'Kies een foto uit de diapresentatie en schrijf op wat deze foto met jou te maken heeft.', fotos: SCREENSHOTS, active: true },
-          { id: 'a1_sticky', type: 'stickynotes', title: '📌 Deel je eerste gedachten op een geeltje', active: true },
+          { id: 'a1_geeltjes1', type: 'geeltjes', titelText: '📌 Sticky Notes: Waar wil je vanavond bij stilstaan?', active: true },
           { id: 'a1_schema', type: 'text', text: '📅 Tijdschema Avond 1 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje (introductie Getsemane)\n19:15 – 19:30 | Input: "Jezus droeg onze prestatiedruk"\n19:30 – 20:15 | Kringvragen, gebed & werkvorm (steentjes)\n20:15 – 20:30 | Afsluiting & uitleg: hoe pas je dit principe zelf toe? (3 minuten)', active: true },
           { id: 'a1_t1', type: 'text', text: '🎬 Avond 1: Schuld & Genade\n\nWonder 1: Vergeving (Jezus zweet bloeddruppels in Getsemane).\n\nOpbouw voor hun hart: Rust vinden. Kringleiders dragen vaak een dubbele verantwoordelijkheid (studie + de spirituele zorg voor anderen). Jezus droeg de ultieme stress, zodat zij vanuit rust en genade mogen leven. Je bent eerst Gods kind, dan pas leider.', active: true },
           { id: 'a1_v1', type: 'vraag', vraagText: 'Waar voel jij op dit moment de grootste druk om te moeten \'presteren\' (richting God, je studie of je omgeving)?', active: true },
           { id: 'a1_v2', type: 'vraag', vraagText: 'Vind je het makkelijk om te accepteren dat Gods genade voor jou genoeg is, zónder dat je er iets voor hoeft te doen?', active: true },
           { id: 'a1_s1', type: 'stelling', stellingText: 'Als christelijke student mag je eigenlijk geen last hebben van faalangst of prestatiedruk.', active: true },
           { id: 'a1_w1', type: 'text', text: '🙏 Gebed & Werkvorm:\nIedereen legt een steentje (symbool voor eigen faalangst of schuld) bij het kruis. Bid specifiek voor rust en bevrijding van prestatiedruk in het leven van elke student afzonderlijk.', active: true },
-          { id: 'a1_tafel', type: 'text', text: '🍽️ Stellingen & Dilemma\'s voor de maaltijd\n\nStelling:\n"Het is moeilijker om jezelf te vergeven voor een grote fout dan om te geloven dat God het heeft vergeven."\n\nDilemma:\nJe haalt een belangrijk tentamen niet door uitstelgedrag. Kies je ervoor om dit direct tegen een vriend te zeggen (kwetsbaar) of los je het de volgende keer stiekem in je eentje op (perfectionisme)?\n\nVraag voor op tafel:\nWanneer merkte jij voor het laatst dat je onbewust probeerde om de liefde van God of waardering van anderen te verdienen?', active: true },
-          { id: 'a1_y1', type: 'youtube', url: 'https://www.youtube.com/watch?v=VIDEO_ID1', active: true },
-          { id: 'a1_web1', type: 'website', url: 'https://www.example.com/rust', active: true }
+          { id: 'a1_tafel', type: 'text', text: '🍽️ Stellingen & Dilemma\'s voor de maaltijd\n\nStelling:\n"Het is moeilijker om jezelf te vergeven voor een grote fout dan om te geloven dat God het heeft vergeven."\n\nDilemma:\nJe haalt een belangrijk tentamen niet door uitstelgedrag. Kies je ervoor om dit direct tegen een vriend te zeggen (kwetsbaar) of los je het de volgende keer stiekem in je eentje op (perfectionisme)?\n\nVraag voor op tafel:\nWanneer merkte jij voor het laatst dat je onbewust probeerde om de liefde van God of waardering van anderen te verdienen?', active: true }
         ],
         'avond2': [
           { id: 'a2_schema', type: 'text', text: '📅 Tijdschema Avond 2 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje\n19:15 – 19:30 | Input: "Vrijgemaakt van destructieve gewoontes"\n19:30 – 20:15 | Kringvragen, gebed & werkvorm (papierversnipperaar)\n20:15 – 20:30 | Afsluiting & uitleg: hoe pas je dit principe zelf toe? (3 minuten)', active: true },
-          { id: 'a2_t1', type: 'text', text: '🎬 Avond 2: Vrijheid & Zuiverheid\n\nWonderen: 2. Verlossing (Slagen op Zijn rug) & 3. Reiniging (Bloed uit Zijn hoofdwonden).\n\nOpbouw voor hun hart: Schoonmaak. Als leider sta je in de frontlinie en dat kan gepaard gaan met leugens in je hoofd of de verleiding van geheime zonden (social media verslaving, onzuiverheid). Jezus\' bloed reinigt je geweten en breekt ketens.', active: true },
+          { id: 'a2_t1', type: 'text', text: '🎬 Avond 2: Vrijheid & Zuiverheid\n\nWonderen: 2. Verlossing (Slagen op Zijn rug) & 3. Reiniging (Bloed uit Zijn hoofdwonden).\n\nOpbouw voor hun hart: Schoonmaak. Als leider sta je in de frontlinie en dat kan gepaard gaan met leugens in je hoofd of de verleiding van geheime zonden. Jezus\' bloed reinigt je geweten en breekt ketens.', active: true },
+          { id: 'a2_geeltjes', type: 'geeltjes', titelText: '📌 Plak je geeltje: Welke leugens of herinneringen geef je aan Jezus?', active: true },
           { id: 'a2_v1', type: 'vraag', vraagText: 'Welke negatieve gedachte of leugen over jezelf ("Ik schiet tekort", "Ik ben niet geestelijk genoeg") geloof jij het snelst?', active: true },
-          { id: 'a2_v2', type: 'vraag', vraagText: 'Op welk terrein in je leven verlang je op dit moment naar meer persoonlijke vrijheid of zuiverheid?', active: true },
-          { id: 'a2_s1', type: 'stelling', stellingText: 'Je kunt pas een bruikbare christen zijn als je je destructieve gewoontes en zonden volledig hebt overwonnen.', active: true },
-          { id: 'a2_w1', type: 'text', text: '🙏 Gebed & Werkvorm:\nSchrijf de leugens/blokkades op en vernietig ze (papierversnipperaar). Zegen elkaar in tweetallen met een gereinigd denken en spreek Gods waarheid over elkaar uit.', active: true },
-          { id: 'a2_tafel', type: 'text', text: '🍽️ Stellingen & Dilemma\'s voor de maaltijd\n\nStelling:\n"Sociale media kosten je meer innerlijke rust dan je toe wilt geven."\n\nDilemma:\nJe ontdekt dat je een hardnekkige, stiekeme gewoonte hebt waar je vanaf wilt. Vertel je dit direct aan je mentor/kring, of vecht je er eerst een halfjaar in stilte tegen?\n\nVraag voor op tafel:\nWelk negatief label of welk kritisch stemmetje uit je verleden klinkt het vaakst door als je even alleen bent?', active: true },
-          { id: 'a2_y1', type: 'youtube', url: 'https://www.youtube.com/watch?v=VIDEO_ID2', active: true },
-          { id: 'a2_web1', type: 'website', url: 'https://www.example.com/vrijheid', active: true }
+          { id: 'a2_s1', type: 'stelling', stellingText: 'Je kunt pas een bruikbare christen zijn als je je destructieve gewoontes en zonden volledig hebt overwonnen.', active: true }
         ],
         'avond3': [
-          { id: 'a3_schema', type: 'text', text: '📅 Tijdschema Avond 3 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje\n19:15 – 19:30 | Input: "Heling voor pijn en angst"\n19:30 – 20:15 | Kringvragen, ministry-sessie & gebed\n20:15 – 20:30 | Afsluiting & uitleg: hoe pas je dit principe zelf toe? (3 minuten)', active: true },
-          { id: 'a3_t1', type: 'text', text: '🎬 Avond 3: Heling & Pijn\n\nWonder: 4. Genezing (Bloed uit Zijn handen).\n\nOpbouw voor hun hart: Diepe heling. Kringleiders zijn vaak \'gevers\', maar dragen zelf ook weleens verborgen wonden (afwijzing, eenzaamheid, fysieke uitputting). Jezus\' doorboorde handen zijn er om hún pijn aan te raken.', active: true },
-          { id: 'a3_v1', type: 'vraag', vraagText: 'Als je heel eerlijk naar jezelf kijkt: waar zit op dit moment jouw emotionele of fysieke vermoeidheid/pijn?', active: true },
-          { id: 'a3_v2', type: 'vraag', vraagText: 'Vind je het makkelijk om je eigen zwakheid aan God (en deze groep) te laten zien, of houd je liever de schijn op dat het goed gaat?', active: true },
-          { id: 'a3_s1', type: 'stelling', stellingText: 'Geestelijke strijd is iets van vroeger of van verre landen; als Nederlandse student merk je daar eigenlijk weinig van.', active: true },
-          { id: 'a3_w1', type: 'text', text: '🙏 Gebed & Werkvorm:\nRicht de hele afsluiting in als een ministry-sessie. Vraag wie er gebed wil voor heling of herstel en ga als leiding specifiek voor deze studenten bidden en zegenen met de Heilige Geest.', active: true },
-          { id: 'a3_tafel', type: 'text', text: '🍽️ Stellingen & Dilemma\'s voor de maaltijd\n\nStelling:\n"Als christelijke studenten zijn we te bang om onze echte mentale of fysieke zwakheid te laten zien."\n\nDilemma:\nJe bent zo moe van je studie en het leiderschap dat je het liefst al je taken per direct neerlegt. Doe je alsof er niets aan de hand is tot de vakantie, of trek je nu aan de bel?\n\nVraag voor op tafel:\nWat is de plek of situatie waar jij je het snelst eenzaam voelt, ondanks dat je midden in een studentenleven zit?', active: true },
-          { id: 'a3_y1', type: 'youtube', url: 'https://www.youtube.com/watch?v=VIDEO_ID3', active: true },
-          { id: 'a3_web1', type: 'website', url: 'https://www.example.com/heling', active: true }
+          { id: 'a3_schema', type: 'text', text: '📅 Tijdschema Avond 3 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje\n19:15 – 19:30 | Input: "Heling voor pijn en angst"\n19:30 – 20:15 | Kringvragen, ministry-sessie & gebed\n20:15 – 20:30 | Afsluiting & uitleg', active: true },
+          { id: 'a3_t1', type: 'text', text: '🎬 Avond 3: Heling & Pijn\n\nWonder: 4. Genezing (Bloed uit Zijn handen).\n\nOpbouw voor hun hart: Diepe heling. Kringleiders zijn vaak \'gevers\', maar dragen zelf ook weleens verborgen wonden. Jezus\' doorboorde handen zijn er om hún pijn aan te raken.', active: true },
+          { id: 'a3_v1', type: 'vraag', vraagText: 'Als je heel eerlijk naar jezelf kijkt: waar zit op dit moment jouw emotionele of fysieke vermoeidheid/pijn?', active: true }
         ],
         'avond4': [
-          { id: 'a4_schema', type: 'text', text: '📅 Tijdschema Avond 4 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje\n19:15 – 19:30 | Input: "Autoriteit en vrede in de strijd"\n19:30 – 20:15 | Kringvragen, proclamatiegebed & werkvorm\n20:15 – 20:30 | Afsluiting & uitleg: hoe pas je dit principe zelf toe? (3 minuten)', active: true },
-          { id: 'a4_t1', type: 'text', text: '🎬 Avond 4: De Strijd & Jouw Route\n\nWonderen: 5. Bevrijding (Bloed uit Zijn voeten) & 6. Verzoening (Bloed uit Zijn zijde).\n\nOpbouw voor hun hart: Autoriteit en vrede. Leren staan in de overwinning van Jezus. Soms voelt het leven als een strijd waarin je geleefd wordt. Jezus\' voeten geven vaste grond om te wandelen in vrede, vrij van angst voor keuzes in de toekomst.', active: true },
-          { id: 'a4_v1', type: 'vraag', vraagText: 'Waar ervaar jij op dit moment de meeste (geestelijke) strijd of twijfel in je dagelijks leven?', active: true },
-          { id: 'a4_v2', type: 'vraag', vraagText: 'Ervaar je de diepe vrede (verzoening) van God in je basis, of is er onrust over je relaties of de toekomst?', active: true },
-          { id: 'a4_s1', type: 'stelling', stellingText: 'Als christen in een seculiere wereld hoef je geen strijd te voelen, want Jezus heeft alles al overwonnen.', active: true },
-          { id: 'a4_w1', type: 'text', text: '🙏 Gebed & Werkvorm:\nGa in een cirkel staan. De leiding spreekt een krachtig proclamatiegebed uit over de voeten en wegen van de studenten: dat ze standvastig zullen zijn en angstvrij hun stappen in het leven mogen zetten.', active: true },
-          { id: 'a4_tafel', type: 'text', text: '🍽️ Stellingen & Dilemma\'s voor de maaltijd\n\nStelling:\n"Het maken van keuzes over je toekomst (studie of partner) veroorzaakt bij jou meer angst dan vertrouwen."\n\nDilemma:\nEr ontstaat een flinke irritatie tussen twee mensen op jouw kring. Confronteer je hen daar direct open over tijdens de nababespreking, of hoop je dat het vanzelf overgaat?\n\nVraag voor op tafel:\nWaar merk jij in het dagelijks leven dat het studentenleven tegen je christelijke waarden indruist?', active: true },
-          { id: 'a4_y1', type: 'youtube', url: 'https://www.youtube.com/watch?v=VIDEO_ID4', active: true },
-          { id: 'a4_web1', type: 'website', url: 'https://www.example.com/strijd', active: true }
+          { id: 'a4_t1', type: 'text', text: '🎬 Avond 4: De Strijd & Jouw Route\n\nWonderen: 5. Bevrijding (Bloed uit Zijn voeten) & 6. Verzoening (Bloed uit Zijn zijde).', active: true },
+          { id: 'a4_v1', type: 'vraag', vraagText: 'Waar ervaar jij op dit moment de meeste (geestelijke) strijd of twijfel in je dagelijks leven?', active: true }
         ],
         'avond5': [
-          { id: 'a5_schema', type: 'text', text: '📅 Tijdschema Avond 5 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje\n19:15 – 19:30 | Input: "Nieuw hart, nieuwe identiteit"\n19:30 – 20:15 | Kringvragen, zegenkaarten & feestelijke afsluiting\n20:15 – 20:30 | Afsluiting & uitleg: hoe kun je dit principe (de 7 wonderen) blijven gebruiken in je persoonlijke leven? (3 minuten)', active: true },
-          { id: 'a5_t1', type: 'text', text: '🎬 Avond 5: Identiteit & Koninklijke Uitzending\n\nWonder: 7. Wedergeboorte (Het doorboorde hart van Jezus).\n\nOpbouw voor hun hart: Koninklijke identiteit. Het diepe besef dat ze geliefd zijn om wie ze zijn, niet om wat ze doen. Een nieuw hart betekent leven vanuit overvloed.', active: true },
-          { id: 'a5_v1', type: 'vraag', vraagText: 'Als al je taken en rollen (inclusief het kringleiderschap) wegvallen: wie ben jij dan aan de voeten van Jezus?', active: true },
-          { id: 'a5_v2', type: 'vraag', vraagText: 'Welk \'wonder van het kruis\' heeft jou de afgelopen weken persoonlijk het meest veranderd of opgebouwd?', active: true },
-          { id: 'a5_s1', type: 'stelling', stellingText: 'Het is onmogelijk om in een seculiere studentenwereld 100% te leven vanuit je christelijke identity zonder buiten de groep te vallen.', active: true },
-          { id: 'a5_w1', type: 'text', text: '🙏 Gebed & Werkvorm:\nSluit feestelijk af. Geef elke student een Zegenkaart met een profetische of opbouwende bemoediging die jullie als leiding specifiek voor die persoon hebben opgeschreven. Spreek een grote zegen uit over hun leven.', active: true },
-          { id: 'a5_tafel', type: 'text', text: '🍽️ Stellingen & Dilemma\'s voor de maaltijd\n\nStelling:\n"Jouw eigenwaarde hangt stiekem meer af van je studieresultaten en prestaties dan van je identiteit in Christus."\n\nDilemma:\nJe mag kiezen: of je haalt cum laude je diploma maar hebt een matig sociaal/geestelijk leven, of je studeert met een ruime voldoende af en investeert al je tijd in mensen om je heen.\n\nVraag voor op tafel:\nWelk masker zet jij in de collegezaal of op de vereniging op omdat je bang bent dat ze je anders niet aardig vinden?', active: true },
-          { id: 'a5_y1', type: 'youtube', url: 'https://www.youtube.com/watch?v=VIDEO_ID5', active: true },
-          { id: 'a5_web1', type: 'website', url: 'https://www.example.com/identiteit', active: true }
+          { id: 'a5_t1', type: 'text', text: '🎬 Avond 5: Identiteit & Koninklijke Uitzending\n\nWonder: 7. Wedergeboorte (Het doorboorde hart van Jezus).', active: true },
+          { id: 'a5_geeltjes', type: 'geeltjes', titelText: '📌 Deel een bemoedigend geeltje / zegenwens met de groep:', active: true }
         ]
       }
     };
   }
+
   // ---------- STATE ----------
   let topicsList = [];
   let contentData = {};
   let currentTopicId = null;
   let currentComponentIdx = null;
   let modalMode = 'add';
+
   // ---------- DRAG & DROP STATE ----------
   let draggedTopicIndex = null;
   let draggedComponentIndex = null;
   let draggedComponentTopicId = null;
+
   // ---------- ACCORDEON & RENDER CORE ----------
   function initApp() {
     const dataNode = isEditMode ? 'draft' : 'published';
@@ -653,6 +640,7 @@
       renderAccordionStructure();
     });
   }
+
   function renderAccordionStructure() {
     const root = document.getElementById('accordion-root');
     root.innerHTML = '';
@@ -698,7 +686,7 @@
             <option value="text">Tekstblok</option>
             <option value="vraag">Open Vraag</option>
             <option value="stelling">Stelling (Poll)</option>
-            <option value="stickynotes">Sticky Notes (Live Wall)</option>
+            <option value="geeltjes">Sticky Notes (Geeltjesbord)</option>
             <option value="fotoStelling">Foto-stelling (Diapresentatie)</option>
             <option value="website">Website (iframe)</option>
             <option value="youtube">YouTube-video</option>
@@ -712,6 +700,7 @@
       renderComponents(topic.id);
     });
   }
+
   function toggleAccordion(header, topicId) {
     const panel = document.getElementById(`panel-${topicId}`);
     const isOpen = panel.classList.contains('open');
@@ -721,6 +710,7 @@
       panel.classList.add('open'); header.classList.add('active');
     }
   }
+
   function renderComponents(topicId) {
     setTimeout(() => {
       const container = document.getElementById(`components-${topicId}`);
@@ -767,17 +757,23 @@
               <div class="poll-results" id="poll-res-${comp.id}">Uitslag: 0x Eens | 0x Oneens</div>
             </div>`;
           listenToPoll(topicId, comp.id);
-        } else if (comp.type === 'stickynotes') {
+        } else if (comp.type === 'geeltjes') {
           innerHTML = `
-            <div class="stickynotes-box">
-              <strong>📌 Sticky Notes Wall: ${escapeHtml(comp.title || 'Deel je gedachten')}</strong>
-              <div class="input-group" style="margin-top: 10px;">
-                <textarea id="sn-input-${comp.id}" placeholder="Schrijf jouw sticky note hier..." rows="2"></textarea>
-                <button onclick="addStickyNote('${topicId}','${comp.id}')" style="align-self:flex-start; height:auto; padding:10px 16px;">Plakken 📌</button>
+            <div class="geeltjes-box">
+              <strong>📌 ${escapeHtml(comp.titelText || 'Sticky Notes / Geeltjes')}</strong>
+              <div class="geeltjes-input-area">
+                <input type="text" id="note-in-${comp.id}" placeholder="Schrijf je geeltje..." maxlength="140">
+                <select id="note-color-${comp.id}">
+                  <option value="yellow">💛 Geel</option>
+                  <option value="pink">🩷 Roze</option>
+                  <option value="blue">🩵 Blauw</option>
+                  <option value="green">💚 Groen</option>
+                </select>
+                <button onclick="addGeeltje('${topicId}','${comp.id}')">Plakken 📌</button>
               </div>
-              <div class="stickynotes-grid" id="sn-grid-${comp.id}">Bezig met geeltjes laden...</div>
+              <div class="geeltjes-grid" id="geeltjes-grid-${comp.id}">Bezig met laden...</div>
             </div>`;
-          listenToStickyNotes(topicId, comp.id);
+          listenToGeeltjes(topicId, comp.id);
         } else if (comp.type === 'fotoStelling') {
           innerHTML = `
             <div class="foto-stelling-box">
@@ -831,6 +827,7 @@
       });
     }, 50);
   }
+
   // Helper: YouTube ID extraheren
   function extractYouTubeId(url) {
     if (!url) return '';
@@ -845,71 +842,62 @@
     return '';
   }
 
-  // ---------- STICKY NOTES FUNCTIES ----------
-  function addStickyNote(topicId, compId) {
-    const input = document.getElementById(`sn-input-${compId}`);
+  // ---------- STICKY NOTES / GEELTJES FUNCTIES ----------
+  function addGeeltje(topicId, compId) {
+    const input = document.getElementById(`note-in-${compId}`);
+    const colorSelect = document.getElementById(`note-color-${compId}`);
     if (!input || !input.value.trim()) return;
     
-    db.ref(`interactie/${topicId}/${compId}/stickynotes`).push({
+    const text = input.value.trim();
+    const color = colorSelect ? colorSelect.value : 'yellow';
+    const rotation = (Math.random() * 8 - 4).toFixed(1); // Speelse schuine rotatie tussen -4 en +4 graden
+
+    db.ref(`interactie/${topicId}/${compId}/geeltjes`).push({
       naam: currentUserName || "Anoniem",
-      tekst: input.value.trim(),
+      tekst: text,
+      kleur: color,
+      rotatie: rotation,
       ts: Date.now()
     });
     input.value = '';
   }
 
-  function listenToStickyNotes(topicId, compId) {
-    db.ref(`interactie/${topicId}/${compId}/stickynotes`).on('value', (snap) => {
-      const grid = document.getElementById(`sn-grid-${compId}`);
-      if (!grid) return;
-      grid.innerHTML = '';
+  function listenToGeeltjes(topicId, compId) {
+    db.ref(`interactie/${topicId}/${compId}/geeltjes`).on('value', (snap) => {
+      const container = document.getElementById(`geeltjes-grid-${compId}`);
+      if (!container) return;
       const data = snap.val();
-      if (!data) { 
-        grid.innerHTML = '<em style="color:#64748b; font-size:0.9rem;">Er zijn nog geen sticky notes geplakt. Wees de eerste!</em>'; 
-        return; 
+      if (!data) {
+        container.innerHTML = '<em style="color:#94a3b8; font-size:0.85rem; grid-column:1/-1;">Nog geen geeltjes geplakt. Schrijf als eerste een reactie!</em>';
+        return;
       }
-      
-      const entries = Object.entries(data).reverse(); // Nieuwste bovenaan/eerst
-      entries.forEach(([key, note]) => {
-        const noteEl = document.createElement('div');
-        noteEl.className = 'sticky-note';
-        
-        const timeStr = new Date(note.ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        
-        noteEl.innerHTML = `
-          <div>
-            <div class="author">📌 ${escapeHtml(note.naam)}</div>
-            <div class="text">${escapeHtml(note.tekst)}</div>
-          </div>
-          <div class="meta">
-            <span>${timeStr}</span>
-            <button class="btn-edit-note" onclick="editStickyNote('${topicId}','${compId}','${key}')">✎ Bewerken</button>
+      const entries = Object.entries(data).reverse();
+      container.innerHTML = entries.map(([key, item]) => {
+        const rot = item.rotatie || 0;
+        const colorClass = item.kleur || 'yellow';
+        const isOwner = (item.naam === currentUserName) || isEditMode;
+        const deleteBtn = isOwner ? `<button class="delete-note" onclick="deleteGeeltje('${topicId}','${compId}','${key}')">✕</button>` : '';
+        return `
+          <div class="geeltje ${colorClass}" style="transform: rotate(${rot}deg);">
+            ${deleteBtn}
+            <div>${escapeHtml(item.tekst)}</div>
+            <div class="author">~ ${escapeHtml(item.naam)}</div>
           </div>
         `;
-        grid.appendChild(noteEl);
-      });
+      }).join('');
     });
   }
 
-  function editStickyNote(topicId, compId, noteKey) {
-    const noteRef = db.ref(`interactie/${topicId}/${compId}/stickynotes/${noteKey}`);
-    noteRef.once('value', (snap) => {
-      const note = snap.val();
-      if (!note) return;
-      
-      const newText = prompt("Bewerk je sticky note:", note.tekst);
-      if (newText !== null && newText.trim() !== "") {
-        noteRef.update({
-          tekst: newText.trim(),
-          editedTs: Date.now()
-        });
-      }
-    });
+  function deleteGeeltje(topicId, compId, key) {
+    if (confirm('Wil je dit geeltje verwijderen?')) {
+      db.ref(`interactie/${topicId}/${compId}/geeltjes/${key}`).remove();
+    }
   }
 
   // ---------- FOTO-STELLING: DIAPRESENTATIE & OPEN VRAAG ----------
   let photoIndexMap = {};
   let photoAnswersCache = {};
+
   function initPhotoDia(topicId, compId) {
     photoIndexMap[compId] = photoIndexMap[compId] || 0;
     
@@ -925,6 +913,7 @@
     updateDiaImage(compId);
     renderPhotoFeed(compId);
   }
+
   function updatePhotoDia(compId, richting) {
     const huidige = photoIndexMap[compId] || 0;
     const nieuwe = (huidige + richting + SCREENSHOTS.length) % SCREENSHOTS.length;
@@ -932,6 +921,7 @@
     updateDiaImage(compId);
     renderPhotoFeed(compId);
   }
+
   function updateDiaImage(compId) {
     const img = document.getElementById(`dia-img-${compId}`);
     const teller = document.getElementById(`dia-counter-${compId}`);
@@ -941,6 +931,7 @@
       teller.textContent = `${index + 1} / ${SCREENSHOTS.length}`;
     }
   }
+
   function sendPhotoAnswer(topicId, compId) {
     const input = document.getElementById(`photo-answer-${compId}`);
     if (!input || !input.value.trim()) return;
@@ -953,6 +944,7 @@
     });
     input.value = '';
   }
+
   function renderPhotoFeed(compId) {
     const container = document.getElementById(`photo-feed-${compId}`);
     if (!container) return;
@@ -974,7 +966,8 @@
       </div>
     `).join('');
   }
-  // ---------- INTERACTIE LIVE FEEDS (bestaande) ----------
+
+  // ---------- INTERACTIE LIVE FEEDS ----------
   function sendAnswer(topicId, compId) {
     const input = document.getElementById(`in-${compId}`);
     if (!input || !input.value.trim()) return;
@@ -985,6 +978,7 @@
     });
     input.value = '';
   }
+
   function listenToAnswers(topicId, compId) {
     db.ref(`interactie/${topicId}/${compId}/antwoorden`).on('value', (snap) => {
       const container = document.getElementById(`feed-${compId}`);
@@ -997,10 +991,12 @@
       });
     });
   }
+
   function votePoll(topicId, compId, vote) {
     if(!currentUserName) return;
     db.ref(`interactie/${topicId}/${compId}/poll/${currentUserName}`).set(vote);
   }
+
   function listenToPoll(topicId, compId) {
     db.ref(`interactie/${topicId}/${compId}/poll`).on('value', (snap) => {
       const display = document.getElementById(`poll-res-${compId}`);
@@ -1012,18 +1008,21 @@
       display.textContent = `Uitslag live: ${eens}x Eens 👍 | ${oneens}x Oneens 👎`;
     });
   }
+
   // ---------- DRAG & DROP FUNCTIES ----------
   function arrayMove(arr, fromIndex, toIndex) {
     if (toIndex < 0 || toIndex >= arr.length) return;
     const el = arr.splice(fromIndex, 1)[0];
     arr.splice(toIndex, 0, el);
   }
+
   function handleTopicDragStart(e) {
     draggedTopicIndex = parseInt(e.target.dataset.topicIndex);
     e.target.classList.add('dragging');
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', 'topic');
   }
+
   function handleTopicDragOver(e) {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
@@ -1032,6 +1031,7 @@
       target.classList.add('drag-over');
     }
   }
+
   function handleTopicDrop(e) {
     e.preventDefault();
     const targetIndex = parseInt(e.currentTarget.dataset.topicIndex);
@@ -1041,10 +1041,12 @@
     draggedTopicIndex = null;
     renderAccordionStructure();
   }
+
   function handleTopicDragEnd(e) {
     e.target.classList.remove('dragging');
     document.querySelectorAll('.accordion-item').forEach(item => item.classList.remove('drag-over'));
   }
+
   function handleComponentDragStart(e) {
     draggedComponentTopicId = e.target.dataset.topicId;
     draggedComponentIndex = parseInt(e.target.dataset.componentIndex);
@@ -1052,6 +1054,7 @@
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', 'component');
   }
+
   function handleComponentDragOver(e) {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
@@ -1060,6 +1063,7 @@
       target.classList.add('drag-over');
     }
   }
+
   function handleComponentDrop(e) {
     e.preventDefault();
     if (draggedComponentTopicId === null || draggedComponentIndex === null) return;
@@ -1074,26 +1078,31 @@
     draggedComponentIndex = null;
     renderComponents(draggedComponentTopicId);
   }
+
   function handleComponentDragEnd(e) {
     e.target.classList.remove('dragging');
     document.querySelectorAll('.component-item').forEach(item => item.classList.remove('drag-over'));
   }
+
   // ---------- EDIT EN EDIT-MODALS (DRAFT) ----------
   function toggleComponent(topicId, idx) {
     const comp = contentData[topicId][idx];
     comp.active = !comp.active;
     db.ref(`draft/content/${topicId}/${idx}/active`).set(comp.active);
   }
+
   function openAddModal(topicId) {
     currentTopicId = topicId; modalMode = 'add';
     const type = document.getElementById(`type-select-${topicId}`).value;
     buildModalForm(type, null);
   }
+
   function openEditModal(topicId, idx) {
     currentTopicId = topicId; currentComponentIdx = idx; modalMode = 'edit';
     const comp = contentData[topicId][idx];
     buildModalForm(comp.type, comp);
   }
+
   function buildModalForm(type, existing) {
     const form = document.getElementById('modal-form');
     document.getElementById('modal-title').textContent = modalMode === 'add' ? "Component Toevoegen" : "Component Redigeren";
@@ -1105,11 +1114,10 @@
       form.innerHTML += `<label>Vraagtekst</label><input type="text" id="m-vraag" value="${existing ? existing.vraagText : ''}">`;
     } else if (type === 'stelling') {
       form.innerHTML += `<label>Stellingtekst</label><input type="text" id="m-stelling" value="${existing ? existing.stellingText : ''}">`;
-    } else if (type === 'stickynotes') {
-      form.innerHTML += `<label>Titel / Opdracht op de Sticky Wall</label><input type="text" id="m-stickynotes-title" value="${existing ? escapeHtml(existing.title || '') : ''}" placeholder="Bijv. Deel je belangrijkste inzicht...">`;
+    } else if (type === 'geeltjes') {
+      form.innerHTML += `<label>Titel / Instructie Geeltjesbord</label><input type="text" id="m-geeltjes-titel" value="${existing ? (existing.titelText || '') : '📌 Sticky Notes: Waar wil je bij stilstaan?'}">`;
     } else if (type === 'fotoStelling') {
       form.innerHTML += `<label>Stellingtekst</label><input type="text" id="m-foto-stelling" value="${existing ? existing.stellingText : ''}">`;
-      form.innerHTML += `<p style="color:#64748b; font-size:0.8rem; margin-top:5px;">De fotolijst is vast ingesteld (37 screenshots).</p>`;
     } else if (type === 'website') {
       form.innerHTML += `<label>Website-URL</label><input type="url" id="m-url" placeholder="https://..." value="${existing ? existing.url : ''}">`;
     } else if (type === 'youtube') {
@@ -1117,7 +1125,9 @@
     }
     document.getElementById('modal-overlay').style.display = 'flex';
   }
+
   function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
+
   function saveModal() {
     if (!isEditMode) return;
     const type = document.getElementById('m-type').value;
@@ -1126,7 +1136,7 @@
     if (type === 'text') obj.text = document.getElementById('m-text').value;
     if (type === 'vraag') obj.vraagText = document.getElementById('m-vraag').value;
     if (type === 'stelling') obj.stellingText = document.getElementById('m-stelling').value;
-    if (type === 'stickynotes') obj.title = document.getElementById('m-stickynotes-title').value;
+    if (type === 'geeltjes') obj.titelText = document.getElementById('m-geeltjes-titel').value;
     if (type === 'fotoStelling') {
       obj.stellingText = document.getElementById('m-foto-stelling').value;
       obj.fotos = SCREENSHOTS;
@@ -1143,26 +1153,30 @@
     db.ref(`draft/content/${currentTopicId}`).set(contentData[currentTopicId]);
     closeModal();
   }
+
   function existingIdOrNew() {
     if (modalMode === 'edit' && contentData[currentTopicId][currentComponentIdx].id) {
       return contentData[currentTopicId][currentComponentIdx].id;
     }
     return 'c_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
   }
+
   function deleteComponent(topicId, idx) {
     if(!confirm("Weet je zeker dat je dit blok wilt wissen?")) return;
     contentData[topicId].splice(idx, 1);
     db.ref(`draft/content/${topicId}`).set(contentData[topicId]);
   }
+
   // ---------- HOOFDSTUKKEN/AVONDEN DYNAMISCH BEWERKEN ----------
   let editingTopicId = null;
+
   function openAddTopicModal() {
     editingTopicId = null;
     document.getElementById('topic-title-input').value = '';
     document.getElementById('topic-modal-title').textContent = "Nieuwe Avond Toevoegen";
     document.getElementById('topic-modal-overlay').style.display = 'flex';
   }
-  
+
   function openEditTopicModal(id) {
     const topic = topicsList.find(t => t.id === id);
     if (!topic) return;
@@ -1171,9 +1185,9 @@
     document.getElementById('topic-modal-title').textContent = "Titel van Avond Aanpassen";
     document.getElementById('topic-modal-overlay').style.display = 'flex';
   }
-  
+
   function closeTopicModal() { document.getElementById('topic-modal-overlay').style.display = 'none'; }
-  
+
   function saveTopicModal() {
     const title = document.getElementById('topic-title-input').value.trim();
     if(!title) return;
@@ -1191,6 +1205,7 @@
     db.ref('draft/content').set(contentData);
     closeTopicModal();
   }
+
   function deleteTopic(id) {
     if(!confirm("Weet je 100% zeker dat je deze volledige avond en alle bijbehorende tekst/vragen wilt verwijderen?")) return;
     topicsList = topicsList.filter(t => t.id !== id);
@@ -1198,6 +1213,7 @@
     db.ref('draft/topics').set(topicsList);
     db.ref('draft/content').set(contentData);
   }
+
   // ---------- LIVE DEELNEMERS PUSH & CONTROLS ----------
   document.getElementById('publishBtn').addEventListener('click', function() {
     if (!confirm('Wil je alle geredigeerde teksten en avonden direct pushen naar de telefoons van de studenten?')) return;
@@ -1208,6 +1224,7 @@
       }
     });
   });
+
   document.getElementById('resetBtn').addEventListener('click', function() {
     if (!confirm('⚠️ Let op: Weet je zeker dat je alle data wilt terugzetten naar de 5 standaardavonden? Alle live antwoorden worden gewist.')) return;
     db.ref('interactie').remove();
@@ -1217,9 +1234,15 @@
     db.ref('published').set(def);
     alert('Systeem succesvol gereset naar de 5 basisavonden.');
   });
+
   // ---------- SETUP INITIALISATIE ----------
   document.addEventListener('DOMContentLoaded', initApp);
-  function escapeHtml(text) { if (!text) return ''; const map = { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;' }; return text.replace(/[&<>"']/g, m => map[m]); }
+
+  function escapeHtml(text) { 
+    if (!text) return ''; 
+    const map = { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;' }; 
+    return text.replace(/[&<>"']/g, m => map[m]); 
+  }
 </script>
 </body>
 </html>
