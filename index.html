@@ -500,7 +500,7 @@
         ],
         'avond3': [
           { id: 'a3_schema', type: 'text', text: '📅 Tijdschema Avond 3 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje\n19:15 – 19:30 | Input: "Heling voor pijn en angst"\n19:30 – 20:15 | Kringvragen, ministry-sessie & gebed\n20:15 – 20:30 | Afsluiting & uitleg', active: true },
-          { id: 'a3_t1', type: 'text', text: '🎬 Avond 3: Heling & Pijn\n\nWonder: 4. Genezing (Bloed uit Zijn handen).\n\nOpbouw voor hun hart: Diepe heling. Kringleiders zijn vaak \'gevers\', maar dragen zelf ook weleens verborgen wonden. Jezus\' doorboorde handen zijn er om hún pijn aan te raken.', active: true },
+          { id: 'a3_t1', type: 'text', text: '🎬 Avond 3: Heling & Pijn\n\nWonder: 4. Genezing (Bloed uit Zijn hands).\n\nOpbouw voor hun hart: Diepe heling. Kringleiders zijn vaak \'gevers\', maar dragen zelf ook weleens verborgen wonden. Jezus\' doorboorde handen zijn er om hún pijn aan te raken.', active: true },
           { id: 'a3_v1', type: 'vraag', vraagText: 'Als je heel eerlijk naar jezelf kijkt: waar zit op dit moment jouw emotionele of fysieke vermoeidheid/pijn?', active: true }
         ],
         'avond4': [
@@ -536,7 +536,6 @@
         topicsList = val.topics || [];
         contentData = val.content || {};
 
-        // Veiligheidscheck: zorg dat de startavond gegarandeerd al haar stickynotes en studentvragen behoudt
         if (!contentData['avond1'] || !contentData['avond1'].some(c => c.id === 'a1_geeltjes1')) {
           const defAvond1 = getDefaultData().content.avond1;
           contentData['avond1'] = defAvond1;
@@ -590,7 +589,6 @@
       compContainer.id = `components-${topic.id}`; 
       panel.appendChild(compContainer);
       
-      // UITKLAPMENU MET DE 25 ACTIVERENDE WERKVOORBEELDEN IN ONTWERPMODUS
       if (isEditMode) {
         const addArea = document.createElement('div'); addArea.className = 'add-component-area';
         addArea.innerHTML = `
@@ -710,7 +708,7 @@
               <input type="text" id="in-${id}" placeholder="Typ jouw antwoord...">
               <button onclick="sendAnswer('${topicId}','${id}')">Verstuur</button>
             </div>
-            <div class="feed-container" id="feed-${id}">Bezig met antwoorden laden...</div>
+            <div class="feed-container" id="feed-${id}">Laden...</div>
           </div>`;
 
       case 'stelling':
@@ -741,7 +739,7 @@
               </select>
               <button onclick="addGeeltje('${topicId}','${id}')">Plakken 📌</button>
             </div>
-            <div class="geeltjes-grid" id="geeltjes-grid-${id}">Bezig met laden...</div>
+            <div class="geeltjes-grid" id="geeltjes-grid-${id}">Laden...</div>
           </div>`;
 
       case 'fotoStelling':
@@ -761,7 +759,7 @@
                 <input type="text" id="photo-answer-${id}" placeholder="Typ jouw antwoord over deze foto...">
                 <button onclick="sendPhotoAnswer('${topicId}','${id}')">Verstuur</button>
               </div>
-              <div class="feed-container" id="photo-feed-${id}">Bezig met laden...</div>
+              <div class="feed-container" id="photo-feed-${id}">Laden...</div>
             </div>
           </div>`;
 
@@ -874,7 +872,7 @@
               <input type="text" id="kp-txt-${id}" placeholder="Wat neem je mee of laat je achter?">
               <button onclick="submitKofferTrash('${id}')">Opslaan</button>
             </div>
-            <div class="geeltjes-grid" id="geeltjes-grid-${id}">Bezig met laden...</div>
+            <div class="geeltjes-grid" id="geeltjes-grid-${id}">Laden...</div>
           </div>`;
 
       case 'smart_actiekaart':
@@ -926,15 +924,17 @@
     }
   }
 
-  // ---------- INTERACTIES LOGICA (ROBUUSTE MULTI-PATH SYNC) ----------
+  // ---------- INTERACTIES LOGICA (BEVEILIGDE READERS ZONDER VASTLOPERS) ----------
   function sendAnswer(topicId, compId) {
     const input = document.getElementById(`in-${compId}`);
     if (!input || !input.value.trim()) return;
-    db.ref(`interactie/${compId}/antwoorden`).push({
+    const payload = {
       naam: currentUserName || "Anoniem",
       txt: input.value.trim(),
       ts: Date.now()
-    });
+    };
+    db.ref(`interactie/topicId/{compId}/antwoorden`).push(payload);
+    db.ref(`interactie/${compId}/antwoorden`).push(payload);
     input.value = '';
   }
 
@@ -944,36 +944,38 @@
     let store = {};
 
     const render = () => {
-      const items = Object.values(store);
-      if (items.length === 0) {
+      const validItems = Object.values(store).filter(a => a && typeof a === 'object');
+      if (validItems.length === 0) {
         container.innerHTML = '<em>Nog geen antwoorden ingestuurd.</em>';
         return;
       }
-      container.innerHTML = items.sort((a,b) => (b.ts||0) - (a.ts||0)).map(a => `
-        <div class="feed-item">
-          <span><strong>${escapeHtml(a.naam)}:</strong> ${escapeHtml(a.txt || a.tekst || '')}</span>
-          <span class="time">${a.ts ? new Date(a.ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}</span>
-        </div>
-      `).join('');
+      container.innerHTML = validItems
+        .sort((a,b) => (b.ts || 0) - (a.ts || 0))
+        .map(a => `
+          <div class="feed-item">
+            <span><strong>${escapeHtml(a.naam || 'Anoniem')}:</strong> ${escapeHtml(a.txt || a.tekst || '')}</span>
+            <span class="time">${a.ts ? new Date(a.ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}</span>
+          </div>
+        `).join('');
     };
 
-    const paths = [
-      `interactie/${compId}/antwoorden`,
-      `interactie/${topicId}/${compId}/antwoorden`,
-      `interactie/topicId/{compId}/antwoorden`,
-      `interactie/{compId}/antwoorden`
-    ];
-    paths.forEach(p => {
-      db.ref(p).on('value', snap => {
-        const val = snap.val();
-        if (val) Object.assign(store, val);
-        render();
-      });
-    });
+    const safeSubscribe = (path) => {
+      try {
+        db.ref(path).on('value', snap => {
+          const val = snap.val();
+          if (val && typeof val === 'object') Object.assign(store, val);
+          render();
+        }, () => { render(); });
+      } catch(e) { render(); }
+    };
+
+    safeSubscribe(`interactie/topicId/{compId}/antwoorden`);
+    safeSubscribe(`interactie/${compId}/antwoorden`);
   }
 
   function votePoll(topicId, compId, vote) {
     if(!currentUserName) return;
+    db.ref(`interactie/topicId/{compId}/poll/${currentUserName}`).set(vote);
     db.ref(`interactie/${compId}/poll/${currentUserName}`).set(vote);
   }
 
@@ -983,29 +985,28 @@
     let store = {};
 
     const render = () => {
-      const votes = Object.values(store);
+      const votes = Object.values(store).filter(v => typeof v === 'string');
       if (votes.length === 0) {
         display.textContent = "Uitslag: 0x Eens | 0x Oneens";
         return;
       }
       let eens = 0, oneens = 0;
-      votes.forEach(v => { if (v === 'Eens') eens++; else oneens++; });
+      votes.forEach(v => { if (v === 'Eens') eens++; else if (v === 'Oneens') oneens++; });
       display.textContent = `Uitslag live: ${eens}x Eens 👍 | ${oneens}x Oneens 👎`;
     };
 
-    const paths = [
-      `interactie/${compId}/poll`,
-      `interactie/${topicId}/${compId}/poll`,
-      `interactie/topicId/{compId}/poll`,
-      `interactie/{compId}/poll`
-    ];
-    paths.forEach(p => {
-      db.ref(p).on('value', snap => {
-        const val = snap.val();
-        if (val) Object.assign(store, val);
-        render();
-      });
-    });
+    const safeSubscribe = (path) => {
+      try {
+        db.ref(path).on('value', snap => {
+          const val = snap.val();
+          if (val && typeof val === 'object') Object.assign(store, val);
+          render();
+        }, () => { render(); });
+      } catch(e) { render(); }
+    };
+
+    safeSubscribe(`interactie/topicId/{compId}/poll`);
+    safeSubscribe(`interactie/${compId}/poll`);
   }
 
   function addGeeltje(topicId, compId) {
@@ -1013,13 +1014,15 @@
     const colorSelect = document.getElementById(`note-color-${compId}`);
     if (!input || !input.value.trim()) return;
     const rot = (Math.random() * 8 - 4).toFixed(1);
-    db.ref(`interactie/${compId}/geeltjes`).push({
+    const payload = {
       naam: currentUserName || "Anoniem",
       tekst: input.value.trim(),
       kleur: colorSelect ? colorSelect.value : 'yellow',
       rotatie: rot,
       ts: Date.now()
-    });
+    };
+    db.ref(`interactie/topicId/{compId}/geeltjes`).push(payload);
+    db.ref(`interactie/${compId}/geeltjes`).push(payload);
     input.value = '';
   }
 
@@ -1028,13 +1031,15 @@
     const input = document.getElementById(`kp-txt-${compId}`);
     if (!input || !input.value.trim()) return;
     const rot = (Math.random() * 6 - 3).toFixed(1);
-    db.ref(`interactie/${compId}/geeltjes`).push({
+    const payload = {
       naam: currentUserName || "Anoniem",
       tekst: (type === 'koffer' ? '🧳 ' : '🗑️ ') + input.value.trim(),
       kleur: type,
       rotatie: rot,
       ts: Date.now()
-    });
+    };
+    db.ref(`interactie/topicId/{compId}/geeltjes`).push(payload);
+    db.ref(`interactie/${compId}/geeltjes`).push(payload);
     input.value = '';
   }
 
@@ -1044,12 +1049,12 @@
     let dataStore = {};
 
     const render = () => {
-      const entries = Object.entries(dataStore);
-      if (entries.length === 0) {
+      const validEntries = Object.entries(dataStore).filter(([k, item]) => item && typeof item === 'object');
+      if (validEntries.length === 0) {
         container.innerHTML = '<em style="color:#94a3b8; font-size:0.85rem; grid-column:1/-1;">Nog geen geeltjes geplakt. Schrijf als eerste een reactie!</em>';
         return;
       }
-      container.innerHTML = entries.reverse().map(([key, item]) => {
+      container.innerHTML = validEntries.reverse().map(([key, item]) => {
         const rot = item.rotatie || 0;
         const colorClass = item.kleur || 'yellow';
         const isOwner = (item.naam === currentUserName) || isEditMode;
@@ -1057,34 +1062,31 @@
         return `
           <div class="geeltje ${colorClass}" style="transform:rotate(${rot}deg);">
             ${deleteBtn}
-            <div>${escapeHtml(item.tekst)}</div>
-            <div class="author">~ ${escapeHtml(item.naam)}</div>
+            <div>${escapeHtml(item.tekst || item.txt || '')}</div>
+            <div class="author">~ ${escapeHtml(item.naam || 'Anoniem')}</div>
           </div>
         `;
       }).join('');
     };
 
-    const paths = [
-      `interactie/${compId}/geeltjes`,
-      `interactie/${topicId}/${compId}/geeltjes`,
-      `interactie/topicId/{compId}/geeltjes`,
-      `interactie/{compId}/geeltjes`
-    ];
-    paths.forEach(p => {
-      db.ref(p).on('value', snap => {
-        const val = snap.val();
-        if (val) Object.assign(dataStore, val);
-        render();
-      });
-    });
+    const safeSubscribe = (path) => {
+      try {
+        db.ref(path).on('value', snap => {
+          const val = snap.val();
+          if (val && typeof val === 'object') Object.assign(dataStore, val);
+          render();
+        }, () => { render(); });
+      } catch(e) { render(); }
+    };
+
+    safeSubscribe(`interactie/topicId/{compId}/geeltjes`);
+    safeSubscribe(`interactie/${compId}/geeltjes`);
   }
 
   function deleteGeeltje(topicId, compId, key) {
     if (confirm('Wil je dit geeltje verwijderen?')) {
-      db.ref(`interactie/${compId}/geeltjes/${key}`).remove();
-      db.ref(`interactie/${topicId}/${compId}/geeltjes/${key}`).remove();
       db.ref(`interactie/topicId/{compId}/geeltjes/${key}`).remove();
-      db.ref(`interactie/{compId}/geeltjes/${key}`).remove();
+      db.ref(`interactie/${compId}/geeltjes/${key}`).remove();
     }
   }
 
@@ -1272,19 +1274,18 @@
     
     if (!photoAnswersCache[compId]) {
       photoAnswersCache[compId] = {};
-      const paths = [
-        `interactie/${compId}/photoAnswers`,
-        `interactie/${topicId}/${compId}/photoAnswers`,
-        `interactie/topicId/{compId}/photoAnswers`,
-        `interactie/{compId}/photoAnswers`
-      ];
-      paths.forEach(p => {
-        db.ref(p).on('value', snap => {
-          const val = snap.val();
-          if (val) Object.assign(photoAnswersCache[compId], val);
-          renderPhotoFeed(compId);
-        });
-      });
+      const safeSubscribe = (path) => {
+        try {
+          db.ref(path).on('value', snap => {
+            const val = snap.val();
+            if (val && typeof val === 'object') Object.assign(photoAnswersCache[compId], val);
+            renderPhotoFeed(compId);
+          }, () => { renderPhotoFeed(compId); });
+        } catch(e) { renderPhotoFeed(compId); }
+      };
+
+      safeSubscribe(`interactie/topicId/{compId}/photoAnswers`);
+      safeSubscribe(`interactie/${compId}/photoAnswers`);
     }
     
     updateDiaImage(compId);
@@ -1312,12 +1313,14 @@
     const input = document.getElementById(`photo-answer-${compId}`);
     if (!input || !input.value.trim()) return;
     const idx = photoIndexMap[compId] || 0;
-    db.ref(`interactie/${compId}/photoAnswers`).push({
+    const payload = {
       naam: currentUserName || "Anoniem",
       tekst: input.value.trim(),
       fotoIndex: idx,
       ts: Date.now()
-    });
+    };
+    db.ref(`interactie/topicId/{compId}/photoAnswers`).push(payload);
+    db.ref(`interactie/${compId}/photoAnswers`).push(payload);
     input.value = '';
   }
 
@@ -1327,7 +1330,7 @@
     
     const idx = photoIndexMap[compId] || 0;
     const items = Object.values(photoAnswersCache[compId] || {})
-      .filter(a => a.fotoIndex === idx)
+      .filter(a => a && typeof a === 'object' && (a.fotoIndex === idx || a.fotoIndex == idx))
       .reverse();
     
     if (items.length === 0) {
@@ -1337,8 +1340,8 @@
     
     container.innerHTML = items.map(a => `
       <div class="feed-item">
-        <span><strong>${escapeHtml(a.naam)}:</strong> ${escapeHtml(a.tekst)}</span>
-        <span class="time">${new Date(a.ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+        <span><strong>${escapeHtml(a.naam || 'Anoniem')}:</strong> ${escapeHtml(a.tekst || a.txt || '')}</span>
+        <span class="time">${a.ts ? new Date(a.ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}</span>
       </div>
     `).join('');
   }
