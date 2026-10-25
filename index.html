@@ -95,6 +95,8 @@
     #switchModeBtn:hover { background: #b0c9f2; transform: translateY(-2px); }
     #addTopicBtn { background: #e2e8f0; color: #334155; }
     #addTopicBtn:hover { background: #cbd5e1; transform: translateY(-2px); }
+    #werkvormenGuideBtn { background: #fef3c7; color: #92400e; }
+    #werkvormenGuideBtn:hover { background: #fde68a; transform: translateY(-2px); }
     .mode-indicator {
       display: inline-block;
       padding: 6px 16px;
@@ -105,6 +107,108 @@
     }
     .mode-indicator.edit { background: rgba(254, 243, 199, 0.9); color: #b45309; }
     .mode-indicator.view { background: rgba(209, 250, 229, 0.9); color: #065f46; }
+
+    /* UITKLAPMENU 25 ACTIVERENDE WERKVOORBEELDEN (ONTWERPMODUS) */
+    .werkvormen-guide-box {
+      margin-bottom: 20px;
+      background: #ffffff;
+      border: 1px solid #fed7aa;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.08);
+    }
+    .werkvormen-guide-summary {
+      width: 100%;
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border: none;
+      padding: 16px 22px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #92400e;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      transition: background 0.2s ease;
+    }
+    .werkvormen-guide-summary:hover {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    }
+    .werkvormen-guide-arrow {
+      font-size: 1.1rem;
+      transition: transform 0.3s ease;
+      color: #b45309;
+    }
+    .werkvormen-guide-content {
+      padding: 20px 24px;
+      background: #ffffff;
+      max-height: 580px;
+      overflow-y: auto;
+      border-top: 1px solid #fde68a;
+    }
+    .werkvormen-quick-select {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      background: #f8fafc;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      flex-wrap: wrap;
+    }
+    .werkvormen-quick-select select {
+      flex: 1;
+      min-width: 250px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.9rem;
+      background: #fff;
+    }
+    .werkvorm-category { margin-bottom: 22px; }
+    .werkvorm-category:last-child { margin-bottom: 0; }
+    .werkvorm-category-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .werkvorm-card {
+      background: #f8fafc;
+      border-left: 4px solid #f59e0b;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    .werkvorm-card.highlight {
+      background: #fef3c7 !important;
+      border-left-color: #d97706 !important;
+    }
+    .werkvorm-card strong.wv-title {
+      color: #0f172a;
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.98rem;
+    }
+    .werkvorm-card ul {
+      margin-left: 20px;
+      margin-top: 6px;
+      margin-bottom: 6px;
+    }
+    .werkvorm-card li { margin-bottom: 3px; }
 
     /* Accordeon */
     .accordion-item { 
@@ -336,9 +440,239 @@
   
   <div class="header-actions" id="headerActions">
     <button id="addTopicBtn" style="display:none;" onclick="openAddTopicModal()">➕ Avond Toevoegen</button>
+    <button id="werkvormenGuideBtn" style="display:none;" onclick="toggleWerkvormenGuide()">💡 Uitleg 25 Werkvormen ▾</button>
     <button id="switchModeBtn">🔄 Open Aanpasmodus</button>
     <button id="publishBtn" style="display:none;">📤 Push naar Iedereen</button>
     <button id="resetBtn" style="display:none;">⚠️ Reset Data</button>
+  </div>
+
+  <!-- UITKLAPMENU MET DE 25 ACTIVERENDE WERKVOORBEELDEN IN ONTWERPMODUS -->
+  <div id="werkvormen-guide-box" class="werkvormen-guide-box" style="display:none;">
+    <button type="button" class="werkvormen-guide-summary" onclick="toggleWerkvormenGuide()">
+      <span style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:1.3rem;">💡</span>
+        <span><strong>Gids & Uitleg: 25 Activerende Werkvormen</strong> <span style="font-size:0.85rem; font-weight:normal; opacity:0.85;">(Klik om uit te klappen)</span></span>
+      </span>
+      <span id="werkvormenGuideArrow" class="werkvormen-guide-arrow">▼</span>
+    </button>
+    <div id="werkvormenGuideContent" class="werkvormen-guide-content" style="display:none;">
+      
+      <!-- Snelkeuze uitklapmenu binnen de gids -->
+      <div class="werkvormen-quick-select">
+        <label for="wv-quick-select" style="font-weight:700; font-size:0.9rem; color:#475569;">Snel naar werkvorm springen:</label>
+        <select id="wv-quick-select" onchange="jumpToWerkvorm(this.value)">
+          <option value="">-- Kies een werkvorm voor toelichting --</option>
+          <optgroup label="📖 Tekst ontdekken & analyseren">
+            <option value="wv-1">1. De Zweedse methode</option>
+            <option value="wv-2">2. Stille conversatie (Wall of Silence)</option>
+            <option value="wv-3">3. Woordzoeker / Sleutelwoord</option>
+            <option value="wv-4">4. De Krantenkop</option>
+            <option value="wv-5">5. Parafraseren in 2026</option>
+            <option value="wv-6">6. Tijdlijn & Emotiecurve</option>
+          </optgroup>
+          <optgroup label="💬 Dialoog & Verdieping">
+            <option value="wv-7">7. De Placemat-methode</option>
+            <option value="wv-8">8. Over de streep / Het Stellingenspel</option>
+            <option value="wv-9">9. Binnen- en buitencirkel (Fishbowl)</option>
+            <option value="wv-10">10. Walk & Talk</option>
+            <option value="wv-11">11. Speeddaten</option>
+            <option value="wv-12">12. Diamant-prioriteren</option>
+          </optgroup>
+          <optgroup label="🎭 Creatief & Inleven">
+            <option value="wv-13">13. De 'Hot Seat' (Interview met een personage)</option>
+            <option value="wv-14">14. Fototafel</option>
+            <option value="wv-15">15. De Kritische Bril (Advocaat van de duivel)</option>
+            <option value="wv-16">16. Voorwerpenles (Object lesson)</option>
+            <option value="wv-17">17. Teken de kern</option>
+          </optgroup>
+          <optgroup label="🎯 Toepassing naar het dagelijks leven">
+            <option value="wv-18">18. Koffer en Prullenbak</option>
+            <option value="wv-19">19. Brief aan jezelf / God</option>
+            <option value="wv-20">20. SMART Actiekaart</option>
+            <option value="wv-21">21. De 5x 'Waarom?'-ketting</option>
+            <option value="wv-22">22. Post-it Actiemuur</option>
+          </optgroup>
+          <optgroup label="🙏 Afsluiting & Gebed">
+            <option value="wv-23">23. Gebedscarrousel (Stations)</option>
+            <option value="wv-24">24. De Schrift bidden (Lectio Divina)</option>
+            <option value="wv-25">25. Zegen doorgeven</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <!-- Categorie 1 -->
+      <div class="werkvorm-category">
+        <div class="werkvorm-category-title">📖 Tekst ontdekken & analyseren</div>
+        
+        <div class="werkvorm-card" id="wv-1">
+          <strong class="wv-title">1. De Zweedse methode</strong>
+          <p>Iedereen leest de tekst individueel en noteert drie symbolen:</p>
+          <ul>
+            <li>💡 <strong>Lampje:</strong> Wat valt je op of geeft een nieuw inzicht?</li>
+            <li>❓ <strong>Vraagteken:</strong> Wat begrijp je niet of roept vragen op?</li>
+            <li>🏹 <strong>Pijl:</strong> Wat raakt jou persoonlijk of vraagt om toepassing?</li>
+          </ul>
+          <p>Bespreek daarna per symbool elkaars bevindingen.</p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-2">
+          <strong class="wv-title">2. Stille conversatie (Wall of Silence)</strong>
+          <p>Plak grote vellen papier met de Bijbeltekst (of kernverzen) op tafel of aan de muur. Iedereen loopt in stilte rond met een stift en schrijft vragen, reacties of associaties bij de tekst. Je mag ook reageren op wat anderen hebben opgeschreven. Pas na 10 minuten breek je de stilte.</p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-3">
+          <strong class="wv-title">3. Woordzoeker / Sleutelwoord</strong>
+          <p>Laat iedereen de tekst scannen en één enkel woord kiezen dat voor hen de kern van het gedeelte samenvat. Maak een rondje waarin iedereen kort toelicht waarom juist dát woord gekozen is.</p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-4">
+          <strong class="wv-title">4. De Krantenkop</strong>
+          <p>Vraag de deelnemers in tweetallen een pakkende krantenkop of socialmediapost (max. 280 tekens) te schrijven die het Bijbelgedeelte accuraat en eigentijds samenvat.</p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-5">
+          <strong class="wv-title">5. Parafraseren in 2026</strong>
+          <p>Herschrijf een gelijkenis of passage naar het heden: hoe zou dit verhaal eruitzien als het zich afspeelt op een kantoor, op school of in een WhatsApp-groep?</p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-6">
+          <strong class="wv-title">6. Tijdlijn & Emotiecurve</strong>
+          <p>Teken bij een verhalende tekst een tijdlijn op een bord of vel papier. Teken een grafieklijn van de emoties of het geloofsvertrouwen van de hoofdpersonen (pieken en dalen). Waar zit het kantelpunt?</p>
+        </div>
+      </div>
+
+      <!-- Categorie 2 -->
+      <div class="werkvorm-category">
+        <div class="werkvorm-category-title">💬 Dialoog & Verdieping</div>
+
+        <div class="werkvorm-card" id="wv-7">
+          <strong class="wv-title">7. De Placemat-methode</strong>
+          <p>Verdeel de groep in viertallen rondom een groot vel (A3). Verdeel het vel in vier buitenhoeken en een centraal middenvak. Iedereen schrijft in zijn eigen hoek zijn gedachten over een vraag. Vervolgens overleg je samen en schrijf je de gezamenlijke conclusie in het middenvak.</p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-8">
+          <strong class="wv-title">8. Over de streep / Het Stellingenspel</strong>
+          <p>Trek een denkbeeldige lijn door de kamer (één kant = helemaal mee eens, andere kant = helemaal mee oneens). Noem een prikkelende stelling naar aanleiding van de tekst. Iedereen gaat fysiek op de lijn staan op de plek die bij zijn mening past. Vraag mensen aan beide uiteinden én in het midden om hun positie toe te lichten.</p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-9">
+          <strong class="wv-title">9. Binnen- en buitencirkel (Fishbowl)</strong>
+          <p>Zet 3–4 stoelen in een binnenste kring en de rest van de stoelen eromheen. De binnenkring voert een diepgaand gesprek over een kernvraag; de buitenkring luistert. Blijft er één stoel leeg in het midden, dan mag iemand uit de buitenkring aanschuiven om kort een gedachte in te brengen en daarna weer terug te gaan.</p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-10">
+          <strong class="wv-title">10. Walk & Talk</strong>
+          <p>Stuur de groep in tweetallen naar buiten voor een korte wandeling van 10–15 minuten met één specifieke, persoonlijke reflectievraag over de tekst. Lopen zorgt vaak voor openhartigere gesprekken dan strak aan een tafel zitten.</p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-11">
+          <strong class="wv-title">11. Speeddaten</strong>
+          <p>Zet tafels tegenover elkaar. Laat mensen in 2 minuten per ronde met wisselende gesprekspartners reageren op een korte vraag of vers (bijv. "Wat troost jou het meest in Psalm 23?"). Na 2 minuten schuift de ene rij door.</p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-12">
+          <strong class="wv-title">12. Diamant-prioriteren</strong>
+          <p>Geef een lijst met 9 thema's, beloftes of adviezen uit de tekst op losse kaartjes. Laat groepjes deze leggen in een ruitvorm (1 bovenaan = belangrijkste, 2 daaronder, 3 in het midden, 2 daaronder, 1 onderaan = minst urgente/belangrijke). Dit dwingt tot keuzes en levert goede discussies op.</p>
+        </div>
+      </div>
+
+      <!-- Categorie 3 -->
+      <div class="werkvorm-category">
+        <div class="werkvorm-category-title">🎭 Creatief & Inleven</div>
+
+        <div class="werkvorm-card" id="wv-13">
+          <strong class="wv-title">13. De 'Hot Seat' (Interview met een personage)</strong>
+          <p>Eén persoon neemt plaats op een speciale stoel en kruipt in de rol van een bijbelpersoon (bijv. Marta, de verloren zoon, of een omstander bij een wonder). De rest van de groep interviewt deze persoon: <em>"Hoe voelde je je toen...?"</em></p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-14">
+          <strong class="wv-title">14. Fototafel</strong>
+          <p>Leg 20–30 verschillende afbeeldingen op tafel (landschappen, mensen, kunst, alledaagse voorwerpen). Vraag iedereen een foto te pakken die het beste weergeeft wat de tekst bij hen oproept of hoe zij hun relatie met God op dit moment ervaren.</p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-15">
+          <strong class="wv-title">15. De Kritische Bril (Advocaat van de duivel)</strong>
+          <p>Spreek af dat de groep 5 minuten bewust de rol aanneemt van een sceptische buitenstaander: welke tegenwerpingen, moeilijke vragen of irritaties roept deze tekst op in onze huidige samenleving? Bespreek daarna hoe je daar vanuit geloof op reageert.</p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-16">
+          <strong class="wv-title">16. Voorwerpenles (Object lesson)</strong>
+          <p>Zet een aantal alledaagse voorwerpen op tafel (bijv. een spiegel, een sleutel, een zaklamp, zaadjes, een gebroken kopje). Laat deelnemers een voorwerp kiezen en uitleggen hoe dat de kern van de Bijbeltekst voor hen illustreert.</p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-17">
+          <strong class="wv-title">17. Teken de kern</strong>
+          <p>Geef iedereen stiften en papier. Vraag hen de tekst niet in woorden, maar in een eenvoudige tekening, schema of symbool uit te drukken. Het gaat niet om kunstkwaliteit, maar om visuele reflectie.</p>
+        </div>
+      </div>
+
+      <!-- Categorie 4 -->
+      <div class="werkvorm-category">
+        <div class="werkvorm-category-title">🎯 Toepassing naar het dagelijks leven</div>
+
+        <div class="werkvorm-card" id="wv-18">
+          <strong class="wv-title">18. Koffer en Prullenbak</strong>
+          <p>Teken een reiskoffer en een prullenbak op een bord:</p>
+          <ul>
+            <li>🧳 <strong>Koffer:</strong> Wat neem je uit deze studie mee in je "geestelijke bagage" voor de komende week?</li>
+            <li>🗑️ <strong>Prullenbak:</strong> Welke gedachte, zorg of gewoonte wil je na het lezen van deze tekst weggooien of loslaten?</li>
+          </ul>
+        </div>
+
+        <div class="werkvorm-card" id="wv-19">
+          <strong class="wv-title">19. Brief aan jezelf / God</strong>
+          <p>Iedereen schrijft 5 minuten in stilte een korte brief. Dit kan een brief zijn vanuit God aan henzelf (gebaseerd op de beloften uit de tekst) of een eerlijke reactie van de deelnemer aan God.</p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-20">
+          <strong class="wv-title">20. SMART Actiekaart</strong>
+          <p>Laat iedereen één concreet actiepunt opschrijven op een ansichtkaart: Wat ga je deze week anders doen n.a.v. dit gedeelte? Laat hen de kaart adresseren aan zichzelf en stuur/geef deze een week later terug als herinnering.</p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-21">
+          <strong class="wv-title">21. De 5x 'Waarom?'-ketting</strong>
+          <p>Neem een opdracht of levensles uit de tekst en vraag vijf keer achter elkaar door met "Waarom?".<br>
+          <em>Voorbeeld: "We moeten geduld hebben." → Waarom? → "Omdat we anders boos worden." → Waarom? → Zo kom je bij diepere onderliggende motieven en geloofsfundamenten.</em></p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-22">
+          <strong class="wv-title">22. Post-it Actiemuur</strong>
+          <p>Iedereen schrijft op een gele post-it een uitdaging en op een groene post-it een praktische kans om de tekst deze week handen en voeten te geven. Plak ze gezamenlijk op een deur en bid ervoor.</p>
+        </div>
+      </div>
+
+      <!-- Categorie 5 -->
+      <div class="werkvorm-category">
+        <div class="werkvorm-category-title">🙏 Afsluiting & Gebed</div>
+
+        <div class="werkvorm-card" id="wv-23">
+          <strong class="wv-title">23. Gebedscarrousel (Stations)</strong>
+          <p>Richt drie hoeken in de ruimte in met een thema uit de tekst:</p>
+          <ul>
+            <li>1. <strong>Dank:</strong> schrijf een dankpunt op een briefje.</li>
+            <li>2. <strong>Vergeving/Bekering:</strong> steek in stilte een kaarsje aan.</li>
+            <li>3. <strong>Voorbede:</strong> schrijf een gebedsverzoek op voor een ander.</li>
+          </ul>
+          <p>Laat mensen in stilte van station naar station lopen.</p>
+        </div>
+
+        <div class="werkvorm-card" id="wv-24">
+          <strong class="wv-title">24. De Schrift bidden (Lectio Divina)</strong>
+          <p>Lees de tekst in drie rondes voor:</p>
+          <ul>
+            <li>1. <strong>Luisteren:</strong> Welk woord of zinnetje valt je op?</li>
+            <li>2. <strong>Overwegen:</strong> Wat wil God jou hiermee zeggen?</li>
+            <li>3. <strong>Bidden:</strong> Maak van dat vers een kort, hardop of stil gebed terug naar God.</li>
+          </ul>
+        </div>
+
+        <div class="werkvorm-card" id="wv-25">
+          <strong class="wv-title">25. Zegen doorgeven</strong>
+          <p>Eindig in tweetallen. Laat de duo's elkaar zegenen of bemoedigen met een specifieke belofte of zegenbede die rechtstreeks ontleend is aan het bestudeerde Bijbelgedeelte.</p>
+        </div>
+      </div>
+
+    </div>
   </div>
 
   <div id="accordion-root"></div>
@@ -433,6 +767,8 @@
   const publishBtn = document.getElementById('publishBtn');
   const resetBtn = document.getElementById('resetBtn');
   const addTopicBtn = document.getElementById('addTopicBtn');
+  const werkvormenGuideBtn = document.getElementById('werkvormenGuideBtn');
+  const werkvormenGuideBox = document.getElementById('werkvormen-guide-box');
 
   if (isEditMode) {
     modeIndicator.textContent = '📝 Aanpasmodus (Live Editten)';
@@ -440,12 +776,44 @@
     publishBtn.style.display = 'inline-block';
     resetBtn.style.display = 'inline-block';
     addTopicBtn.style.display = 'inline-block';
+    if (werkvormenGuideBtn) werkvormenGuideBtn.style.display = 'inline-block';
+    if (werkvormenGuideBox) werkvormenGuideBox.style.display = 'block';
     switchBtn.textContent = '👀 Terug naar volgmodus';
   }
 
   switchBtn.addEventListener('click', function() {
     window.location.href = isEditMode ? window.location.pathname : window.location.pathname + "?mode=edit";
   });
+
+  // ---------- TOGGLE & NAVIGATIE WERKVOORBEELDEN GIDS ----------
+  function toggleWerkvormenGuide() {
+    const content = document.getElementById('werkvormenGuideContent');
+    const arrow = document.getElementById('werkvormenGuideArrow');
+    if (!content) return;
+    if (content.style.display === 'none' || content.style.display === '') {
+      content.style.display = 'block';
+      if (arrow) arrow.style.transform = 'rotate(180deg)';
+    } else {
+      content.style.display = 'none';
+      if (arrow) arrow.style.transform = 'rotate(0deg)';
+    }
+  }
+
+  function jumpToWerkvorm(targetId) {
+    if (!targetId) return;
+    const content = document.getElementById('werkvormenGuideContent');
+    const arrow = document.getElementById('werkvormenGuideArrow');
+    if (content && (content.style.display === 'none' || content.style.display === '')) {
+      content.style.display = 'block';
+      if (arrow) arrow.style.transform = 'rotate(180deg)';
+    }
+    const card = document.getElementById(targetId);
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      card.classList.add('highlight');
+      setTimeout(() => card.classList.remove('highlight'), 2200);
+    }
+  }
 
   // ---------- GEBRUIKERSNAAM & QR CODE ----------
   let currentUserName = localStorage.getItem('bijbelstudie_naam') || '';
@@ -869,7 +1237,7 @@
     }
   }
 
-  // ---------- INTERACTIES LOGICA (100% AFGESTEMD OP DATABASE EXPORT) ----------
+  // ---------- INTERACTIES LOGICA ----------
   function sendAnswer(topicId, compId) {
     const input = document.getElementById(`in-${compId}`);
     if (!input || !input.value.trim()) return;
@@ -1021,7 +1389,6 @@
       }).join('');
     };
 
-    // Luister naar geeltjes én stickynotes (beide stijlen uit de export)
     const paths = [];
     if (topicId) {
       paths.push(`interactie/${topicId}/${compId}/geeltjes`);
