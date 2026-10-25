@@ -469,7 +469,7 @@
     if (!currentUserName) document.getElementById('name-overlay').style.display = 'flex';
   });
 
-  // ---------- BASISDATA (ORIGINELE 5 AVONDEN) ----------
+  // ---------- BASISDATA: VOLLEDIGE STARTAVOND INCLUSIEF ALLE TEKSTEN & STICKY NOTES ----------
   function getDefaultData() {
     return {
       'topics': [
@@ -486,16 +486,20 @@
           { id: 'a1_schema', type: 'text', text: '📅 Tijdschema Avond 1 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje (introductie Getsemane)\n19:15 – 19:30 | Input: "Jezus droeg onze prestatiedruk"\n19:30 – 20:15 | Kringvragen, gebed & werkvorm (steentjes)\n20:15 – 20:30 | Afsluiting & uitleg: hoe pas je dit principe zelf toe? (3 minuten)', active: true },
           { id: 'a1_t1', type: 'text', text: '🎬 Avond 1: Schuld & Genade\n\nWonder 1: Vergeving (Jezus zweet bloeddruppels in Getsemane).\n\nOpbouw voor hun hart: Rust vinden. Kringleiders dragen vaak een dubbele verantwoordelijkheid (studie + de spirituele zorg voor anderen). Jezus droeg de ultieme stress, zodat zij vanuit rust en genade mogen leven. Je bent eerst Gods kind, dan pas leider.', active: true },
           { id: 'a1_v1', type: 'vraag', vraagText: 'Waar voel jij op dit moment de grootste druk om te moeten \'presteren\' (richting God, je studie of je omgeving)?', active: true },
+          { id: 'a1_v2', type: 'vraag', vraagText: 'Vind je het makkelijk om te accepteren dat Gods genade voor jou genoeg is, zónder dat je er iets voor hoeft te doen?', active: true },
           { id: 'a1_s1', type: 'stelling', stellingText: 'Als christelijke student mag je eigenlijk geen last hebben van faalangst of prestatiedruk.', active: true },
-          { id: 'a1_w1', type: 'text', text: '🙏 Gebed & Werkvorm:\nIedereen legt een steentje (symbool voor eigen faalangst of schuld) bij het kruis. Bid specifiek voor rust en bevrijding van prestatiedruk in het leven van elke student afzonderlijk.', active: true }
+          { id: 'a1_w1', type: 'text', text: '🙏 Gebed & Werkvorm:\nIedereen legt een steentje (symbool voor eigen faalangst of schuld) bij het kruis. Bid specifiek voor rust en bevrijding van prestatiedruk in het leven van elke student afzonderlijk.', active: true },
+          { id: 'a1_tafel', type: 'text', text: '🍽️ Stellingen & Dilemma\'s voor de maaltijd\n\nStelling:\n"Het is moeilijker om jezelf te vergeven voor een grote fout dan om te geloven dat God het heeft vergeven."\n\nDilemma:\nJe haalt een belangrijk tentamen niet door uitstelgedrag. Kies je ervoor om dit direct tegen een vriend te zeggen (kwetsbaar) of los je het de volgende keer stiekem in je eentje op (perfectionisme)?\n\nVraag voor op tafel:\nWanneer merkte jij voor het laatst dat je onbewust probeerde om de liefde van God of waardering van anderen te verdienen?', active: true }
         ],
         'avond2': [
           { id: 'a2_schema', type: 'text', text: '📅 Tijdschema Avond 2 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje\n19:15 – 19:30 | Input: "Vrijgemaakt van destructieve gewoontes"\n19:30 – 20:15 | Kringvragen, gebed & werkvorm (papierversnipperaar)\n20:15 – 20:30 | Afsluiting & uitleg: hoe pas je dit principe zelf toe? (3 minuten)', active: true },
           { id: 'a2_t1', type: 'text', text: '🎬 Avond 2: Vrijheid & Zuiverheid\n\nWonderen: 2. Verlossing (Slagen op Zijn rug) & 3. Reiniging (Bloed uit Zijn hoofdwonden).\n\nOpbouw voor hun hart: Schoonmaak. Als leider sta je in de frontlinie en dat kan gepaard gaan met leugens in je hoofd of de verleiding van geheime zonden. Jezus\' bloed reinigt je geweten en breekt ketens.', active: true },
           { id: 'a2_geeltjes', type: 'geeltjes', titelText: '📌 Plak je geeltje: Welke leugens of herinneringen geef je aan Jezus?', active: true },
-          { id: 'a2_v1', type: 'vraag', vraagText: 'Welke negatieve gedachte of leugen over jezelf ("Ik schiet tekort", "Ik ben niet geestelijk genoeg") geloof jij het snelst?', active: true }
+          { id: 'a2_v1', type: 'vraag', vraagText: 'Welke negatieve gedachte of leugen over jezelf ("Ik schiet tekort", "Ik ben niet geestelijk genoeg") geloof jij het snelst?', active: true },
+          { id: 'a2_s1', type: 'stelling', stellingText: 'Je kunt pas een bruikbare christen zijn als je je destructieve gewoontes en zonden volledig hebt overwonnen.', active: true }
         ],
         'avond3': [
+          { id: 'a3_schema', type: 'text', text: '📅 Tijdschema Avond 3 (19:00 - 20:30)\n\n19:00 – 19:15 | Opening & filmpje\n19:15 – 19:30 | Input: "Heling voor pijn en angst"\n19:30 – 20:15 | Kringvragen, ministry-sessie & gebed\n20:15 – 20:30 | Afsluiting & uitleg', active: true },
           { id: 'a3_t1', type: 'text', text: '🎬 Avond 3: Heling & Pijn\n\nWonder: 4. Genezing (Bloed uit Zijn handen).\n\nOpbouw voor hun hart: Diepe heling. Kringleiders zijn vaak \'gevers\', maar dragen zelf ook weleens verborgen wonden. Jezus\' doorboorde handen zijn er om hún pijn aan te raken.', active: true },
           { id: 'a3_v1', type: 'vraag', vraagText: 'Als je heel eerlijk naar jezelf kijkt: waar zit op dit moment jouw emotionele of fysieke vermoeidheid/pijn?', active: true }
         ],
@@ -528,9 +532,16 @@
     const dataNode = isEditMode ? 'draft' : 'published';
     db.ref(dataNode).on('value', (snapshot) => {
       const val = snapshot.val();
-      if (val) {
+      if (val && val.topics && val.content) {
         topicsList = val.topics || [];
         contentData = val.content || {};
+
+        // Veiligheidscheck: zorg dat de startavond gegarandeerd al haar stickynotes en studentvragen behoudt
+        if (!contentData['avond1'] || !contentData['avond1'].some(c => c.id === 'a1_geeltjes1')) {
+          const defAvond1 = getDefaultData().content.avond1;
+          contentData['avond1'] = defAvond1;
+          if (isEditMode) db.ref(`${dataNode}/content/avond1`).set(defAvond1);
+        }
       } else {
         const def = getDefaultData();
         topicsList = def.topics;
@@ -879,7 +890,6 @@
           </div>`;
 
       default:
-        // Voor alle overige activerende gespreksvormen (speeddate, walk & talk, hot seat, lectio divina, etc.)
         return `
           <div class="vorm-box">
             <strong>💬 ${titel || comp.type}</strong>
@@ -915,7 +925,7 @@
     }
   }
 
-  // ---------- INTERACTIES LOGICA (FIREBASE) ----------
+  // ---------- INTERACTIES LOGICA (FIREBASE MET AUTOMATISCHE HISTORIE-MERGE) ----------
   function sendAnswer(compId) {
     const input = document.getElementById(`in-${compId}`);
     if (!input || !input.value.trim()) return;
@@ -928,16 +938,19 @@
   }
 
   function listenToAnswers(compId) {
-    db.ref(`interactie/${compId}/antwoorden`).on('value', (snap) => {
+    let d1 = {}, d2 = {};
+    const render = () => {
       const container = document.getElementById(`feed-${compId}`);
       if (!container) return;
+      const combined = { ...d2, ...d1 };
+      if (!Object.keys(combined).length) { container.innerHTML = '<em>Nog geen antwoorden ingestuurd.</em>'; return; }
       container.innerHTML = '';
-      const data = snap.val();
-      if (!data) { container.innerHTML = '<em>Nog geen antwoorden ingestuurd.</em>'; return; }
-      Object.values(data).reverse().forEach(a => {
-        container.innerHTML += `<div class="feed-item"><span><strong>${escapeHtml(a.naam)}:</strong> ${escapeHtml(a.txt)}</span><span class="time">${new Date(a.ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span></div>`;
+      Object.values(combined).reverse().forEach(a => {
+        container.innerHTML += `<div class="feed-item"><span><strong>${escapeHtml(a.naam)}:</strong> ${escapeHtml(a.txt || a.tekst || '')}</span><span class="time">${a.ts ? new Date(a.ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}</span></div>`;
       });
-    });
+    };
+    db.ref(`interactie/${compId}/antwoorden`).on('value', (snap) => { d1 = snap.val() || {}; render(); });
+    db.ref(`interactie/{compId}/antwoorden`).on('value', (snap) => { d2 = snap.val() || {}; render(); });
   }
 
   function votePoll(compId, vote) {
@@ -946,15 +959,18 @@
   }
 
   function listenToPoll(compId) {
-    db.ref(`interactie/${compId}/poll`).on('value', (snap) => {
+    let d1 = {}, d2 = {};
+    const render = () => {
       const display = document.getElementById(`poll-res-${compId}`);
       if (!display) return;
-      const data = snap.val();
-      if(!data) { display.textContent = "Uitslag: 0x Eens | 0x Oneens"; return; }
+      const combined = { ...d2, ...d1 };
+      if (!Object.keys(combined).length) { display.textContent = "Uitslag: 0x Eens | 0x Oneens"; return; }
       let eens = 0, oneens = 0;
-      Object.values(data).forEach(v => { if(v === 'Eens') eens++; else oneens++; });
+      Object.values(combined).forEach(v => { if(v === 'Eens') eens++; else oneens++; });
       display.textContent = `Uitslag live: ${eens}x Eens 👍 | ${oneens}x Oneens 👎`;
-    });
+    };
+    db.ref(`interactie/${compId}/poll`).on('value', (snap) => { d1 = snap.val() || {}; render(); });
+    db.ref(`interactie/{compId}/poll`).on('value', (snap) => { d2 = snap.val() || {}; render(); });
   }
 
   function addGeeltje(compId) {
@@ -988,15 +1004,16 @@
   }
 
   function listenToGeeltjes(compId) {
-    db.ref(`interactie/${compId}/geeltjes`).on('value', (snap) => {
+    let d1 = {}, d2 = {};
+    const render = () => {
       const container = document.getElementById(`geeltjes-grid-${compId}`);
       if (!container) return;
-      const data = snap.val();
-      if (!data) {
+      const combined = { ...d2, ...d1 };
+      if (!Object.keys(combined).length) {
         container.innerHTML = '<em style="color:#94a3b8; font-size:0.85rem; grid-column:1/-1;">Nog geen geeltjes geplakt.</em>';
         return;
       }
-      container.innerHTML = Object.entries(data).reverse().map(([key, item]) => {
+      container.innerHTML = Object.entries(combined).reverse().map(([key, item]) => {
         const isOwner = (item.naam === currentUserName) || isEditMode;
         const delBtn = isOwner ? `<button class="delete-note" onclick="deleteGeeltje('${compId}','${key}')">✕</button>` : '';
         return `
@@ -1007,11 +1024,16 @@
           </div>
         `;
       }).join('');
-    });
+    };
+    db.ref(`interactie/${compId}/geeltjes`).on('value', (snap) => { d1 = snap.val() || {}; render(); });
+    db.ref(`interactie/{compId}/geeltjes`).on('value', (snap) => { d2 = snap.val() || {}; render(); });
   }
 
   function deleteGeeltje(compId, key) {
-    if (confirm('Wil je dit geeltje verwijderen?')) db.ref(`interactie/${compId}/geeltjes/${key}`).remove();
+    if (confirm('Wil je dit geeltje verwijderen?')) {
+      db.ref(`interactie/${compId}/geeltjes/${key}`).remove();
+      db.ref(`interactie/{compId}/geeltjes/${key}`).remove();
+    }
   }
 
   // ---------- CANVAS ENGINE MET PEN UP/DOWN ----------
@@ -1197,11 +1219,14 @@
     photoIndexMap[compId] = photoIndexMap[compId] || 0;
     if (!photoAnswersCache[compId]) {
       photoAnswersCache[compId] = [];
-      db.ref(`interactie/${compId}/photoAnswers`).on('value', (snap) => {
-        const data = snap.val();
-        photoAnswersCache[compId] = data ? Object.values(data) : [];
+      let d1 = {}, d2 = {};
+      const updatePhoto = () => {
+        const combined = { ...d2, ...d1 };
+        photoAnswersCache[compId] = Object.values(combined);
         renderPhotoFeed(compId);
-      });
+      };
+      db.ref(`interactie/${compId}/photoAnswers`).on('value', (snap) => { d1 = snap.val() || {}; updatePhoto(); });
+      db.ref(`interactie/{compId}/photoAnswers`).on('value', (snap) => { d2 = snap.val() || {}; updatePhoto(); });
     }
     updateDiaImage(compId);
     renderPhotoFeed(compId);
