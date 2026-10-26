@@ -989,6 +989,8 @@
         if (isEditMode) {
           const actions = document.createElement('div'); actions.className = 'actions';
           actions.innerHTML = `
+            <button onclick="moveComponent('${topicId}', ${idx}, -1)" ${idx === 0 ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : ''} title="Omhoog verplaatsen">▲</button>
+            <button onclick="moveComponent('${topicId}', ${idx}, 1)" ${idx === list.length - 1 ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : ''} title="Omlaag verplaatsen">▼</button>
             <button class="toggle ${comp.active !== false ? 'on' : ''}" onclick="toggleComponent('${topicId}', ${idx})">
               ${comp.active !== false ? 'Zichtbaar' : 'Verborgen'}
             </button>
@@ -1001,6 +1003,17 @@
         activateBlockLogic(topicId, comp);
       });
     }, 40);
+  }
+
+  function moveComponent(topicId, idx, direction) {
+    if (!isEditMode) return;
+    const list = contentData[topicId];
+    if (!list) return;
+    const targetIdx = idx + direction;
+    if (targetIdx < 0 || targetIdx >= list.length) return;
+    arrayMove(list, idx, targetIdx);
+    db.ref(`draft/content/${topicId}`).set(list);
+    renderComponents(topicId);
   }
 
   function renderBlockHTML(topicId, comp) {
