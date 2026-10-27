@@ -322,13 +322,49 @@
     .geeltjes-input-area input { flex: 1; min-width: 180px; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; }
     .geeltjes-input-area select { padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; font-weight: 600; }
     .geeltjes-input-area button { padding: 8px 16px; background: #f59e0b; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; }
-    .geeltjes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-top: 10px; min-height: 80px; }
-    .geeltje {
-      padding: 12px 10px; border-radius: 2px 2px 10px 2px; box-shadow: 2px 4px 10px rgba(0,0,0,0.08);
-      font-size: 0.88rem; line-height: 1.35; font-weight: 500; color: #1e293b; position: relative; word-break: break-word;
-      transition: transform 0.2s ease, box-shadow 0.2s ease; display: flex; flex-direction: column; justify-content: space-between; min-height: 110px;
+    .geeltjes-grid { 
+      position: relative; 
+      width: 100%; 
+      min-height: 180px; 
+      margin-top: 10px; 
+      background: #fafaf9; 
+      border: 2px dashed #e2e8f0; 
+      border-radius: 14px; 
+      overflow: visible; 
+      transition: min-height 0.2s ease;
     }
-    .geeltje:hover { transform: scale(1.05) rotate(0deg) !important; z-index: 10; box-shadow: 4px 10px 18px rgba(0,0,0,0.15); }
+    .geeltje {
+      width: 150px;
+      min-height: 110px;
+      padding: 12px 10px; 
+      border-radius: 2px 2px 10px 2px; 
+      box-shadow: 2px 4px 10px rgba(0,0,0,0.08);
+      font-size: 0.88rem; 
+      line-height: 1.35; 
+      font-weight: 500; 
+      color: #1e293b; 
+      position: absolute; 
+      word-break: break-word;
+      transition: transform 0.15s ease, box-shadow 0.15s ease; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: space-between;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+    }
+    .geeltje.dragging {
+      cursor: grabbing !important;
+      z-index: 1000 !important;
+      transform: scale(1.08) rotate(0deg) !important;
+      box-shadow: 0 16px 30px rgba(0,0,0,0.2) !important;
+      transition: none !important;
+    }
+    .geeltje:hover { 
+      transform: scale(1.05) rotate(0deg); 
+      z-index: 10; 
+      box-shadow: 4px 10px 18px rgba(0,0,0,0.15); 
+    }
     .geeltje.yellow { background: #fef08a; border-top: 6px solid #fde047; }
     .geeltje.pink   { background: #fbcfe8; border-top: 6px solid #f472b6; }
     .geeltje.blue   { background: #bae6fd; border-top: 6px solid #38bdf8; }
@@ -1380,7 +1416,7 @@
     });
   }
 
-  // AANPASSING 2: Slechts één keer pushen naar Firebase zodat er nooit twee geeltjes worden geplaatst
+  // Slechts één keer pushen naar Firebase zodat er nooit twee geeltjes worden geplaatst
   function addGeeltje(topicId, compId) {
     const input = document.getElementById(`note-in-${compId}`);
     const colorSelect = document.getElementById(`note-color-${compId}`);
@@ -1413,13 +1449,90 @@
     input.value = '';
   }
 
-  // AANPASSING 2: Correcte weergave, automatische ontdubbeling en direct werkend kruisje
+  // DRAGGABLE STICKY NOTES ENGINE MET AUTOMATISCH MEEGROEIEND VELD
+  let activeDraggingGeeltje = false;
+
+  function makeGeeltjeDraggable(el, key, path, container) {
+    let startX = 0, startY = 0, startLeft = 0, startTop = 0;
+    let hasMoved = false;
+
+    function onPointerDown(e) {
+      if (e.target.closest('.delete-note')) return;
+      if (e.button !== undefined && e.button !== 0) return;
+
+      activeDraggingGeeltje = true;
+      hasMoved = false;
+      startX = e.clientX;
+      startY = e.clientY;
+      startLeft = parseFloat(el.style.left) || 0;
+      startTop = parseFloat(el.style.top) || 0;
+
+      el.classList.add('dragging');
+      try { el.setPointerCapture(e.pointerId); } catch(err) {}
+
+      window.addEventListener('pointermove', onPointerMove);
+      window.addEventListener('pointerup', onPointerUp);
+      window.addEventListener('pointercancel', onPointerUp);
+      e.preventDefault();
+    }
+
+    function onPointerMove(e) {
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (!hasMoved && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
+        hasMoved = true;
+      }
+      if (!hasMoved) return;
+
+      let newX = startLeft + dx;
+      let newY = startTop + dy;
+
+      const maxW = Math.max(10, container.clientWidth - el.offsetWidth - 10);
+      newX = Math.max(6, Math.min(newX, maxW));
+      newY = Math.max(6, newY);
+
+      el.style.left = newX + 'px';
+      el.style.top = newY + 'px';
+
+      // Laat het veld direct dynamisch meegroeien naar beneden als je sticky notes onder elkaar plaatst
+      const neededHeight = newY + el.offsetHeight + 40;
+      const curHeight = parseFloat(container.style.minHeight) || 180;
+      if (neededHeight > curHeight) {
+        container.style.minHeight = neededHeight + 'px';
+      }
+    }
+
+    function onPointerUp(e) {
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', onPointerUp);
+      el.classList.remove('dragging');
+
+      try { el.releasePointerCapture(e.pointerId); } catch(err) {}
+      activeDraggingGeeltje = false;
+
+      if (hasMoved) {
+        const finalX = Math.round(parseFloat(el.style.left) || 0);
+        const finalY = Math.round(parseFloat(el.style.top) || 0);
+
+        if (path && key) {
+          db.ref(`${path}/${key}`).update({ x: finalX, y: finalY });
+        }
+      }
+    }
+
+    el.addEventListener('pointerdown', onPointerDown);
+  }
+
+  // Correcte weergave, draggable sticky notes en dynamisch meegroeiend veld
   function listenToGeeltjes(topicId, compId) {
     const container = document.getElementById(`geeltjes-grid-${compId}`);
     if (!container) return;
     const pathStores = {};
 
     const render = () => {
+      if (activeDraggingGeeltje) return; // Voorkom hertekening tijdens actieve versleping
+
       let allEntries = [];
       Object.entries(pathStores).forEach(([path, storeObj]) => {
         if (storeObj && typeof storeObj === 'object') {
@@ -1443,25 +1556,68 @@
       });
 
       if (uniqueEntries.length === 0) {
-        container.innerHTML = '<em style="color:#94a3b8; font-size:0.85rem; grid-column:1/-1;">Nog geen geeltjes geplakt. Schrijf als eerste een reactie!</em>';
+        container.style.minHeight = '120px';
+        container.innerHTML = '<em style="color:#94a3b8; font-size:0.85rem; padding:12px; display:block;">Nog geen geeltjes geplakt. Schrijf als eerste een reactie!</em>';
         return;
       }
 
-      uniqueEntries.sort((a, b) => (b.item.ts || 0) - (a.item.ts || 0));
+      uniqueEntries.sort((a, b) => (a.item.ts || 0) - (b.item.ts || 0));
 
-      container.innerHTML = uniqueEntries.map(({ key, item }) => {
+      container.innerHTML = '';
+      const containerWidth = container.clientWidth || 600;
+      const noteWidth = 150;
+      const noteHeight = 115;
+      const gapX = 14;
+      const gapY = 16;
+      const cols = Math.max(1, Math.floor((containerWidth - 20) / (noteWidth + gapX)));
+
+      let maxBottom = 160;
+
+      uniqueEntries.forEach(({ key, item, path }, index) => {
         const rot = item.rotatie || 0;
         const colorClass = item.kleur || 'yellow';
         const isOwner = (item.naam === currentUserName) || isEditMode;
         const deleteBtn = isOwner ? `<button type="button" class="delete-note" onclick="deleteGeeltje('${topicId}','${compId}','${key}', event)">✕</button>` : '';
-        return `
-          <div class="geeltje ${colorClass}" style="transform:rotate(${rot}deg);">
-            ${deleteBtn}
-            <div>${escapeHtml(item.tekst || item.txt || '')}</div>
-            <div class="author">~ ${escapeHtml(item.naam || 'Anoniem')}</div>
-          </div>
+
+        let posX = (typeof item.x === 'number') ? item.x : null;
+        let posY = (typeof item.y === 'number') ? item.y : null;
+
+        if (posX === null || posY === null) {
+          const col = index % cols;
+          const row = Math.floor(index / cols);
+          posX = 12 + col * (noteWidth + gapX);
+          posY = 12 + row * (noteHeight + gapY);
+        }
+
+        // Zorg dat de sticky note binnen het kader blijft op mobiele schermen
+        const maxX = Math.max(10, containerWidth - noteWidth - 10);
+        if (posX > maxX) posX = maxX;
+        if (posX < 6) posX = 6;
+        if (posY < 6) posY = 6;
+
+        const bottom = posY + noteHeight + 25;
+        if (bottom > maxBottom) maxBottom = bottom;
+
+        const noteEl = document.createElement('div');
+        noteEl.className = `geeltje ${colorClass}`;
+        noteEl.style.left = posX + 'px';
+        noteEl.style.top = posY + 'px';
+        noteEl.style.transform = `rotate(${rot}deg)`;
+        noteEl.dataset.key = key;
+        noteEl.dataset.path = path;
+
+        noteEl.innerHTML = `
+          ${deleteBtn}
+          <div>${escapeHtml(item.tekst || item.txt || '')}</div>
+          <div class="author">~ ${escapeHtml(item.naam || 'Anoniem')}</div>
         `;
-      }).join('');
+
+        makeGeeltjeDraggable(noteEl, key, path, container);
+        container.appendChild(noteEl);
+      });
+
+      // Veld dynamisch laten meegroeien zodat sticky notes ook ruim onder elkaar geplaatst kunnen worden
+      container.style.minHeight = (maxBottom + 30) + 'px';
     };
 
     const paths = [];
@@ -1482,7 +1638,7 @@
     });
   }
 
-  // AANPASSING 2: Kruisje verwijdert geeltje en eventuele dubbelganger direct uit de database
+  // Kruisje verwijdert geeltje en eventuele dubbelganger direct uit de database
   function deleteGeeltje(topicId, compId, key, e) {
     if (e) {
       e.preventDefault();
