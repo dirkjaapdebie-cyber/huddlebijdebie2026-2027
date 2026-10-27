@@ -338,9 +338,12 @@
     .geeltje .author { font-size: 0.72rem; font-weight: 700; color: #475569; margin-top: 8px; text-align: right; }
     .geeltje .delete-note {
       position: absolute; top: 4px; right: 6px; background: rgba(0,0,0,0.12); border: none; border-radius: 50%;
-      width: 18px; height: 18px; font-size: 10px; line-height: 18px; text-align: center; cursor: pointer; color: #333; display: none;
+      width: 20px; height: 20px; font-size: 11px; line-height: 20px; text-align: center; cursor: pointer; color: #333; display: none; z-index: 20;
     }
     .geeltje:hover .delete-note { display: block; }
+    @media (hover: none) {
+      .geeltje .delete-note { display: block; }
+    }
 
     /* CANVAS TEKENEN */
     .canvas-wrap { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
@@ -844,6 +847,7 @@
   let currentComponentIdx = null;
   let modalMode = 'add';
   const canvasInstances = {};
+  const openTopicIds = new Set(); // Houdt geopende avonden bij zodat het scherm niet verspringt
 
   let draggedTopicIndex = null;
   let draggedComponentIndex = null;
@@ -864,6 +868,14 @@
 
   function renderAccordionStructure() {
     const root = document.getElementById('accordion-root');
+    const scrollPos = window.scrollY;
+
+    // Bewaar welke topics momenteel openstaan
+    root.querySelectorAll('.accordion-panel.open').forEach(p => {
+      const tid = p.id.replace('panel-', '');
+      if (tid) openTopicIds.add(tid);
+    });
+
     root.innerHTML = '';
     
     topicsList.forEach((topic, index) => {
@@ -886,6 +898,12 @@
       };
       const panel = document.createElement('div'); panel.className = 'accordion-panel'; panel.id = `panel-${topic.id}`;
       
+      // Als deze avond open stond, laat hem open blijven
+      if (openTopicIds.has(topic.id)) {
+        header.classList.add('active');
+        panel.classList.add('open');
+      }
+
       if (isEditMode) {
         const tControls = document.createElement('div');
         tControls.className = 'topic-controls';
@@ -950,6 +968,11 @@
       item.appendChild(header); item.appendChild(panel); root.appendChild(item);
       renderComponents(topic.id);
     });
+
+    // Herstel scrollpositie zodat de pagina nooit verspringt
+    requestAnimationFrame(() => {
+      window.scrollTo(0, scrollPos);
+    });
   }
 
   function toggleAccordion(header, topicId) {
@@ -957,8 +980,10 @@
     const isOpen = panel.classList.contains('open');
     if (isOpen) {
       panel.classList.remove('open'); header.classList.remove('active');
+      openTopicIds.delete(topicId);
     } else {
       panel.classList.add('open'); header.classList.add('active');
+      openTopicIds.add(topicId);
     }
   }
 
@@ -989,8 +1014,8 @@
         if (isEditMode) {
           const actions = document.createElement('div'); actions.className = 'actions';
           actions.innerHTML = `
-            <button onclick="moveComponent('${topicId}', ${idx}, -1)" ${idx === 0 ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : ''} title="Omhoog verplaatsen">▲</button>
-            <button onclick="moveComponent('${topicId}', ${idx}, 1)" ${idx === list.length - 1 ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : ''} title="Omlaag verplaatsen">▼</button>
+            <button type="button" onclick="moveComponent('${topicId}', ${idx}, -1, event)" ${idx === 0 ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : ''} title="Omhoog verplaatsen">▲</button>
+            <button type="button" onclick="moveComponent('${topicId}', ${idx}, 1, event)" ${idx === list.length - 1 ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : ''} title="Omlaag verplaatsen">▼</button>
             <button class="toggle ${comp.active !== false ? 'on' : ''}" onclick="toggleComponent('${topicId}', ${idx})">
               ${comp.active !== false ? 'Zichtbaar' : 'Verborgen'}
             </button>
@@ -1005,15 +1030,29 @@
     }, 40);
   }
 
-  function moveComponent(topicId, idx, direction) {
+  function moveComponent(topicId, idx, direction, e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     if (!isEditMode) return;
     const list = contentData[topicId];
     if (!list) return;
     const targetIdx = idx + direction;
     if (targetIdx < 0 || targetIdx >= list.length) return;
+    
+    // Zorg dat deze avond geregistreerd staat als geopend
+    openTopicIds.add(topicId);
+    const scrollPos = window.scrollY;
+
     arrayMove(list, idx, targetIdx);
     db.ref(`draft/content/${topicId}`).set(list);
     renderComponents(topicId);
+
+    // Herstel direct de scrollpositie zodat de weergave binnen de studie blijft
+    requestAnimationFrame(() => {
+      window.scrollTo(0, scrollPos);
+    });
   }
 
   function renderBlockHTML(topicId, comp) {
@@ -1341,6 +1380,7 @@
     });
   }
 
+  // AANPASSING 2: Slechts één keer pushen naar Firebase zodat er nooit twee geeltjes worden geplaatst
   function addGeeltje(topicId, compId) {
     const input = document.getElementById(`note-in-${compId}`);
     const colorSelect = document.getElementById(`note-color-${compId}`);
@@ -1353,9 +1393,6 @@
       rotatie: rot,
       ts: Date.now()
     };
-    if (topicId) {
-      db.ref(`interactie/${topicId}/${compId}/geeltjes`).push(payload);
-    }
     db.ref(`interactie/${compId}/geeltjes`).push(payload);
     input.value = '';
   }
@@ -1376,22 +1413,47 @@
     input.value = '';
   }
 
+  // AANPASSING 2: Correcte weergave, automatische ontdubbeling en direct werkend kruisje
   function listenToGeeltjes(topicId, compId) {
     const container = document.getElementById(`geeltjes-grid-${compId}`);
     if (!container) return;
-    let dataStore = {};
+    const pathStores = {};
 
     const render = () => {
-      const validEntries = Object.entries(dataStore).filter(([k, item]) => item && typeof item === 'object');
-      if (validEntries.length === 0) {
+      let allEntries = [];
+      Object.entries(pathStores).forEach(([path, storeObj]) => {
+        if (storeObj && typeof storeObj === 'object') {
+          Object.entries(storeObj).forEach(([key, item]) => {
+            if (item && typeof item === 'object') {
+              allEntries.push({ key, item, path });
+            }
+          });
+        }
+      });
+
+      // Automatische ontdubbeling voor het geval eerdere data dubbel was opgeslagen
+      const uniqueEntries = [];
+      const seen = new Set();
+      allEntries.forEach(entry => {
+        const sig = `${entry.item.naam || ''}_${entry.item.tekst || entry.item.txt || ''}_${Math.floor((entry.item.ts || 0) / 2000)}`;
+        if (!seen.has(sig)) {
+          seen.add(sig);
+          uniqueEntries.push(entry);
+        }
+      });
+
+      if (uniqueEntries.length === 0) {
         container.innerHTML = '<em style="color:#94a3b8; font-size:0.85rem; grid-column:1/-1;">Nog geen geeltjes geplakt. Schrijf als eerste een reactie!</em>';
         return;
       }
-      container.innerHTML = validEntries.reverse().map(([key, item]) => {
+
+      uniqueEntries.sort((a, b) => (b.item.ts || 0) - (a.item.ts || 0));
+
+      container.innerHTML = uniqueEntries.map(({ key, item }) => {
         const rot = item.rotatie || 0;
         const colorClass = item.kleur || 'yellow';
         const isOwner = (item.naam === currentUserName) || isEditMode;
-        const deleteBtn = isOwner ? `<button class="delete-note" onclick="deleteGeeltje('${topicId}','${compId}','${key}')">✕</button>` : '';
+        const deleteBtn = isOwner ? `<button type="button" class="delete-note" onclick="deleteGeeltje('${topicId}','${compId}','${key}', event)">✕</button>` : '';
         return `
           <div class="geeltje ${colorClass}" style="transform:rotate(${rot}deg);">
             ${deleteBtn}
@@ -1413,22 +1475,48 @@
     paths.forEach(p => {
       try {
         db.ref(p).on('value', snap => {
-          const val = snap.val();
-          if (val && typeof val === 'object') Object.assign(dataStore, val);
+          pathStores[p] = snap.val() || {};
           render();
         }, () => { render(); });
       } catch(e) { render(); }
     });
   }
 
-  function deleteGeeltje(topicId, compId, key) {
+  // AANPASSING 2: Kruisje verwijdert geeltje en eventuele dubbelganger direct uit de database
+  function deleteGeeltje(topicId, compId, key, e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     if (confirm('Wil je dit geeltje verwijderen?')) {
-      if (topicId) {
-        db.ref(`interactie/${topicId}/${compId}/geeltjes/${key}`).remove();
-        db.ref(`interactie/${topicId}/${compId}/stickynotes/${key}`).remove();
+      const paths = [];
+      if (topicId && topicId !== 'undefined') {
+        paths.push(`interactie/${topicId}/${compId}/geeltjes`);
+        paths.push(`interactie/${topicId}/${compId}/stickynotes`);
       }
-      db.ref(`interactie/${compId}/geeltjes/${key}`).remove();
-      db.ref(`interactie/${compId}/stickynotes/${key}`).remove();
+      paths.push(`interactie/${compId}/geeltjes`);
+      paths.push(`interactie/${compId}/stickynotes`);
+
+      paths.forEach(p => {
+        db.ref(`${p}/${key}`).once('value', snap => {
+          const val = snap.val();
+          db.ref(`${p}/${key}`).remove();
+          if (val && (val.tekst || val.txt)) {
+            paths.forEach(p2 => {
+              db.ref(p2).once('value', s2 => {
+                const all = s2.val();
+                if (all && typeof all === 'object') {
+                  Object.entries(all).forEach(([k2, v2]) => {
+                    if (v2 && (v2.tekst === val.tekst || v2.txt === val.txt) && v2.naam === val.naam) {
+                      db.ref(`${p2}/${k2}`).remove();
+                    }
+                  });
+                }
+              });
+            });
+          }
+        });
+      });
     }
   }
 
