@@ -1638,7 +1638,7 @@
     });
   }
 
-  // Kruisje verwijdert geeltje en eventuele dubbelganger direct uit de database
+  // Kruisje verwijdert nu strikt en alleen DAT ENE aangeklikte geeltje uit de database
   function deleteGeeltje(topicId, compId, key, e) {
     if (e) {
       e.preventDefault();
@@ -1654,24 +1654,7 @@
       paths.push(`interactie/${compId}/stickynotes`);
 
       paths.forEach(p => {
-        db.ref(`${p}/${key}`).once('value', snap => {
-          const val = snap.val();
-          db.ref(`${p}/${key}`).remove();
-          if (val && (val.tekst || val.txt)) {
-            paths.forEach(p2 => {
-              db.ref(p2).once('value', s2 => {
-                const all = s2.val();
-                if (all && typeof all === 'object') {
-                  Object.entries(all).forEach(([k2, v2]) => {
-                    if (v2 && (v2.tekst === val.tekst || v2.txt === val.txt) && v2.naam === val.naam) {
-                      db.ref(`${p2}/${k2}`).remove();
-                    }
-                  });
-                }
-              });
-            });
-          }
-        });
+        db.ref(`${p}/${key}`).remove();
       });
     }
   }
